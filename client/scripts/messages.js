@@ -1,5 +1,6 @@
 Template.NearbyMessages.helpers({
 	messages: function(){
-		return Signs.find({});
+		Meteor.subscribe('NearbySigns', Session.get('centralPointOfReference'));
+		return SignsCollection.find({});
 	}
 });

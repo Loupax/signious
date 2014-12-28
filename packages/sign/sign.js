@@ -1,8 +1,13 @@
+SignsCollection = new Meteor.Collection('Signs');
+if(Meteor.isServer){
+	SignsCollection._ensureIndex({location: '2dsphere'});	
+}
+
+
 Sign = function(o){
 	this.text 		= o.text;
 	this.when 		= new Date;
-	this.location   = (o.location instanceof Location)?o:new Location(o.location);
-
+	this.location   = o.location;//(o.location instanceof Location)?o:new Location(o.location);
 };
 
 Sign.prototype.delete = function(){
@@ -23,13 +28,12 @@ Sign.prototype.delete = function(){
 
 Sign.prototype.save = function(){
 	var self = this;
-	
 	return new Promise(function(resolve, reject){
 		if(self._id){
 			reject(new Error('Sign already had _id. Maybe you meant to update?'));
 		}
-
-		Signs.insert({
+		console.log(self,self.location.toMongo());
+		SignsCollection.insert({
 			text: self.text,
 			when: self.when,
 			location: self.location.toMongo()
