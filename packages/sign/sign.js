@@ -7,8 +7,12 @@ if(Meteor.isServer){
 Sign = function(o){
 	this.text 		= o.text;
 	this.when 		= new Date;
-	this.location   = o.location;//(o.location instanceof Location)?o:new Location(o.location);
+	this.location   = o.location;
 };
+
+Sign.prototype.update = function(){
+	throw new Error('Not yet implemented');
+}
 
 Sign.prototype.delete = function(){
 	var self = this;

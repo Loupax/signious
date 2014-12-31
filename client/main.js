@@ -17,8 +17,28 @@ Signious = {
 		  timeout: 5000,
 		  maximumAge: 0
 		},
+
 		lastKnownLocation: new Location({latitude:0, longitude: 0, altitude: 0}),
-		centralPointOfReference: [0,0],
+		centralPointOfReference: {
+			get: function(){
+				return this.isValid()?this._val.slice(0):undefined;
+			}, 
+			isValid: function(){
+				return (this._val[0] > -1) && (this._val[1] > -1);
+			},
+			set: function(arr){ 
+				if(!arr){
+					this._val[0] = -1;
+					this._val[1] = -1;
+				}else{
+					this._val[0] = Number(arr[0]); 
+					this._val[1] = Number(arr[1]);	
+				}
+				
+				Session.set('centralPointOfReference', this.get());
+			},
+			_val: [-1,-1]
+		},
 		LOCATION_WATCH_ID: undefined
 	}
 };
@@ -34,9 +54,8 @@ Tracker.autorun(function () {
 	console.log(lastKnownLocation);
 	Meteor.call('Sign:getCentralPointOfReference',lastKnownLocation, function(err, data){
 		var coords = (data && data.location)?data.location.coordinates:undefined;
-		Signious.geolocation.centralPointOfReference = coords;
-		Session.set('centralPointOfReference', coords);
-		console.log(err,coords);
+		console.log(coords);
+		Signious.geolocation.centralPointOfReference.set(coords);
 	});	
   }
   

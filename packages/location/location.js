@@ -6,6 +6,26 @@ Location = function(o){
 
 Location.EARTH_RADIUS = 6378137;
 
+Location.makeRectangle = function(location, width, height){
+	var _loc = new Location(location);
+	// Move the reference point so that the original location
+	// is at the center of the created rectangle
+	_loc.addMetersToLongitude(-(width / 2));
+	_loc.addMetersToLatitude(-(height/ 2));
+	
+	var tl = new Location(_loc);
+	var tr = new Location(_loc);
+	var bl = new Location(_loc);
+	var br = new Location(_loc);
+
+	tr.addMetersToLongitude(width);
+	br.addMetersToLongitude(width);
+	br.addMetersToLatitude(height);
+	bl.addMetersToLatitude(height);
+
+	return [tl, tr, bl, br];
+};
+
 Location.prototype.isIdentical = function isIdentical(point){
 	return (this.latitude === point.latitude) && (this.longitude === point.longitude) && (this.altitude === point.altitude);
 };
