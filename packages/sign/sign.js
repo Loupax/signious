@@ -36,7 +36,7 @@ Sign.prototype.save = function(){
 		if(self._id){
 			reject(new Error('Sign already had _id. Maybe you meant to update?'));
 		}
-		console.log(self,self.location.toMongo());
+		
 		SignsCollection.insert({
 			text: self.text,
 			when: self.when,

@@ -1,7 +1,146 @@
-/* CSS declarations go here */
+/*
+Canary Yellow
+#FCF0AD;
 
+Neon
+#E9E74A;
+#EE5E9F;
+#FFDD2A;
+#F59DB9;
+#F9A55B;
+
+Ultra
+#D0E17D
+#36A9CE
+#EF5AA1
+#AE86BC
+#FFDF25
+
+Tropical
+#56C4E8
+#D0E068
+#CD9EC0
+#ED839D
+#FFE476
+
+Samba
+#CDDD73
+#F35F6D
+#FAA457
+#35BEB7
+#D189B9
+
+Aquatic
+#99C7BC
+#89B18C
+#738FA7
+#8A8FA3
+#82ACB8
+
+Sunbrite
+#F9D6AC
+#E9B561
+#E89132
+#DA7527
+#DEAC2F
+
+Classic
+#BAB7A9
+#BFB4AF
+#CDC4C1
+#CFB69E
+#D0AD87
+*/
+@msg-background-color: #FCF0AD;
+/* CSS declarations go here */
+.borderRadius(@a){
+	-webkit-border-radius: @a;
+	-moz-border-radius: @a;
+	-ie-border-radius: @a;
+	border-radius: @a;
+}
+
+.boxShadow(@a){
+	-webkit-box-shadow: @a;
+	-moz-box-shadow: @a;
+	box-shadow: @a;
+}
+*{
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+/** Signious **/
+.signious{
+	padding: 1em;
+}
+
+/** New Message Form **/
 .new-message-form-input{
 	display: block;
 	width: 100%;
 	min-height: 120px;
+}
+
+.new-message-form-input-submit{
+	font-size: 1.5em;
+}
+
+.signious{
+	min-height: 100vh;
+}
+
+/** Nearby Messages styling **/
+.nearby-messages{
+	width: 12.7in;
+	margin: auto;
+}
+
+.nearby-messages-list{
+	padding: 0;
+	margin: 0;
+}
+.nearby-messages-message{
+	display: inline-block;
+	margin: 0;
+	padding: 1em 1em 0 0;
+	vertical-align: middle;
+}
+
+
+.nearby-messages-message-body{
+	width: 		3in;
+	height: 	3in;
+	padding: 	1em;
+	border: 	1px solid #ddd;
+	background: @msg-background-color;
+
+	.boxShadow(1px 1px 4px #ddd);
+}
+
+
+@media (max-width: 12.7in){
+	.nearby-messages{
+		width: 9.5in;
+	}
+}
+@media (max-width: 9.5in){
+	.nearby-messages{
+		width: 6.5in;
+	}
+}
+@media (max-width: 6.5in){
+	.nearby-messages{
+		width: 100%;
+	}
+
+	.nearby-messages-message{
+		width: 100%;
+		padding-right: 0;
+	}
+	.nearby-messages-message-body{
+		display: block;
+		width: inherit;
+	}
 }

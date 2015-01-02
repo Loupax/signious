@@ -10,7 +10,7 @@ Signious = {
 			
 		},
 		onError: function(){
-			console.log(arguments);
+			console.error(arguments);
 		},
 		options: {
 		  enableHighAccuracy: false,
@@ -51,13 +51,9 @@ Tracker.autorun(function () {
   var lastKnownLocation = Session.get("lastKnownLocation");
   
   if(Location.prototype.isValid.call(lastKnownLocation)){
-	console.log(lastKnownLocation);
 	Meteor.call('Sign:getCentralPointOfReference',lastKnownLocation, function(err, data){
 		var coords = (data && data.location)?data.location.coordinates:undefined;
-		console.log(coords);
 		Signious.geolocation.centralPointOfReference.set(coords);
 	});	
   }
-  
-  //Signious.geolocation.centralPointOfReference = SignsCollection.find({});
 });

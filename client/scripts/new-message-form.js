@@ -1,29 +1,31 @@
-Template.NewMessageForm.events({
-	'submit form': function(event, template){
-		event.preventDefault();
-		var text = template.find('textarea').value;
-		if(!text.trim()){
-			return;
-		}
-		else
-		{
-			var sign = new Sign({text: text, location: Signious.geolocation.lastKnownLocation});
-			//console.log(sign, Signious.geolocation.lastKnownLocation);die();
-			template.find('textarea').value = '';
-			sign.save().then(function(){
-				if(!Signious.geolocation.centralPointOfReference.get()){
-					Signious.geolocation.centralPointOfReference.set([sign.location.longitude, sign.location.latitude]);	
-				}
-			}).catch(function(){ 
-				console.log('Error...', arguments);
-			});
-		}
+var newMessageSave = function(template){
+	var text = template.find('textarea').value;
+	if(!text.trim()){
+		return;
+	}
+	else
+	{
+		var sign = new Sign({text: text, location: Signious.geolocation.lastKnownLocation});
 		
-		/*Signs.insert({
-			text: text,
-			when: new Date,
-			location: new Location(Signious.geolocation.lastKnownLocation.coords).toMongo()
+		template.find('textarea').value = '';
+		sign.save().then(function(){
+			if(!Signious.geolocation.centralPointOfReference.get()){
+				Signious.geolocation.centralPointOfReference.set([sign.location.longitude, sign.location.latitude]);	
+			}
+		}).catch(function(){ 
+			console.log('Error...', arguments);
 		});
-		console.log(arguments, template.find('textarea').value, this);*/
+	}
+};
+
+Template.NewMessageForm.events({
+	'submit form': function formSubmissionHandler(event, template){
+		event.preventDefault();
+		newMessageSave(template);
+	},
+	'keyup [name="message"]': function keyupNewMessageFormHandler(event, template){
+		if(event.which === 13 && !event.shiftKey){
+			newMessageSave(template);
+		}
 	}
 });
