@@ -91,6 +91,38 @@ Classic
 	min-height: 100vh;
 }
 
+
+.top-navigation-list{
+	padding: 0;
+	margin: 0;
+	border-bottom: 1px solid rgba(66,66,66,0.4);
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+}
+.top-navigation-list-item{
+	display: table-cell;
+	text-align: center;
+
+
+	a{
+		text-decoration: none;
+		color: #000;
+		display: block;
+		padding: 1em;
+		border: 4px solid transparent;
+		border-left-width: 0;
+		border-right-width: 0;
+	}
+	&>a.is_current_route{
+		border-bottom-color: #000;
+	}
+}
+
+#login-buttons{
+	text-align: left;
+}
+
 /** Nearby Messages styling **/
 .nearby-messages{
 	width: 12.7in;

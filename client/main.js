@@ -9,8 +9,19 @@ Signious = {
 			}
 			
 		},
-		onError: function(){
-			console.error(arguments);
+		onError: function(error){
+			switch(error.code){
+				// PERMISSION_DENIED
+				case 1:
+				break;
+				// POSITION_UNAVAILABLE
+				case 2:
+				break;
+				// TIMEOUT
+				case 3:
+				break;
+			}
+			console.error(error);
 		},
 		options: {
 		  enableHighAccuracy: false,
