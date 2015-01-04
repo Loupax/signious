@@ -8,6 +8,12 @@ Sign = function(o){
 	this.text 		= o.text;
 	this.when 		= new Date;
 	this.location   = o.location;
+
+	for(var prop in o){
+		if(! (prop in this)){
+			this[prop] = o[prop];
+		}
+	}
 };
 
 Sign.prototype.update = function(){
@@ -38,6 +44,7 @@ Sign.prototype.save = function(){
 		}
 		
 		SignsCollection.insert({
+			poster_id: self.poster_id,
 			text: self.text,
 			when: self.when,
 			location: self.location.toMongo()

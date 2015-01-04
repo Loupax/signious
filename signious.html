@@ -36,7 +36,7 @@
 </template>
 
 <template name="profile">
-	<h1>PROFILE</h1>
+	{{> UserMessages}}
 </template>
 
 <template name="NewMessageForm">
@@ -51,20 +51,33 @@
 </template>
 
 <template name="NearbyMessages">
-	<div class="nearby-messages">
-		<ol class="nearby-messages-list">
-			{{#each messages}}{{!
-			}}<li class="nearby-messages-message">
-				<div class="nearby-messages-message-body">
-				{{text}}
-				</div>
-			</li>{{!
-			}}{{/each}}
+	<div class="messages">
+		<ol class="messages-list">
+			{{#each messages}}{{> ListMessage this}}{{/each}}
 		</ol>
 		{{#unless isReady}}
 		{{> loader}}
 		{{/unless}}
 	</div>
+</template>
+
+<template name="UserMessages">
+	<div class="messages">
+		<ol class="messages-list">
+			{{#each messages}}{{> ListMessage this}}{{/each}}
+		</ol>
+		{{#unless isReady}}
+		{{> loader}}
+		{{/unless}}
+	</div>
+</template>
+
+<template name="ListMessage">
+	<li class="messages-message">
+		<div class="messages-message-body">
+		{{text}}
+		</div>
+	</li>
 </template>
 
 <template name="loader">

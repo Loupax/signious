@@ -124,16 +124,16 @@ Classic
 }
 
 /** Nearby Messages styling **/
-.nearby-messages{
+.messages{
 	width: 12.7in;
 	margin: auto;
 }
 
-.nearby-messages-list{
+.messages-list{
 	padding: 0;
 	margin: 0;
 }
-.nearby-messages-message{
+.messages-message{
 	display: inline-block;
 	margin: 0;
 	padding: 1em 1em 0 0;
@@ -141,37 +141,40 @@ Classic
 }
 
 
-.nearby-messages-message-body{
+.messages-message-body{
 	width: 		3in;
 	height: 	3in;
 	padding: 	1em;
 	border: 	1px solid #ddd;
 	background: @msg-background-color;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+	overflow-y: auto;
 
 	.boxShadow(1px 1px 4px #ddd);
 }
 
 
 @media (max-width: 12.7in){
-	.nearby-messages{
+	.messages{
 		width: 9.5in;
 	}
 }
 @media (max-width: 9.5in){
-	.nearby-messages{
+	.messages{
 		width: 6.5in;
 	}
 }
 @media (max-width: 6.5in){
-	.nearby-messages{
+	.messages{
 		width: 100%;
 	}
 
-	.nearby-messages-message{
+	.messages-message{
 		width: 100%;
 		padding-right: 0;
 	}
-	.nearby-messages-message-body{
+	.messages-message-body{
 		display: block;
 		width: inherit;
 	}
