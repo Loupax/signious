@@ -1,9 +1,9 @@
-var isReady, cop;
+var isReady, loc;
 
 Template.NearbyMessages.helpers({
 	messages: function(){
-		cop = Session.get('centralPointOfReference');
-		isReady = Meteor.subscribe('NearbySigns', cop);
+		loc = Session.get('lastKnownLocation');
+		isReady = Meteor.subscribe('NearbySigns', loc);
 		return SignsCollection.find({},{
 			sort:{
   				when:-1
@@ -11,6 +11,6 @@ Template.NearbyMessages.helpers({
   		});
 	},
 	isReady: function(){
-		return isReady.ready() && cop;
+		return isReady.ready() && loc;
 	}
 });

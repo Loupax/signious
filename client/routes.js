@@ -1,4 +1,4 @@
-Router.configure({
+/*Router.configure({
   // the default layout
   layoutTemplate: 'root'
 });
@@ -9,4 +9,4 @@ Router.route('/', function () {
 
 Router.route('/profile', function () {
   this.render('profile');
-});
+});*/
