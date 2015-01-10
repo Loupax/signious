@@ -1,4 +1,6 @@
-Session.set('lastKnownLocation', new Location({latitude: 0, longitude: 0, altitude: 0}));
+var INITIAL_LOCATION = new Location();
+Session.set('lastKnownLocation', INITIAL_LOCATION);
+
 Signious = {
 	geolocation: {
 		onChange: function(location){
@@ -29,42 +31,10 @@ Signious = {
 		  maximumAge: 0
 		},
 
-		lastKnownLocation: new Location({latitude:0, longitude: 0, altitude: 0}),
-		centralPointOfReference: {
-			get: function(){
-				return this.isValid()?this._val.slice(0):undefined;
-			}, 
-			isValid: function(){
-				return (this._val[0] > -1) && (this._val[1] > -1);
-			},
-			set: function(arr){ 
-				if(!arr){
-					this._val[0] = -1;
-					this._val[1] = -1;
-				}else{
-					this._val[0] = Number(arr[0]); 
-					this._val[1] = Number(arr[1]);	
-				}
-				
-				Session.set('centralPointOfReference', this.get());
-			},
-			_val: [-1,-1]
-		},
+		lastKnownLocation: INITIAL_LOCATION,
 		LOCATION_WATCH_ID: undefined
 	}
 };
 
 
 Signious.geolocation.LOCATION_WATCH_ID = navigator.geolocation.watchPosition(Signious.geolocation.onChange, Signious.geolocation.onError, Signious.geolocation.options);	
-
-
-Tracker.autorun(function () {
-  var lastKnownLocation = Session.get("lastKnownLocation");
-  
-  if(Location.prototype.isValid.call(lastKnownLocation)){
-	Meteor.call('Sign:getCentralPointOfReference',lastKnownLocation, function(err, data){
-		var coords = (data && data.location)?data.location.coordinates:undefined;
-		Signious.geolocation.centralPointOfReference.set(coords);
-	});	
-  }
-});

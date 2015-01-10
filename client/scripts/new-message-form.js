@@ -9,9 +9,7 @@ var newMessageSave = function(template){
 		
 		template.find('textarea').value = '';
 		sign.save().then(function(){
-			if(!Signious.geolocation.centralPointOfReference.get()){
-				Signious.geolocation.centralPointOfReference.set([sign.location.longitude, sign.location.latitude]);	
-			}
+			
 		}).catch(function(){ 
 			console.log('Error...', arguments);
 		});

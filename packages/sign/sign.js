@@ -1,4 +1,12 @@
 SignsCollection = new Meteor.Collection('Signs');
+SignsCollection.deny({
+	'remove': function(){return true;},
+	'update': function(){return true;},
+});
+SignsCollection.allow({
+	// We wouldn't want impersonators...
+	'insert': function(userId, doc){return userId === doc.poster_id;}
+})
 if(Meteor.isServer){
 	SignsCollection._ensureIndex({location: '2dsphere'});	
 }
