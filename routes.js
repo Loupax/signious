@@ -13,7 +13,6 @@ Router.route('/profile', function () {
 
 
 Router.route('/deploy',function(req, res){
-	var sys = Npm.require('sys')
 	var exec = Npm.require('child_process').exec;
 	function puts(error, stdout, stderr) { res.end(stdout); }
 	exec("git pull", puts);
