@@ -1,27 +1,54 @@
 SignsCollection = new Meteor.Collection('Signs');
 SignsCollection.deny({
 	'remove': function(){return true;},
-	'update': function(){return true;},
+	'update': function(){return true;}
 });
 SignsCollection.allow({
 	// We wouldn't want impersonators...
 	'insert': function(userId, doc){return userId === doc.poster_id;}
-})
+});
+
+
 if(Meteor.isServer){
-	SignsCollection._ensureIndex({location: '2dsphere'});	
+	SignsCollection._ensureIndex({location: '2dsphere'});
+
+    Meteor.methods({
+        SignPackage_save: function(sign){
+            return SignsCollection.insert({
+                poster_id: sign.poster_id,
+                text: sign.text,
+                when: sign.when,
+                location: Location.prototype.toMongo.call(sign.location),
+                direct_message: sign.direct_message,
+                mentions: Sign.getMentions(sign)
+            });
+        }
+    });
 }
 
 
-Sign = function(o){
+Sign = function Sign(o){
 	this.text 		= o.text;
 	this.when 		= new Date;
 	this.location   = o.location;
+    this.direct_message = o.direct_message || false;
+    //this.mentions is populated on the server
 
 	for(var prop in o){
 		if(! (prop in this)){
 			this[prop] = o[prop];
 		}
 	}
+};
+
+Sign.getMentions = function(sign){
+    var re = /(?:^|\W)@(\w+)(?!\w)/g, match, mentions = [];
+    while (match = re.exec(sign.text)) {
+        mentions.push(match[1]);
+    }
+
+    var users = Meteor.users.find({username: {$in: mentions}}, {fields: {'username':1, '_id': 1}}).fetch();
+    return users;
 };
 
 Sign.prototype.update = function(){
@@ -50,19 +77,13 @@ Sign.prototype.save = function(){
 		if(self._id){
 			reject(new Error('Sign already had _id. Maybe you meant to update?'));
 		}
-		
-		SignsCollection.insert({
-			poster_id: self.poster_id,
-			text: self.text,
-			when: self.when,
-			location: self.location.toMongo()
-		}, function(err, id){
-			if(err){
-				reject(err);
-			}else{
-				self._id = id;
-				resolve(self);	
-			}
-		});	
+
+        Meteor.call('SignPackage_save', self, function(err, _id){
+            if(err){
+                reject(err);
+            }else{
+                resolve(self);
+            }
+        });
 	});
 };

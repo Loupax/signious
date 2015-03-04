@@ -5,7 +5,12 @@ var newMessageSave = function(template){
 	}
 	else
 	{
-		var sign = new Sign({text: text, location: Signious.geolocation.lastKnownLocation, poster_id: Meteor.user()?Meteor.user()._id:undefined});
+		var sign = new Sign({
+            text: text,
+            location: Signious.geolocation.lastKnownLocation,
+            poster_id: Meteor.user()?Meteor.user()._id:undefined,
+            is_direct_message: false
+        });
 		
 		template.find('textarea').value = '';
 		sign.save().then(function(){
