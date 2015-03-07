@@ -3,17 +3,21 @@ Router.configure({
   layoutTemplate: 'root'
 });
 
-Router.route('/', function () {
-  this.render('home');
+Router.route('/', {
+    controller: 'HomeController',
+    action: 'index'
 });
 
-Router.route('/profile', function () {
-  this.render('profile');
+Router.route('/profile', {
+    controller: 'ProfileController',
+    action: 'index'
 });
 
 
-Router.route('/deploy',function(req, res){
-	var exec = Npm.require('child_process').exec;
-	function puts(error, stdout, stderr) { res.end(stdout); }
-	exec("git pull", puts);
+Router.route('/deploy', {
+    action:function(req, res){
+        var exec = Npm.require('child_process').exec;
+        function puts(error, stdout, stderr) { res.end(stdout); }
+        exec("git pull", puts);
+    }
 }, {where: 'server'});
