@@ -1,8 +1,9 @@
 ApplicationController = RouteController.extend({
     layoutTemplate: 'root',
 
+    data:{},
+
     onBeforeAction: function () {
-        console.log('app before hook!');
         this.next();
     },
 

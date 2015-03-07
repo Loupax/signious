@@ -13,6 +13,9 @@
 				<li class="top-navigation-list-item">
 					<a class="{{currentRoute '/'}}" href="/">Home</a>
 				</li>
+                <li class="top-navigation-list-item">
+                    <a class="{{currentRoute '/inbox'}}" href="/inbox">Inbox</a>
+                </li>
 				<li class="top-navigation-list-item">
 					{{#if isLoggedIn}}
 					<a class="{{currentRoute '/profile'}}" href="/profile">Profile</a>
@@ -32,11 +35,11 @@
 <template name="home">
 	
 	{{> NewMessageForm}}
-	{{> NearbyMessages}}
+	{{> Messages}}
 </template>
 
 <template name="profile">
-	{{> UserMessages}}
+	{{> Messages}}
 </template>
 
 <template name="NewMessageForm">
@@ -50,18 +53,8 @@
 	</form>
 </template>
 
-<template name="NearbyMessages">
-	<div class="messages">
-		<ol class="messages-list">
-			{{#each messages}}{{> ListMessage this}}{{/each}}
-		</ol>
-		{{#unless isReady}}
-		{{> loader}}
-		{{/unless}}
-	</div>
-</template>
 
-<template name="UserMessages">
+<template name="Messages">
 	<div class="messages">
 		<ol class="messages-list">
 			{{#each messages}}{{> ListMessage this}}{{/each}}

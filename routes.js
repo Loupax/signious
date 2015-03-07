@@ -13,6 +13,10 @@ Router.route('/profile', {
     action: 'index'
 });
 
+Router.route('/inbox', {
+    controller: 'InboxController',
+    action: 'index'
+});
 
 Router.route('/deploy', {
     action:function(req, res){

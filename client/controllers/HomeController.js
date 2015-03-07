@@ -1,3 +1,4 @@
+var valid, isReady;
 HomeController = ApplicationController.extend({
     data: {
         messages: function(){

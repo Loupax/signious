@@ -1,9 +1,9 @@
 var isReady;
-ProfileController = ApplicationController.extend({
+InboxController = ApplicationController.extend({
     data: {
         messages: function(){
-            isReady = Meteor.subscribe('MessagesOfUser');
-            return SignsCollection.find({poster_id: Meteor.user()?Meteor.user()._id:-1},{
+            isReady = Meteor.subscribe('MessagesDirectedToUser');
+            return SignsCollection.find({},{
                 sort:{
                     when:-1
                 }
