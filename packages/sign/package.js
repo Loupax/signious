@@ -6,9 +6,9 @@ Package.on_use(function (api, where) {
   api.add_files('sign.js', ['client', 'server']);
   api.add_files([
       'methods.js',
-      'nearby_signs_publications.js',
-      'messages_of_user_publications.js',
-      'messages_directed_to_user.js'
+      'publications/nearby_signs_publications.js',
+      'publications/messages_of_user_publications.js',
+      'publications/messages_directed_to_user.js'
   ], ['server']);
   api.use('location');
   api.export(['Sign','SignsCollection']);

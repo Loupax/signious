@@ -23,5 +23,6 @@ Router.route('/deploy', {
         var exec = Npm.require('child_process').exec;
         function puts(error, stdout, stderr) { res.end(stdout); }
         exec("git pull", puts);
-    }
-}, {where: 'server'});
+    },
+    where: 'server'
+});
