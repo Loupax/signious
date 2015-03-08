@@ -1,7 +1,10 @@
 Meteor.publish('MessagesDirectedToUser', function MessagesDirectedToUser() {
     if(this.userId){
         return SignsCollection.find({
-                'mentions._id': this.userId
+                $or: [
+                    {'mentions._id': this.userId},
+                    {'response_to_user_id': this.userId}
+                ]
             },
             {
                 sort:{

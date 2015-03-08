@@ -1,56 +1,4 @@
-/*
-Canary Yellow
-#FCF0AD;
 
-Neon
-#E9E74A;
-#EE5E9F;
-#FFDD2A;
-#F59DB9;
-#F9A55B;
-
-Ultra
-#D0E17D
-#36A9CE
-#EF5AA1
-#AE86BC
-#FFDF25
-
-Tropical
-#56C4E8
-#D0E068
-#CD9EC0
-#ED839D
-#FFE476
-
-Samba
-#CDDD73
-#F35F6D
-#FAA457
-#35BEB7
-#D189B9
-
-Aquatic
-#99C7BC
-#89B18C
-#738FA7
-#8A8FA3
-#82ACB8
-
-Sunbrite
-#F9D6AC
-#E9B561
-#E89132
-#DA7527
-#DEAC2F
-
-Classic
-#BAB7A9
-#BFB4AF
-#CDC4C1
-#CFB69E
-#D0AD87
-*/
 @msg-background-color: #FCF0AD;
 /* CSS declarations go here */
 .borderRadius(@a){
@@ -58,6 +6,26 @@ Classic
 	-moz-border-radius: @a;
 	-ie-border-radius: @a;
 	border-radius: @a;
+}
+
+// Flexbox display
+// flex or inline-flex
+.flex-display(@display: flex) {
+  display: ~"-webkit-@{display}";
+  display: ~"-moz-@{display}";
+  display: ~"-ms-@{display}box"; // IE10 uses -ms-flexbox
+  display: ~"-ms-@{display}"; // IE11
+  display: @display;
+}
+
+// Flex Flow Direction
+// - applies to: flex containers
+// row | row-reverse | column | column-reverse
+.flex-direction(@direction: row) {
+  -webkit-flex-direction: @direction;
+  -moz-flex-direction: @direction;
+  -ms-flex-direction: @direction;
+  flex-direction: @direction;
 }
 
 .boxShadow(@a){
@@ -125,7 +93,6 @@ Classic
 
 /** Nearby Messages styling **/
 .messages{
-	width: 12.7in;
 	margin: auto;
 }
 
@@ -134,16 +101,8 @@ Classic
 	margin: 0;
 }
 .messages-message{
-	display: inline-block;
-	margin: 0;
-	padding: 1em 1em 0 0;
-	vertical-align: middle;
-}
-
-
-.messages-message-body{
-	width: 		3in;
-	height: 	3in;
+	display: block;
+	margin: 1em 0 0 0;
 	padding: 	1em;
 	border: 	1px solid #ddd;
 	background: @msg-background-color;
@@ -154,28 +113,12 @@ Classic
 	.boxShadow(1px 1px 4px #ddd);
 }
 
-
-@media (max-width: 12.7in){
-	.messages{
-		width: 9.5in;
-	}
+.messages-message-body{
+  min-height: 1in;
 }
-@media (max-width: 9.5in){
-	.messages{
-		width: 6.5in;
-	}
-}
-@media (max-width: 6.5in){
-	.messages{
-		width: 100%;
-	}
 
-	.messages-message{
-		width: 100%;
-		padding-right: 0;
-	}
-	.messages-message-body{
-		display: block;
-		width: inherit;
-	}
+.messages-message-actions{
+  .flex-display();
+  .flex-direction(row-reverse);
+  margin: 0 0 1em 0;
 }

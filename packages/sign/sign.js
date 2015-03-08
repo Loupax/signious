@@ -20,6 +20,8 @@ if(Meteor.isServer){
                 when: sign.when,
                 location: Location.prototype.toMongo.call(sign.location),
                 direct_message: sign.direct_message,
+                response_to_user_id: sign.response_to_user_id,
+                response_to_sign_id: sign.response_to_sign_id,
                 mentions: Sign.getMentions(sign)
             });
         }

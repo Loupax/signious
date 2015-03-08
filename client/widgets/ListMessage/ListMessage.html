@@ -1,0 +1,13 @@
+<template name="ListMessage">
+    <li class="messages-message">
+        <div class="messages-message-body">
+            {{FormatMessage this}}
+        </div>
+        <div class="messages-message-actions">
+            <button value="{{this._id}}" class="js-show-response-form messages-messages-actions-reply"><i class="fa fa-reply"></i></button>
+        </div>
+        {{#if isRespondingTo this}}
+            {{> NewMessageForm this}}
+        {{/if}}
+    </li>
+</template>
