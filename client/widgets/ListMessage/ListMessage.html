@@ -1,5 +1,13 @@
 <template name="ListMessage">
     <li class="messages-message">
+        <div class="messages-message-head">
+            {{#if poster_id}}
+            <a class="messages-message-username" href="#">{{username}}</a>
+            {{/if}}
+            {{#unless poster_id}}
+                <span class="messages-message-username" href="#">{{username}}</span>
+            {{/unless}}
+        </div>
         <div class="messages-message-body">
             {{FormatMessage this}}
         </div>

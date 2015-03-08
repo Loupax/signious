@@ -16,6 +16,7 @@ if(Meteor.isServer){
         SignPackage_save: function(sign){
             return SignsCollection.insert({
                 poster_id: sign.poster_id,
+                username: sign.username,
                 text: sign.text,
                 when: sign.when,
                 location: Location.prototype.toMongo.call(sign.location),

@@ -4,5 +4,9 @@
 Handlebars.registerHelper('responsesOfSign', function (sign){
     return SignsCollection.find({
         response_to_sign_id: sign._id
+    },{
+        sort:{
+            when:-1
+        }
     });
 });

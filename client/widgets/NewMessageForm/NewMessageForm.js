@@ -12,6 +12,7 @@ var newMessageSave = function(template){
             text: text,
             location: Signious.geolocation.lastKnownLocation,
             poster_id: Meteor.user()?Meteor.user()._id:undefined,
+            username: Meteor.user()?Meteor.user().username:'Anonymous',
             is_direct_message: false,
             response_to_sign_id: response_to_sign_id,
             response_to_user_id: response_to_user_id

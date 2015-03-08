@@ -11,13 +11,6 @@ ProfileController = ApplicationController.extend({
                 }
             });
         },
-        responses: function(){
-          return SignsCollection.find({
-              'response_to_user_id': Meteor.userId()
-          },{
-              sort: -1
-          });
-        },
         isReady: function(){
             return isReady.ready();
         }

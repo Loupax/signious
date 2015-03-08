@@ -7,4 +7,11 @@ Meteor.startup(function(){
         var generatedUsername = account.emails[0].address.replace(/@|\./g, '_');
         Meteor.users.update({_id: account._id}, {$set:{username: generatedUsername}})
     });
+
+    var nameless_signs = SignsCollection.find({username: {$exists: false}}).fetch();
+    console.log(nameless_signs);
+    nameless_signs.forEach(function(sign){
+        var user = Meteor.users.find(sign.poster_id).fetch()[0];
+        SignsCollection.update({_id: sign._id}, {$set:{username: user.username}});
+    });
 });
