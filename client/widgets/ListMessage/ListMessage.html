@@ -9,5 +9,8 @@
         {{#if isRespondingTo this}}
             {{> NewMessageForm this}}
         {{/if}}
+        {{#each responsesOfSign this}}
+            {{> ListMessage this}}
+        {{/each}}
     </li>
 </template>

@@ -1,7 +1,11 @@
 Meteor.publish('MessagesOfUser', function MessagesOfUser() {
   if(this.userId){
   	return SignsCollection.find({
-  		poster_id: this.userId
+  		$or:[
+            {poster_id: this.userId},
+            {'mentions._id': this.userId},
+            {'response_to_user_id': this.userId}
+      ]
   	},
   	{
   		sort:{
