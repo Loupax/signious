@@ -12,6 +12,10 @@ Meteor.startup(function(){
     console.log(nameless_signs);
     nameless_signs.forEach(function(sign){
         var user = Meteor.users.find(sign.poster_id).fetch()[0];
-        SignsCollection.update({_id: sign._id}, {$set:{username: user.username}});
+        if(user) {
+            SignsCollection.update({_id: sign._id}, {$set: {username: user.username}});
+        }else{
+            SignsCollection.update({_id: sign._id}, {$set: {username: 'Anonymous'}});
+        }
     });
 });
