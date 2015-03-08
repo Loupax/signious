@@ -12,7 +12,6 @@ Template.ListMessage.events({
             responses.push(this._id);
         }
         Session.set('NewMessageFormOpenResponseForms', responses.slice());
-
     }
 });
 
