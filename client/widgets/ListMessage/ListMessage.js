@@ -11,6 +11,7 @@ Template.ListMessage.events({
         }else{
             responses.push(this._id);
         }
+        console.log('Debug using github!',responses);
         Session.set('NewMessageFormOpenResponseForms', responses.slice());
     }
 });
