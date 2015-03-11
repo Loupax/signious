@@ -3,6 +3,9 @@
  */
 Template.ListMessage.events({
     'click .js-show-response-form': function clickToggleResponseFormHandler(event, template){
+        // ListMessage can be used as a reccursive template. Stopping propagation to avoid
+        // the handler from firing more than once per parent template instance
+        event.stopPropagation();
         var responses = Session.get('NewMessageFormOpenResponseForms'),
             index = responses.indexOf(this._id);
 
@@ -11,8 +14,6 @@ Template.ListMessage.events({
         }else{
             responses.push(this._id);
         }
-        console.log('Debug using github!',responses);
-        event.stopPropagation();
         Session.set('NewMessageFormOpenResponseForms', responses.slice());
     }
 });
