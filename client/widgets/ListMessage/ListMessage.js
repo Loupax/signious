@@ -12,6 +12,7 @@ Template.ListMessage.events({
             responses.push(this._id);
         }
         console.log('Debug using github!',responses);
+        event.stopPropagation();
         Session.set('NewMessageFormOpenResponseForms', responses.slice());
     }
 });
