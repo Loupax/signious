@@ -6,7 +6,7 @@ HomeController = ApplicationController.extend({
             valid = loc && loc.isValid();
             isReady = Meteor.subscribe('NearbySigns', loc);
             return SignsCollection.find({
-                'response_to_user_id':''
+                
             },{
                 sort:{
                     when:-1
