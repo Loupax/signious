@@ -6,6 +6,7 @@ ProfileController = ApplicationController.extend({
             valid = loc && loc.isValid();
             isReady = Meteor.subscribe('NearbySigns', loc);
             return SignsCollection.find({
+                response_to_sign_id: '',
                 $or:[
                     {poster_id: Meteor.userId()},
                     {'mentions._id': Meteor.userId()},

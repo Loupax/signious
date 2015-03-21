@@ -21,7 +21,7 @@ Meteor.publish('NearbySigns', function NearbySigns(point) {
 
     if (query.length) {
         return SignsCollection.find(query.length === 1?query[0]:{$or: query}, {sort: {when: -1}});
-    }else{
-        return SignsCollection.find({_id: -1});
     }
+
+    this.ready();
 });
