@@ -3,7 +3,8 @@
  */
 Handlebars.registerHelper('FormatMessage', function (message){
     var text     = message.text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    text = Autolinker.link( text, { newWindow: true } );
+    text = Autolinker.link( text, { newWindow: true, twitter: false} );
+
     (message.mentions || []).forEach(function(mention, index){
         var n = '@'+mention.username;
         text = text.replace(n, '<a href="#">'+n+'</a>');
