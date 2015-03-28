@@ -9,5 +9,5 @@ Package.on_use(function (api, where) {
       'publications/nearby_signs_publications.js'
   ], ['server']);
   api.use('location');
-  api.export(['Sign','SignsCollection']);
+  api.export(['Sign','SignsCollection', 'AccessibleSigns']);
 });

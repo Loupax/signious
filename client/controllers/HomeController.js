@@ -5,7 +5,7 @@ HomeController = ApplicationController.extend({
             var loc = new Location(Session.get('lastKnownLocation'));
             valid = loc && loc.isValid();
             isReady = Meteor.subscribe('NearbySigns', loc);
-            return SignsCollection.find({
+            return AccessibleSigns.find({
                 response_to_sign_id: ''
             },{
                 sort:{

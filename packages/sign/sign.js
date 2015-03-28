@@ -1,7 +1,18 @@
+// This is the collection that all signs get stored into
 SignsCollection = new Meteor.Collection('Signs');
 SignsCollection.deny({
 	'remove': function(){return true;},
 	'update': function(){return true;}
+});
+// This collection is not to be used as a real collection
+// It only exists as a fake collection that we can query for
+// published data. Check the publications of the package
+// for more info
+AccessibleSigns = new Meteor.Collection('AccessibleSigns');
+AccessibleSigns.deny({
+    'insert': function(){return true;},
+    'update': function(){return true;},
+    'remove': function(){return true;}
 });
 SignsCollection.allow({
 	// We wouldn't want impersonators...
@@ -11,6 +22,7 @@ SignsCollection.allow({
 
 if(Meteor.isServer){
 	SignsCollection._ensureIndex({location: '2dsphere'});
+    AccessibleSigns._ensureIndex({location: '2dsphere'});
 
     Meteor.methods({
         SignPackage_save: function(sign){

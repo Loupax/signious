@@ -2,7 +2,7 @@
  * Created by loupax on 3/8/15.
  */
 Handlebars.registerHelper('responsesOfSign', function (sign){
-    return SignsCollection.find({
+    return AccessibleSigns.find({
         response_to_sign_id: sign._id
     },{
         sort:{
