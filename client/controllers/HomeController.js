@@ -1,10 +1,7 @@
-var valid, isReady;
+var valid;
 HomeController = ApplicationController.extend({
     data: {
         messages: function(){
-            var loc = new Location(Session.get('lastKnownLocation'));
-            valid = loc && loc.isValid();
-            isReady = Meteor.subscribe('NearbySigns', loc);
             return AccessibleSigns.find({
                 response_to_sign_id: ''
             },{
@@ -14,8 +11,14 @@ HomeController = ApplicationController.extend({
             });
         },
         isReady: function(){
-            return isReady.ready() && valid;
+            return valid;
         }
+    },
+    waitOn: function(){
+        var loc = new Location(Session.get('lastKnownLocation'));
+        return Meteor.subscribe('NearbySigns', loc, function(){
+            valid = true;
+        });
     },
 
     index: function () {

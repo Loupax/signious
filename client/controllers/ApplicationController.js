@@ -2,6 +2,7 @@ ApplicationController = RouteController.extend({
     layoutTemplate: 'root',
 
     data:{},
+    fastRender: true,
 
     onBeforeAction: function () {
         this.next();
