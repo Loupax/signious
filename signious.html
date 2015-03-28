@@ -44,13 +44,11 @@
 		<ol class="messages-list">
 			{{#each messages}}{{> ListMessage this}}{{/each}}
 		</ol>
-		{{#unless isReady}}
-		{{> loader}}
-		{{/unless}}
 	</div>
 </template>
 
-<template name="loader">
+<template name="Loading">
+    {{> NewMessageForm}}
 	<div class="spinner">
 	  <div class="rect1"></div>
 	  <div class="rect2"></div>

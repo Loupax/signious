@@ -40,5 +40,7 @@ Meteor.publish('NearbySigns', function NearbySigns(point) {
         var handle2 = cur.observeChanges(observers);
         self.onStop(function(){handle2.stop();});
     }
-    this.ready();
+
+    self.ready();
+
 });

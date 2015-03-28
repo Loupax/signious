@@ -1,4 +1,3 @@
-var valid, isReady;
 ProfileController = ApplicationController.extend({
     data: {
         messages: function(){
@@ -16,15 +15,14 @@ ProfileController = ApplicationController.extend({
                 }
             });
         },
-        waitOn: function(){
-            var loc = new Location(Session.get('lastKnownLocation'));
-            return Meteor.subscribe('NearbySigns', loc, function(){
-                valid = true;
-            });
-        },
         isReady: function(){
             return valid;
         }
+    },
+
+    waitOn: function(){
+        var loc = new Location(Session.get('lastKnownLocation'));
+        return Meteor.subscribe('NearbySigns', loc);
     },
 
     index: function () {

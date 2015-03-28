@@ -1,4 +1,3 @@
-var valid;
 HomeController = ApplicationController.extend({
     data: {
         messages: function(){
@@ -16,9 +15,7 @@ HomeController = ApplicationController.extend({
     },
     waitOn: function(){
         var loc = new Location(Session.get('lastKnownLocation'));
-        return Meteor.subscribe('NearbySigns', loc, function(){
-            valid = true;
-        });
+        return Meteor.subscribe('NearbySigns', loc);
     },
 
     index: function () {
