@@ -1,3 +1,4 @@
+Session.setDefault('saving_message', 0);
 var newMessageSave = function(template){
 	var text = template.find('textarea').value,
         response_to_sign_id = template.find('[name="respond_to_sign_id"]').value,
@@ -17,9 +18,13 @@ var newMessageSave = function(template){
             response_to_sign_id: response_to_sign_id,
             response_to_user_id: response_to_user_id
         });
-		
+
+        var saving = Session.get('saving_message');
+        Session.set('saving_message', ++saving);
 		template.find('textarea').value = '';
 		return sign.save().then(function(){
+            var saving = Session.get('saving_message');
+            Session.set('saving_message', --saving);
             var responses = Session.get('NewMessageFormOpenResponseForms');
             var index = responses.indexOf(sign.response_to_sign_id);
             if(index > -1){
@@ -36,6 +41,10 @@ Session.setDefault('TypedInText', {});
 Handlebars.registerHelper('unsavedMessageText', function(sign_id){
     var texts = Session.get('TypedInText');
     return texts[sign_id||''] || '';
+});
+
+Handlebars.registerHelper('readonly', function(sign_id){
+    return Session.get('saving_message')?'readonly disabled':'';
 });
 
 Template.NewMessageForm.events({

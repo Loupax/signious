@@ -23,22 +23,6 @@ SignsCollection.allow({
 if(Meteor.isServer){
 	SignsCollection._ensureIndex({location: '2dsphere'});
     AccessibleSigns._ensureIndex({location: '2dsphere'});
-
-    Meteor.methods({
-        SignPackage_save: function(sign){
-            return SignsCollection.insert({
-                poster_id: sign.poster_id,
-                username: sign.username,
-                text: sign.text,
-                when: sign.when,
-                location: Location.prototype.toMongo.call(sign.location),
-                direct_message: sign.direct_message,
-                response_to_user_id: sign.response_to_user_id,
-                response_to_sign_id: sign.response_to_sign_id,
-                mentions: Sign.getMentions(sign)
-            });
-        }
-    });
 }
 
 
@@ -93,7 +77,7 @@ Sign.prototype.save = function(){
 			reject(new Error('Sign already had _id. Maybe you meant to update?'));
 		}
 
-        Meteor.call('SignPackage_save', self, function(err, _id){
+        Meteor.call('Sign:save', self, function(err, _id){
             if(err){
                 reject(err);
             }else{

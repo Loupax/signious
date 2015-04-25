@@ -1,15 +1,15 @@
 <template name="NewMessageForm">
     <form>
-        <textarea class="new-message-form-input" name="message">{{unsavedMessageText this._id}}</textarea>
+        <textarea class="new-message-form-input" {{readonly}} name="message">{{unsavedMessageText this._id}}</textarea>
         <input type="hidden" name="respond_to_sign_id" value="{{this._id}}">
         <input type="hidden" name="respond_to_user_id" value="{{this.poster_id}}">
         <div class="btn-group btn-group-justified" role="group">
             <div class="btn-group">
                 {{#unless this._id}}
-                    <input class="btn btn-primary new-message-form-input-submit" type="submit" value="Leave a note" role="button"/>
+                    <input {{readonly}} class="btn btn-primary new-message-form-input-submit" type="submit" value="Leave a note" role="button"/>
                 {{/unless}}
                 {{#if this._id}}
-                    <input class="btn btn-primary new-message-form-input-submit" type="submit" value="Respond" role="button"/>
+                    <input {{readonly}} class="btn btn-primary new-message-form-input-submit" type="submit" value="Respond" role="button"/>
                 {{/if}}
             </div>
         </div>

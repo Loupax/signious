@@ -1,13 +1,19 @@
 <template name="ListMessage">
     <li class="messages-message">
-        <div class="messages-message-head">
-            {{#if poster_id}}
-            <a class="messages-message-username" href="#">{{username}}</a>
-            {{/if}}
-            {{#unless poster_id}}
-                <span class="messages-message-username" href="#">{{username}}</span>
-            {{/unless}}
-        </div>
+        <article>
+        <header>
+            <div class="messages-message-head">
+                {{#if poster_id}}
+                <a class="messages-message-username" href="#">{{username}}</a>
+                {{/if}}
+                {{#unless poster_id}}
+                    <span class="messages-message-username" href="#">{{username}}</span>
+                {{/unless}}
+                {{#if linkedWebpage.title}}
+                    <h1 class="messages-message-linked-webpage-title">{{linkedWebpage.title}}</h1>
+                {{/if}}
+            </div>
+        </header>
         <div class="messages-message-body">
             {{FormatMessage this}}
         </div>
@@ -20,5 +26,6 @@
         {{#each responsesOfSign this}}
             {{> ListMessage this}}
         {{/each}}
+        </article>
     </li>
 </template>
