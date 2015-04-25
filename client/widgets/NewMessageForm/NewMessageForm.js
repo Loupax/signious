@@ -44,7 +44,7 @@ Handlebars.registerHelper('unsavedMessageText', function(sign_id){
 });
 
 Handlebars.registerHelper('readonly', function(sign_id){
-    return Session.get('saving_message')?'readonly disabled':'';
+    return Session.get('saving_message')?'disabled':'';
 });
 
 Template.NewMessageForm.events({

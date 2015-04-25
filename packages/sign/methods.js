@@ -3,7 +3,7 @@ function getHTMLOfURL(url) {
     var fut = new Future();
     var spawn = Npm.require('child_process').spawn;
 
-    var phantom = spawn('phantomjs', [process.env.PWD+'/assets/app/phantom_driver.js.phantom',url]);
+    var phantom = spawn('phantomjs', [process.env.PWD + '/assets/app/phantom_driver.js.phantom', url]);
     var dataBucket = [];
     var errBucket = [];
     phantom.stdout.on('data', Meteor.bindEnvironment(function (data) {
@@ -13,11 +13,11 @@ function getHTMLOfURL(url) {
         errBucket.push(data.toString());
     }));
     phantom.on('exit', Meteor.bindEnvironment(function (code) {
-        if(errBucket.length){
-            fut.throw(new Meteor.Error(500, 'Error while running phantomjs'+ errBucket.join()));
-        }else{
+        if (errBucket.length) {
+            fut.throw(new Meteor.Error(500, 'Error while running phantomjs' + errBucket.join()));
+        } else {
             var doc = dataBucket.join('');
-            fut.return(doc.substr(0,doc.indexOf('</html>')+8));
+            fut.return(doc.substr(0, doc.indexOf('</html>') + 8));
         }
     }));
 
@@ -53,13 +53,33 @@ Meteor.methods({
     'Sign:getAll': function getAll() {
         return SignsCollection.find({}).fetch();
     },
-    'Sign:save': function (sign) {
+    'Sign:addURLData': function (sign_id) {
+        var sign = SignsCollection.find({_id: sign_id}).fetch()[0];
         var urls = Meteor.call('Sign:scrapeURLs', sign);
-        if(urls.length) {
+        if (urls.length) {
             var $ = cheerio.load(getHTMLOfURL(urls[0]).value);
-            var pageTitle = $('title').text();
+            var linkedWebpage = {
+                title: $('title').text(),
+                meta: []
+            };
+
+            //':not([name="viewport"], [http-equiv])'
+            $('meta').filter('[name="keywords"], [name="description"], [property^="og:"]').each(function(index, meta){
+                var $meta = $(meta);
+                linkedWebpage.meta.push(meta.attribs);
+            });
         }
-        return SignsCollection.insert({
+
+        SignsCollection.update(sign_id, {
+            $set: {
+                linkedWebpage: linkedWebpage
+            }
+        });
+        //console.log(linkedWebpage);
+    },
+    'Sign:save': function (sign) {
+
+        var _id = SignsCollection.insert({
             poster_id: sign.poster_id,
             username: sign.username,
             text: sign.text,
@@ -68,11 +88,15 @@ Meteor.methods({
             direct_message: sign.direct_message,
             response_to_user_id: sign.response_to_user_id,
             response_to_sign_id: sign.response_to_sign_id,
-            mentions: Sign.getMentions(sign),
-            linkedWebpage: {
-                title: pageTitle||undefined
-            }
+            mentions: Sign.getMentions(sign)
         });
+
+        // Just make an asynchronous call to the route that will scrape the urls inside
+        // the sign and add additional info to the record
+        Meteor.http.get(Meteor.absoluteUrl('/scrape_html/' + _id), function () {
+        });
+
+        return _id;
     }
 
 });

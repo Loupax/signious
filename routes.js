@@ -22,3 +22,12 @@ Router.route('/deploy', {
     },
     where: 'server'
 });
+
+
+Router.route('/scrape_html/:sign_id', {
+    action:function(req, res){
+        Meteor.call('Sign:addURLData', this.params.sign_id);
+        res.end();
+    },
+    where: 'server'
+});
