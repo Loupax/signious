@@ -108,17 +108,23 @@
 	padding: 0;
 	margin: 0;
 }
+.messages-list li{
+  margin: 1em 0 0 0;
+}
 .messages-message{
 	display: block;
-	margin: 1em 0 0 0;
 	padding: 	1em;
 	border: 	1px solid #ddd;
+    border-width: 1px 1px 0 1px;
 	background: @msg-background-color;
 	text-overflow: ellipsis;
 	overflow-x: hidden;
 	overflow-y: auto;
 
 	.boxShadow(1px 1px 4px #ddd);
+}
+.messages-message:last-child{
+  border-bottom-width: 1px;
 }
 
 .messages-message-body{

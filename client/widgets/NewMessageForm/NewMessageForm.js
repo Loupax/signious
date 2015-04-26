@@ -2,7 +2,24 @@ Session.setDefault('saving_message', 0);
 var newMessageSave = function(template){
 	var text = template.find('textarea').value,
         response_to_sign_id = template.find('[name="respond_to_sign_id"]').value,
-        response_to_user_id = template.find('[name="respond_to_user_id"]').value;
+        response_to_user_id = template.find('[name="respond_to_user_id"]').value,
+        root_sign_id = response_to_sign_id,
+        iterator;
+
+    var i = 0;
+    // We go bottom up to detect the root response of current response tree (if it exists)
+    while(true){
+        iterator = AccessibleSigns.find({_id: root_sign_id}).fetch()[0];
+        if(iterator && iterator.response_to_sign_id)
+            root_sign_id = iterator.response_to_sign_id;
+        else
+            break;
+
+        // I don't like the fact that this loop can freeze the system...
+        // Let's just add an arbitary exit point here
+        if(i++ > 1000000){root_sign_id = ''; break;}
+
+    }
 
 	if(!text.trim()){
 		return;
@@ -16,7 +33,8 @@ var newMessageSave = function(template){
             username: Meteor.user()?Meteor.user().username:'Anonymous',
             is_direct_message: false,
             response_to_sign_id: response_to_sign_id,
-            response_to_user_id: response_to_user_id
+            response_to_user_id: response_to_user_id,
+            discussion_root_sign_id: root_sign_id
         });
 
         var saving = Session.get('saving_message');

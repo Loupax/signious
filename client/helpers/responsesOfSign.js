@@ -3,10 +3,10 @@
  */
 Handlebars.registerHelper('responsesOfSign', function (sign){
     return AccessibleSigns.find({
-        response_to_sign_id: sign._id
+        discussion_root_sign_id: sign._id
     },{
         sort:{
-            when:-1
+            when:1
         }
     });
 });

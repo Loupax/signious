@@ -63,7 +63,6 @@ Meteor.methods({
                 meta: []
             };
 
-            //':not([name="viewport"], [http-equiv])'
             $('meta').filter('[name="keywords"], [name="description"], [property^="og:"]').each(function(index, meta){
                 var $meta = $(meta);
                 linkedWebpage.meta.push(meta.attribs);
@@ -75,7 +74,6 @@ Meteor.methods({
                 linkedWebpage: linkedWebpage
             }
         });
-        //console.log(linkedWebpage);
     },
     'Sign:save': function (sign) {
 
@@ -88,13 +86,13 @@ Meteor.methods({
             direct_message: sign.direct_message,
             response_to_user_id: sign.response_to_user_id,
             response_to_sign_id: sign.response_to_sign_id,
+            discussion_root_sign_id: sign.discussion_root_sign_id,
             mentions: Sign.getMentions(sign)
         });
 
         // Just make an asynchronous call to the route that will scrape the urls inside
         // the sign and add additional info to the record
-        Meteor.http.get(Meteor.absoluteUrl('/scrape_html/' + _id), function () {
-        });
+        Meteor.http.get(Meteor.absoluteUrl('/scrape_html/' + _id), function () {});
 
         return _id;
     }

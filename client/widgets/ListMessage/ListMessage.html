@@ -1,6 +1,5 @@
 <template name="ListMessage">
-    <li class="messages-message">
-        <article>
+        <article class="messages-message">
         <header>
             <div class="messages-message-head">
                 {{#if poster_id}}
@@ -23,9 +22,9 @@
         {{#if isRespondingTo this}}
             {{> NewMessageForm this}}
         {{/if}}
+        </article>
         {{#each responsesOfSign this}}
             {{> ListMessage this}}
         {{/each}}
-        </article>
-    </li>
+
 </template>

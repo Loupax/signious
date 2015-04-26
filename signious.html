@@ -42,7 +42,7 @@
 <template name="Messages">
 	<div class="messages">
 		<ol class="messages-list">
-			{{#each messages}}{{> ListMessage this}}{{/each}}
+			{{#each messages}}<li>{{> ListMessage this}}</li>{{/each}}
 		</ol>
 	</div>
 </template>
