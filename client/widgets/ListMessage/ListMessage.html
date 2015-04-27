@@ -1,30 +1,36 @@
 <template name="ListMessage">
-        <article class="messages-message">
+    <article class="messages-message">
         <header>
             <div class="messages-message-head">
                 {{#if poster_id}}
-                <a class="messages-message-username" href="#">{{username}}</a>
+                    <a class="messages-message-username" href="#">{{username}}</a>
                 {{/if}}
                 {{#unless poster_id}}
                     <span class="messages-message-username" href="#">{{username}}</span>
                 {{/unless}}
-                {{#if linkedWebpage.title}}
-                    <h1 class="messages-message-linked-webpage-title">{{linkedWebpage.title}}</h1>
-                {{/if}}
             </div>
         </header>
         <div class="messages-message-body">
             {{FormatMessage this}}
         </div>
-        <div class="messages-message-actions">
-            <button value="{{this._id}}" class="js-show-response-form messages-messages-actions-reply"><i class="fa fa-reply"></i></button>
+        <div class="messages-message-attached-content">
+            {{#if linkedWebpage.title}}
+                <h1 class="messages-message-linked-webpage-title">{{linkedWebpage.title}}</h1>
+            {{/if}}
+            {{attachedContent this}}
         </div>
-        {{#if isRespondingTo this}}
-            {{> NewMessageForm this}}
-        {{/if}}
-        </article>
-        {{#each responsesOfSign this}}
-            {{> ListMessage this}}
-        {{/each}}
+        <footer>
+            <div class="messages-message-actions">
+                <button value="{{this._id}}" class="js-show-response-form messages-messages-actions-reply"><i
+                        class="fa fa-reply"></i></button>
+            </div>
+            {{#if isRespondingTo this}}
+                {{> NewMessageForm this}}
+            {{/if}}
+        </footer>
+    </article>
+    {{#each responsesOfSign this}}
+        {{> ListMessage this}}
+    {{/each}}
 
 </template>

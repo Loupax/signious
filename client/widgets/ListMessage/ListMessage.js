@@ -25,3 +25,22 @@ Handlebars.registerHelper('isRespondingTo', function(sign){
     var responses = Session.get('NewMessageFormOpenResponseForms');
     return responses.indexOf(sign._id) > -1;
 });
+
+Handlebars.registerHelper('attachedContent', function(sign){
+    if(!sign.linkedWebpage || !sign.linkedWebpage.meta){return '';}
+    var openGraph = sign.linkedWebpage.meta.filter(function(a){return (a.property) && a.property.indexOf('og:') > -1});
+    var ogImage= openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:image') > -1}).pop();
+    var ogTitle= openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:title') > -1}).pop();
+    var ogUrl  = openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:url') > -1}).pop();
+
+    // First, try to see if we scraped any OpenGraph data
+    if(ogTitle && ogImage){
+        if(ogUrl){
+            return new Handlebars.SafeString('<a target="_blank" href="'+ogUrl.content+'"><img class="responsive-image" src="'+(ogImage.content)+'" title="'+(ogTitle.content)+'"/></a>');
+        }else{
+            return new Handlebars.SafeString('<img class="responsive-image" src="'+(ogImage.content)+'" title="'+(ogTitle.content)+'"/>');
+        }
+    }
+
+    return '';
+});
