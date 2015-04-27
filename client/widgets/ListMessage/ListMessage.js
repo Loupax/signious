@@ -29,11 +29,18 @@ Handlebars.registerHelper('isRespondingTo', function(sign){
 Handlebars.registerHelper('attachedContent', function(sign){
     if(!sign.linkedWebpage || !sign.linkedWebpage.meta){return '';}
     var openGraph = sign.linkedWebpage.meta.filter(function(a){return (a.property) && a.property.indexOf('og:') > -1});
+    var ogName= openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:site_name') > -1}).pop();
     var ogImage= openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:image') > -1}).pop();
     var ogTitle= openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:title') > -1}).pop();
     var ogUrl  = openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:url') > -1}).pop();
 
-    // First, try to see if we scraped any OpenGraph data
+    // Is it a youtube video we can embed?
+    if(ogName && ogName.content === 'YouTube'){
+        var videoUrl = openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:video:url') > -1}).pop();
+        if(videoUrl && videoUrl.content);
+            return new Handlebars.SafeString('<iframe width="420" height="315" src="'+videoUrl.content+'" frameborder="0" allowfullscreen></iframe>');
+    }
+    // Are there any images we can get from the sign
     if(ogTitle && ogImage){
         if(ogUrl){
             return new Handlebars.SafeString('<a target="_blank" href="'+ogUrl.content+'"><img class="responsive-image" src="'+(ogImage.content)+'" title="'+(ogTitle.content)+'"/></a>');
