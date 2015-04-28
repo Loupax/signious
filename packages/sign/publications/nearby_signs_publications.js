@@ -1,6 +1,5 @@
 Meteor.publish('NearbySigns', function NearbySigns(point) {
     point = new Location(point);
-
     var self = this, published = {}, observers;
     observers = {
         added: function (sign_id,sign) {
@@ -41,6 +40,6 @@ Meteor.publish('NearbySigns', function NearbySigns(point) {
         self.onStop(function(){handle2.stop();});
     }
 
-    self.ready();
-
+    if(point.isValid())
+        self.ready();
 });

@@ -40,11 +40,13 @@
 
 
 <template name="Messages">
+	{{#unless isLoadingNearbySigns}}
 	<div class="messages">
 		<ol class="messages-list">
 			{{#each messages}}<li>{{> ListMessage this}}</li>{{/each}}
 		</ol>
 	</div>
+	{{/unless}}
 	{{#if isLoadingNearbySigns}}
 	{{> Loading}}
 	{{/if}}
