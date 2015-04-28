@@ -45,10 +45,12 @@
 			{{#each messages}}<li>{{> ListMessage this}}</li>{{/each}}
 		</ol>
 	</div>
+	{{#if isLoadingNearbySigns}}
+	{{> Loading}}
+	{{/if}}
 </template>
 
 <template name="Loading">
-    {{> NewMessageForm}}
 	<div class="spinner">
 	  <div class="rect1"></div>
 	  <div class="rect2"></div>

@@ -13,11 +13,6 @@ HomeController = ApplicationController.extend({
             return valid;
         }
     },
-    waitOn: function(){
-        var loc = new Location(Session.get('lastKnownLocation'));
-        return Meteor.subscribe('NearbySigns', loc);
-    },
-
     index: function () {
         this.render('home');
     }

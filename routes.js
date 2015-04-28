@@ -1,7 +1,7 @@
 Router.configure({
   // the default layout
-  layoutTemplate: 'root',
-  loadingTemplate: 'Loading'
+  layoutTemplate: 'root'
+  //loadingTemplate: 'Loading'
 });
 
 Router.route('/', {
