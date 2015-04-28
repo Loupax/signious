@@ -29,10 +29,10 @@ Handlebars.registerHelper('isRespondingTo', function(sign){
 Handlebars.registerHelper('attachedContent', function(sign){
     if(!sign.linkedWebpage || !sign.linkedWebpage.meta){return '';}
     var openGraph = sign.linkedWebpage.meta.filter(function(a){return (a.property) && a.property.indexOf('og:') > -1});
-    var ogName= openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:site_name') > -1}).pop();
-    var ogImage= openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:image') > -1}).pop();
-    var ogTitle= openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:title') > -1}).pop();
-    var ogUrl  = openGraph.filter(function(a){return (a.property) && a.property.indexOf('og:url') > -1}).pop();
+    var ogName= openGraph.filter(function(a){return (a.property) && a.property  === 'og:site_name';}).pop();
+    var ogImage= openGraph.filter(function(a){return (a.property) && a.property === 'og:image';}).pop();
+    var ogTitle= openGraph.filter(function(a){return (a.property) && a.property === 'og:title';}).pop();
+    var ogUrl  = openGraph.filter(function(a){return (a.property) && a.property ==='og:url';}).pop();
 
     // Is it a youtube video we can embed?
     if(ogName && ogName.content === 'YouTube'){
