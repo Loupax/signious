@@ -4,22 +4,12 @@ var newMessageSave = function(template){
         response_to_sign_id = template.find('[name="respond_to_sign_id"]').value,
         response_to_user_id = template.find('[name="respond_to_user_id"]').value,
         root_sign_id = response_to_sign_id,
-        iterator;
+        parent;
 
-    var i = 0;
-    // We go bottom up to detect the root response of current response tree (if it exists)
-    while(true){
-        iterator = AccessibleSigns.find({_id: root_sign_id}).fetch()[0];
-        if(iterator && iterator.response_to_sign_id)
-            root_sign_id = iterator.response_to_sign_id;
-        else
-            break;
+        parent = AccessibleSigns.find({_id: root_sign_id}, {limit:1}).fetch()[0];
+        if(parent && parent.discussion_root_sign_id)
+            root_sign_id = parent.discussion_root_sign_id
 
-        // I don't like the fact that this loop can freeze the system...
-        // Let's just add an arbitary exit point here
-        if(i++ > 1000000){root_sign_id = ''; break;}
-
-    }
 
 	if(!text.trim()){
 		return;
