@@ -1,0 +1,44 @@
+@side-width: ~"calc(200px + 1em)";
+.sidePadding(@a){
+  padding-left: @a;
+  padding-right: @a;
+}
+// Flexbox display
+// flex or inline-flex
+.flex-display(@display: flex) {
+  display: ~"-webkit-@{display}";
+  display: ~"-moz-@{display}";
+  display: ~"-ms-@{display}box"; // IE10 uses -ms-flexbox
+  display: ~"-ms-@{display}"; // IE11
+  display: @display;
+}
+
+// Flex Flow Direction
+// - applies to: flex containers
+// row | row-reverse | column | column-reverse
+.flex-direction(@direction: row) {
+  -webkit-flex-direction: @direction;
+  -moz-flex-direction: @direction;
+  -ms-flex-direction: @direction;
+  flex-direction: @direction;
+}
+
+.boxShadow(@a){
+  -webkit-box-shadow: @a;
+  -moz-box-shadow: @a;
+  box-shadow: @a;
+}
+.borderRadius(@a){
+  -webkit-border-radius: @a;
+  -moz-border-radius: @a;
+  -ie-border-radius: @a;
+  border-radius: @a;
+}
+
+.transition(@a){
+  -webkit-transition: @a;
+  -moz-transition: @a;
+  -ms-transition: @a;
+  -o-transition: @a;
+  transition: @a;
+}

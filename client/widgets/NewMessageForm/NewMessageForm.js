@@ -8,7 +8,7 @@ var newMessageSave = function(template){
 
         parent = AccessibleSigns.find({_id: root_sign_id}, {limit:1}).fetch()[0];
         if(parent && parent.discussion_root_sign_id)
-            root_sign_id = parent.discussion_root_sign_id
+            root_sign_id = parent.discussion_root_sign_id;
 
 
 	if(!text.trim()){

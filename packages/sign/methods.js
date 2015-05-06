@@ -87,6 +87,7 @@ Meteor.methods({
             response_to_user_id: sign.response_to_user_id,
             response_to_sign_id: sign.response_to_sign_id,
             discussion_root_sign_id: sign.discussion_root_sign_id,
+            avatar: Meteor.user().profile.avatar,
             mentions: Sign.getMentions(sign)
         });
 

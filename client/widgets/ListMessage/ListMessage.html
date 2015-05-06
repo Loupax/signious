@@ -2,6 +2,9 @@
     <article class="messages-message">
         <header>
             <div class="messages-message-head">
+                {{#if avatar}}
+                    <img class="messages-message-avatar-pic" src="/static/{{avatar}}" width="80" height="80">
+                {{/if}}
                 {{#if poster_id}}
                     <a class="messages-message-username" href="#">{{username}}</a>
                 {{/if}}

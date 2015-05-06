@@ -1,47 +1,19 @@
+@import (reference) url('mixins.less');
+/* Post-it color */
+/*@msg-background-color: #FCF0AD;*/
+@msg-background-color: #FFF;
+@app-background: #DBF8FF;
 
-@msg-background-color: #FCF0AD;
-/* CSS declarations go here */
-.borderRadius(@a){
-	-webkit-border-radius: @a;
-	-moz-border-radius: @a;
-	-ie-border-radius: @a;
-	border-radius: @a;
+input{
+  margin-bottom: 1em;
 }
+
+/* CSS declarations go here */
 .responsive-image{
-  width: 100%;
+  max-width: 100%;
   height: auto;
 }
-.messages-message-attached-content{
-  .responsive-image{
-	max-width: 500px;
-	width: auto;
-  }
-}
-// Flexbox display
-// flex or inline-flex
-.flex-display(@display: flex) {
-  display: ~"-webkit-@{display}";
-  display: ~"-moz-@{display}";
-  display: ~"-ms-@{display}box"; // IE10 uses -ms-flexbox
-  display: ~"-ms-@{display}"; // IE11
-  display: @display;
-}
 
-// Flex Flow Direction
-// - applies to: flex containers
-// row | row-reverse | column | column-reverse
-.flex-direction(@direction: row) {
-  -webkit-flex-direction: @direction;
-  -moz-flex-direction: @direction;
-  -ms-flex-direction: @direction;
-  flex-direction: @direction;
-}
-
-.boxShadow(@a){
-	-webkit-box-shadow: @a;
-	-moz-box-shadow: @a;
-	box-shadow: @a;
-}
 *{
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
@@ -50,7 +22,7 @@
 
 /** Signious **/
 .signious{
-	padding: 1em;
+  background: @app-background;
 }
 
 /** New Message Form **/
@@ -74,10 +46,20 @@
 
 .signious{
 	min-height: 100vh;
+    margin-top: 59px;
+}
+
+.top-navigation{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  .boxShadow(0 1px 3px rgba(221, 221, 221, 0.35));
 }
 
 
 .top-navigation-list{
+  	background: #fff;
 	padding: 0;
 	margin: 0;
 	border-bottom: 1px solid rgba(66,66,66,0.4);
@@ -111,6 +93,7 @@
 /** Nearby Messages styling **/
 .messages{
 	margin: auto;
+    .sidePadding(1em);
 }
 
 .messages-list{
@@ -130,7 +113,13 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 
-	.boxShadow(1px 1px 4px #ddd);
+	.boxShadow(1px 1px 4px #F5E1FD);
+}
+.messages-message-avatar-pic{
+  float: left;
+  margin: 0 1em 0 0em;
+  width: 80px;
+  height: auto;
 }
 .messages-message:last-child{
   border-bottom-width: 1px;

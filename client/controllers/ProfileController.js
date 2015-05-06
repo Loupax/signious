@@ -1,12 +1,13 @@
 ProfileController = ApplicationController.extend({
     data: {
+        user: function(){
+          return Meteor.user();
+        },
         messages: function(){
             return AccessibleSigns.find({
                 response_to_sign_id: '',
                 $or:[
-                    {poster_id: Meteor.userId()},
-                    {'mentions._id': Meteor.userId()},
-                    {'response_to_user_id': Meteor.userId()}
+                    {poster_id: Meteor.userId()}
                 ]
 
             },{
@@ -14,12 +15,12 @@ ProfileController = ApplicationController.extend({
                     when:-1
                 }
             });
-        },
-        isReady: function(){
-            return valid;
         }
     },
     index: function () {
-        this.render('home');
+        this.render('profile');
+    },
+    edit: function(){
+        this.render('ProfileEditor');
     }
 });

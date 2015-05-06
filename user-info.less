@@ -1,0 +1,41 @@
+@import (reference) url('mixins.less');
+.user-info{
+  text-align: center;
+  padding-top:1em;
+  background: #E9FFBC;
+  footer{
+    min-height: 3em;
+    background: #fff;
+    border-bottom: 1px solid rgba(66,66,66,0.4);
+    border-top: 1px solid rgba(66,66,66,0.4);
+    .boxShadow(0 1px 3px rgba(221, 221, 221, 0.35));
+  }
+}
+.user-info-top-padding{
+  min-height: 168px;
+}
+.user-info-avatar{
+  background: #fff;
+  padding: 3px;
+  display:inline-block;
+  .borderRadius(3px);
+}
+.user-info-avatar-username,.user-info-avatar-realname{
+  text-align: left;
+}
+.user-info-avatar-username{
+  color: #ddd;
+}
+.user-info-avatar-realname{
+  font-weight: bold;
+}
+.user-info-avatar-pic{
+  width: 200px;
+  height: auto;
+  .borderRadius(inherit);
+}
+.user-info-avatar-motto{
+  vertical-align:middle;
+  text-align:center;
+}
+

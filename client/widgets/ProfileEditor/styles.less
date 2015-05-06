@@ -1,0 +1,27 @@
+@import (reference) url('/mixins.less');
+.profile-editor{
+  margin:auto;
+  width: 1024px;
+  background: #fff;
+  padding: 1em;
+  .borderRadius(0 0 3px 3px);
+  .boxShadow(1px 1px 4px #F5E1FD);
+
+  label{
+    display: table;
+  }
+
+  input[type=file]{
+    display: block;
+    background: #fff;
+    padding: 1.4em;
+    width: 100%;
+    border: 1px dashed #ddd;
+    .borderRadius(3px);
+  }
+
+  .profile-editor-avatar{
+    width: 80px;
+    height: auto;
+  }
+}
