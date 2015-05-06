@@ -137,6 +137,8 @@ Router.route('/profile/update',{
 
         var userId = self.request.body.profile.user_id;
         var existing = Meteor.users.find(userId).fetch()[0];
+        if(!existing.profile)
+            existing.profile = {};
         if((_profile.realname + '').trim())
             existing.profile.realname = _profile.realname.trim();
 
