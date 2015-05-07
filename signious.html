@@ -35,31 +35,6 @@
 	{{> Messages}}
 </template>
 
-<template name="profile">
-	{{> UserInfo}}
-	{{> Messages}}
-</template>
-
-
-<template name="UserInfo">
-    <section class="user-info">
-		<div class="user-info-avatar">
-			<img class="user-info-avatar-pic" src="/static/{{user.profile.avatar}}">
-			<div class="user-info-avatar-realname">
-				{{user.profile.realname}}
-			</div>
-			<div class="user-info-avatar-username">
-				{{user.username}}
-			</div>
-		</div>
-        <h1 class="user-info-avatar-motto">
-            {{user.profile.bio}}
-        </h1>
-		<footer>
-
-		</footer>
-    </section>
-</template>
 
 <template name="Messages">
 	{{#unless isLoadingNearbySigns}}

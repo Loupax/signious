@@ -63,7 +63,7 @@ Meteor.methods({
                 meta: []
             };
 
-            $('meta').filter('[name="keywords"], [name="description"], [property^="og:"]').each(function(index, meta){
+            $('meta').filter('[name="keywords"], [name="description"], [property^="og:"]').each(function (index, meta) {
                 var $meta = $(meta);
                 linkedWebpage.meta.push(meta.attribs);
             });
@@ -93,9 +93,46 @@ Meteor.methods({
 
         // Just make an asynchronous call to the route that will scrape the urls inside
         // the sign and add additional info to the record
-        Meteor.http.get(Meteor.absoluteUrl('/scrape_html/' + _id), function () {});
+        Meteor.http.get(Meteor.absoluteUrl('/scrape_html/' + _id), function () {
+        });
 
         return _id;
     }
 
+});
+
+
+Meteor.methods({
+    'File:upload': function (file, content) {
+        var _id = UploadedFilesCollection.insert({
+            'originalFilename': file.name,
+            'mimeType': file.type
+        });
+        var fs = Npm.require('fs');
+        content = content.replace(/^data:image\/\w+;base64,/, "");
+        var buf = new Buffer(content, 'base64');
+        fs.writeFile(process.env.PWD + "/server/user-content/" + _id, buf,Meteor.bindEnvironment(function (err) {
+            if (err) {
+                return console.error(err);
+            }
+
+            Meteor.users.update({_id: Meteor.userId()}, {$set: {'profile.avatar': _id}});
+            SignsCollection.update({poster_id: Meteor.userId()}, {$set: {'avatar': _id}}, {multi: true});
+        }));
+    }
+});
+
+
+Meteor.methods({
+    'Profile:update': function (data) {
+        var duplicateUsername = Meteor.users.find({'username': data.username, _id: {$ne: Meteor.userId()}}, {fields: {_id: 1}, limit: 1}).fetch();
+        if(duplicateUsername.length){
+            throw new Meteor.Error('Username is taken');
+        }
+        Meteor.users.update({_id: Meteor.userId()}, {$set: {
+            'profile.bio': data.bio,
+            'profile.realname': data.realname,
+            'username': data.username
+        }});
+    }
 });
