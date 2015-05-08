@@ -49,13 +49,16 @@ Router.route('static', {
         var stats = fs.statSync(filePath);
         var mtime = stats.mtime;
         var size = stats.size;
-
-        var file = UploadedFilesCollection.find({_id: this.params[0]}, {limit: 1}).fetch().pop();
+        var now = new Date();
+        var _id = this.params[0];
+        var file = UploadedFilesCollection.find({_id: _id}, {limit: 1}).fetch().pop();
         this.response.writeHead(200, {
             'Content-type': file.mimeType,
             'Last-Modified': mtime.toUTCString(),
-            'Cache-Control':'no-transform,public,max-age=300,s-maxage=900',
-            'Content-Length': size
+            'Cache-Control':'max-age=311040000, public',
+            'Content-Length': size,
+            'ETag': _id + mtime.getTime(),
+            'Expires': (now.setSeconds(now.getSeconds() + 311040000))?now.toUTCString():''
         });
         this.response.write(data);
         this.response.end();
