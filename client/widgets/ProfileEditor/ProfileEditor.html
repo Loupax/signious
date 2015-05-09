@@ -9,7 +9,7 @@
         <input value="{{user._id}}" type="hidden" name="profile[user_id]">
 
         <label for="avatar-file">Avatar</label>
-        <img class="profile-editor-avatar" src="/static/{{user.profile.avatar}}">
+        <img class="profile-editor-avatar" src="/static/resource/{{user.profile.avatar}}">
         <input {{disableOnSave}} id="avatar-file" type="file" name="profile[avatar]">
 
         <input {{disableOnSave}} type="submit">

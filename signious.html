@@ -16,7 +16,7 @@
 				</li>
 				<li class="top-navigation-list-item">
 					{{#if isLoggedIn}}
-					<a class="{{currentRoute '/profile'}}" href="/profile">Profile</a>
+					<a class="{{currentRoute '/profile/show'}}" href="/profile/show">Profile</a>
 					{{/if}}
 				</li>
 				<li class="top-navigation-list-item">
@@ -34,8 +34,6 @@
 	{{> NewMessageForm}}
 	{{> Messages}}
 </template>
-
-
 <template name="Messages">
 	{{#unless isLoadingNearbySigns}}
 	<div class="messages">

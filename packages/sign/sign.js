@@ -14,6 +14,7 @@ AccessibleSigns.deny({
     'update': function(){return true;},
     'remove': function(){return true;}
 });
+
 SignsCollection.allow({
 	// We wouldn't want impersonators...
 	'insert': function(userId, doc){return userId === doc.poster_id;}

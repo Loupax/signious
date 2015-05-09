@@ -1,6 +1,7 @@
 Meteor.publish('NearbySigns', function NearbySigns(point) {
     point = new Location(point);
-    var self = this, published = {}, observers;
+    var self = this, published = {}, observers, users = {};
+
     observers = {
         added: function (sign_id,sign) {
             if(!published[sign_id]) {

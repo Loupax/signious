@@ -6,8 +6,9 @@
 
 <template name="UserInfo">
     <section class="user-info">
+        {{#if user}}
         <div class="user-info-avatar">
-            <img class="user-info-avatar-pic" src="/static/{{user.profile.avatar}}">
+            <img class="user-info-avatar-pic" src="/static/resource/{{user.profile.avatar}}">
             <div class="user-info-avatar-realname">
               {{user.profile.realname}}
             </div>
@@ -18,14 +19,19 @@
         <h1 class="user-info-avatar-motto">
           {{user.profile.bio}}
         </h1>
-
+        {{/if}}
+        {{#unless user}}
+            {{> Loading}}
+        {{/unless}}
 
 
         <footer>
             <a></a>
             <a></a>
             <a></a>
+            {{#if ownedProfile}}
             <a href="/profile/edit">Edit</a>
+            {{/if}}
         </footer>
     </section>
 </template>

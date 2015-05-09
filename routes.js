@@ -1,15 +1,21 @@
 Router.configure({
   // the default layout
-  layoutTemplate: 'root'
-  //loadingTemplate: 'Loading'
+    layoutTemplate: 'root',
+    notFoundTemplate: "routeNotFound"
 });
+
 
 Router.route('/', {
     controller: 'HomeController',
     action: 'index'
 });
 
-Router.route('/profile', {
+Router.route('/:username', {
+    controller: 'ProfileController',
+    action: 'index'
+});
+
+Router.route('/profile/show', {
     controller: 'ProfileController',
     action: 'index'
 });
@@ -19,7 +25,7 @@ Router.route('/profile/edit', {
     action: 'edit'
 });
 
-Router.route('/deploy', {
+Router.route('/deploy/git', {
     action:function(req, res){
         var exec = Npm.require('child_process').exec;
         function puts(error, stdout, stderr) { res.end(stdout); }
@@ -29,7 +35,7 @@ Router.route('/deploy', {
 });
 
 
-Router.route('/scrape_html/:sign_id', {
+Router.route('/scrape/html/:sign_id', {
     action:function(req, res){
         Meteor.call('Sign:addURLData', this.params.sign_id);
         res.end();
@@ -39,18 +45,17 @@ Router.route('/scrape_html/:sign_id', {
 
 
 UploadedFilesCollection = new Meteor.Collection('uploaded_files');
-Router.route('static', {
+Router.route('/static/resource/:file_id', {
     where: 'server',
-    path: /^\/static\/(.*)$/,
     action: function() {
         var fs = Npm.require('fs');
-        var filePath = process.env.PWD + '/server/user-content/' + this.params[0];
+        var _id = this.params.file_id;
+        var filePath = process.env.PWD + '/server/user-content/' + _id;
         var data = fs.readFileSync(filePath);
         var stats = fs.statSync(filePath);
         var mtime = stats.mtime;
         var size = stats.size;
         var now = new Date();
-        var _id = this.params[0];
         var file = UploadedFilesCollection.find({_id: _id}, {limit: 1}).fetch().pop();
         var maxAge = 311040000;
         this.response.writeHead(200, {

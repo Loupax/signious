@@ -2,9 +2,7 @@ Session.setDefault('loadingNearbySigns', true);
 var handler = Deps.autorun(function () {
     var loc = new Location(Session.get('lastKnownLocation'));
     Meteor.subscribe('NearbySigns', loc, function(){
-        //Meteor.setTimeout(function(){
-            Session.set('loadingNearbySigns', false);
-        //}, 1000);
+        Session.set('loadingNearbySigns', false);
     });
 });
 

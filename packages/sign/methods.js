@@ -93,7 +93,7 @@ Meteor.methods({
 
         // Just make an asynchronous call to the route that will scrape the urls inside
         // the sign and add additional info to the record
-        Meteor.http.get(Meteor.absoluteUrl('/scrape_html/' + _id), function () {
+        Meteor.http.get(Meteor.absoluteUrl('/scrape/html/' + _id), function () {
         });
 
         return _id;
@@ -127,7 +127,7 @@ Meteor.methods({
     'Profile:update': function (data) {
         var duplicateUsername = Meteor.users.find({'username': data.username, _id: {$ne: Meteor.userId()}}, {fields: {_id: 1}, limit: 1}).fetch();
         if(duplicateUsername.length){
-            throw new Meteor.Error('Username is taken');
+            throw new Meteor.Error(409, 'Duplicate', 'Username is taken');
         }
         Meteor.users.update({_id: Meteor.userId()}, {$set: {
             'profile.bio': data.bio,
