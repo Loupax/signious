@@ -8,6 +8,12 @@ input{
   margin-bottom: 1em;
 }
 
+input[type=text], input[type=number], input[type=password]{
+  &[disabled]{
+	background: #ddd;
+  }
+}
+
 /* CSS declarations go here */
 .responsive-image{
   max-width: 100%;
