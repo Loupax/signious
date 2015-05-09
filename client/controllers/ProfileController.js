@@ -6,7 +6,7 @@ ProfileController = ApplicationController.extend({
           return currentUser.get();
         },
         ownedProfile: function(){
-            return currentUser.get() && Meteor.user() && (currentUser.get() === Meteor.user().username);
+            return currentUser.get() && Meteor.user() && (currentUser.get().username === Meteor.user().username);
         },
         messages: function(){
             return AccessibleSigns.find({
