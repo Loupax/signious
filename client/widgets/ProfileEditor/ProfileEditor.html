@@ -1,17 +1,17 @@
 <template name="ProfileEditor">
     <form class="profile-editor" action="/profile/update" method="post" enctype="multipart/form-data">
         <label for="realname">Real Name</label>
-        <input value="{{user.profile.realname}}" id="realname" type="text" name="profile[realname]">
+        <input {{disableOnSave}} value="{{user.profile.realname}}" id="realname" type="text" name="profile[realname]">
         <label for="username">Username</label>
-        <input value="{{user.username}}" id="username" type="text" name="profile[username]">
+        <input {{disableOnSave}} value="{{user.username}}" id="username" type="text" name="profile[username]">
         <label for="bio">Bio</label>
-        <input value="{{user.profile.bio}}" id="bio" type="text" name="profile[bio]">
+        <input {{disableOnSave}} value="{{user.profile.bio}}" id="bio" type="text" name="profile[bio]">
         <input value="{{user._id}}" type="hidden" name="profile[user_id]">
 
         <label for="avatar-file">Avatar</label>
         <img class="profile-editor-avatar" src="/static/{{user.profile.avatar}}">
-        <input id="avatar-file" type="file" name="profile[avatar]">
+        <input {{disableOnSave}} id="avatar-file" type="file" name="profile[avatar]">
 
-        <input type="submit">
+        <input {{disableOnSave}} type="submit">
     </form>
 </template>

@@ -52,13 +52,14 @@ Router.route('static', {
         var now = new Date();
         var _id = this.params[0];
         var file = UploadedFilesCollection.find({_id: _id}, {limit: 1}).fetch().pop();
+        var maxAge = 311040000;
         this.response.writeHead(200, {
-            'Content-type': file.mimeType,
+            'Content-Type': file.mimeType,
             'Last-Modified': mtime.toUTCString(),
-            'Cache-Control':'max-age=311040000, public',
+            'Cache-Control':'max-age='+maxAge+', public',
             'Content-Length': size,
             'ETag': _id + mtime.getTime(),
-            'Expires': (now.setSeconds(now.getSeconds() + 311040000))?now.toUTCString():''
+            'Expires': (now.setSeconds(now.getSeconds() + maxAge))?now.toUTCString():''
         });
         this.response.write(data);
         this.response.end();

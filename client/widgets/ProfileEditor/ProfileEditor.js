@@ -1,7 +1,16 @@
 var file;
+var formIsSaving = new ReactiveVar(false);
+
+Template.ProfileEditor.helpers({
+    disableOnSave: function(){
+        return formIsSaving.get()?'disabled':'';
+    }
+});
+
 Template.ProfileEditor.events({
     'submit form': function (evt, template) {
         evt.preventDefault();
+        formIsSaving.set(true);
         var data = {
             'realname': template.find('[name="profile[realname]"]').value,
             'username': template.find('[name="profile[username]"]').value,
@@ -22,8 +31,10 @@ Template.ProfileEditor.events({
             }));
         }
         Promise.all(promises).then(function(){
+            formIsSaving.set(false);
             Router.go('/profile');
         }).catch(function(){
+            formIsSaving.set(false);
             console.log(arguments);
         });
 
