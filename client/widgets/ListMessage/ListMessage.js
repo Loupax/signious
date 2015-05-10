@@ -30,7 +30,7 @@ Template.ListMessage.helpers({
 
         (message.mentions || []).forEach(function (mention, index) {
             var n = '@' + mention.username;
-            text = text.replace(n, '<a href="#">' + n + '</a>');
+            text = text.replace(n, '<a href="/'+mention.username+'">' + n + '</a>');
         });
         return new Handlebars.SafeString(text);
     },

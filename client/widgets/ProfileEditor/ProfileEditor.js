@@ -32,7 +32,7 @@ Template.ProfileEditor.events({
         }
         Promise.all(promises).then(function(){
             formIsSaving.set(false);
-            Router.go('/profile');
+            Router.go('/profile/show');
         }).catch(function(){
             formIsSaving.set(false);
             console.log(arguments);
