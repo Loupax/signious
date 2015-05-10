@@ -1,4 +1,9 @@
-var INITIAL_LOCATION = new Location();
+// Set the coordinates of South Pole as our default coordinates
+// That way our subscriptions will be complete even when the browser
+// denies Geolocation access. We need that for 2 reasons.
+// A: Make the app usable even without geolocation
+// B: Make the app crawlable even without geolocation
+var INITIAL_LOCATION = new Location({latitude: 90, longitude: 0, altitude: 0});
 Session.set('lastKnownLocation', INITIAL_LOCATION);
 
 Signious = {
