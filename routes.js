@@ -12,19 +12,27 @@ Router.route('/', {
 
 Router.route('/:username', {
     controller: 'ProfileController',
+    waitOn: function(){
+        return Meteor.subscribe('SpecificProfilePublication', this.params.username);
+    },
     action: 'index'
 });
 
 Router.route('/profile/show', {
     controller: 'ProfileController',
+    waitOn: function(){
+        return Meteor.subscribe('SpecificPublicSign', Meteor.userId());
+    },
     action: 'index'
 });
 
 Router.route('/:username/sign/:sign_id', {
     controller: 'SignController',
+    waitOn: function(){
+        return Meteor.subscribe('SpecificPublicSign', this.params.sign_id);
+    },
     action: 'index'
 });
-
 
 Router.route('/profile/edit', {
     controller: 'ProfileController',

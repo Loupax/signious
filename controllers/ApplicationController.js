@@ -1,14 +1,7 @@
-Session.setDefault('loadingNearbySigns', true);
-var handler = Deps.autorun(function () {
-    var loc = new Location(Session.get('lastKnownLocation'));
-    Meteor.subscribe('NearbySigns', loc, function(){
-        Session.set('loadingNearbySigns', false);
-    });
-});
-
 ApplicationController = RouteController.extend({
     layoutTemplate: 'root',
     data: {},
+    fastRender: true,
     onBeforeAction: function () {
         this.next();
     },

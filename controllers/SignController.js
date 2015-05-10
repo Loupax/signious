@@ -1,4 +1,14 @@
-var currentSign = new ReactiveVar(undefined)
+var currentSign = new ReactiveVar(undefined);
+if(Meteor.isClient){
+
+}
+var serverSideSubscription;
+/*if(Meteor.isServer){
+    FastRender.route('/:username/sign/:sign_id', function(params) {
+        serverSideSubscription = this.subscribe('SpecificPublicSign', params.sign_id);
+        console.log(serverSideSubscription);
+    });
+}*/
 SignController = ApplicationController.extend({
     data: {
         sign: function(){
@@ -24,15 +34,14 @@ SignController = ApplicationController.extend({
         $('meta.current-sign-meta').remove();
     },
     index: function () {
-        var self = this;
-        Meteor.call('Sign:fetch', Router.current().params.sign_id, function(err, sign){
-            if(err) {
-                self.render('signNotFound');
-            }else {
-                currentSign.set(sign);
-                self.render('SignPage');
-                GAnalytics.pageview();
-            }
-        });
+        var sign = SignsCollection.find({}).fetch().pop();
+
+        if(!sign) {
+            this.render('signNotFound');
+        }else {
+            currentSign.set(sign);
+            this.render('SignPage');
+            GAnalytics.pageview();
+        }
     }
 });

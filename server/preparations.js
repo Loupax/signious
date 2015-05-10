@@ -6,4 +6,4 @@ Meteor.methods({
 
         return user;
     }
-})
+});

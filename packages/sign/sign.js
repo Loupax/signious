@@ -26,6 +26,16 @@ if(Meteor.isServer){
     AccessibleSigns._ensureIndex({location: '2dsphere'});
 }
 
+if(Meteor.isClient){
+	Session.setDefault('loadingNearbySigns', true);
+	var handler = Deps.autorun(function () {
+		var loc = new Location(Session.get('lastKnownLocation'));
+		Meteor.subscribe('NearbySigns', loc, function(){
+			Session.set('loadingNearbySigns', false);
+		});
+	});
+}
+
 
 Sign = function Sign(o){
 	this.text 		= o.text;

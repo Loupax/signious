@@ -23,17 +23,14 @@ ProfileController = ApplicationController.extend({
         }
     },
     index: function (req) {
-        var self = this;
-        var username = (Router.current().params.username || Meteor.user()?Meteor.user().username:'') || -1;
-        Meteor.call('getUserProfile', username, function(err, user){
-            if(err) {
-                self.render('userNotFound');
-            }else {
-                currentUser.set(user);
-                self.render('profile');
-            }
+        var user = Meteor.users.find({}).fetch().pop();
 
-        });
+        if(!user) {
+            this.render('userNotFound');
+        }else {
+            currentUser.set(user);
+            this.render('profile');
+        }
     },
     edit: function(){
         this.render('ProfileEditor');
