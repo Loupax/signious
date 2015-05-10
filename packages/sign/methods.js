@@ -29,6 +29,13 @@ function getHTMLOfURL(url) {
 
 
 Meteor.methods({
+    'Sign:fetch': function(_id){
+      var sign = SignsCollection.find({_id: _id}).fetch().pop();
+        if(!sign)
+            throw new Meteor.Error('404', 'Not found', 'Not found');
+
+        return sign;
+    },
     'Sign:scrapeURLs': function scrapeURLs(sign) {
         var parsed = Autolinker.link(sign.text, {twitter: false});
         try {
@@ -49,9 +56,6 @@ Meteor.methods({
                 }
             }
         }, {limit: 1, sort: {when: 1}, fields: {'location': 1}}).fetch().pop();
-    },
-    'Sign:getAll': function getAll() {
-        return SignsCollection.find({}).fetch();
     },
     'Sign:addURLData': function (sign_id) {
         var sign = SignsCollection.find({_id: sign_id}).fetch()[0];
@@ -129,6 +133,10 @@ Meteor.methods({
         if(duplicateUsername.length){
             throw new Meteor.Error(409, 'Duplicate', 'Username is taken');
         }
+
+        SignsCollection.update({poster_id: Meteor.userId()}, {$set:{
+            username: data.username
+        }}, {multi: true});
         Meteor.users.update({_id: Meteor.userId()}, {$set: {
             'profile.bio': data.bio,
             'profile.realname': data.realname,

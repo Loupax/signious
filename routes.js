@@ -20,6 +20,12 @@ Router.route('/profile/show', {
     action: 'index'
 });
 
+Router.route('/:username/sign/:sign_id', {
+    controller: 'SignController',
+    action: 'index'
+});
+
+
 Router.route('/profile/edit', {
     controller: 'ProfileController',
     action: 'edit'

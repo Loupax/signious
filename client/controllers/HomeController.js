@@ -8,9 +8,6 @@ HomeController = ApplicationController.extend({
                     when:-1
                 }
             });
-        },
-        isReady: function(){
-            return valid;
         }
     },
     index: function () {
