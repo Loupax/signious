@@ -8,7 +8,7 @@ SignController = ApplicationController.extend({
             var sign = currentSign.get(),
                 meta = (sign && sign.linkedWebpage && sign.linkedWebpage.meta)?sign.linkedWebpage.meta:[],
                 domstring = '', iterator;
-            
+
             meta.push({name: "geo.position", content:currentSign.get().location.coordinates.join(';')});
             for(var i = 0, len = meta.length; i < len; i++){
                 iterator = '';
@@ -31,6 +31,7 @@ SignController = ApplicationController.extend({
             }else {
                 currentSign.set(sign);
                 self.render('SignPage');
+                GAnalytics.pageview();
             }
         });
     }
