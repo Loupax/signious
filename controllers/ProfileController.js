@@ -22,10 +22,15 @@ ProfileController = ApplicationController.extend({
             });
         }
     },
-    index: function (req) {
-        var user = Meteor.users.find({}).fetch().pop();
+    index: function (path) {
+        if(path.url.indexOf('/profile/show') > -1){
+            var user = Meteor.users.find({_id: Meteor.userId()}).fetch().pop();
+        }else{
+            var user = Meteor.users.find({username: path.url.split('/').pop()}).fetch().pop();
+        }
 
         if(!user) {
+            currentUser.set(undefined);
             this.render('userNotFound');
         }else {
             currentUser.set(user);
