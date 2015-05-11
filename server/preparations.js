@@ -15,16 +15,28 @@ Meteor.methods({
             'originalFilename': file.name,
             'mimeType': file.type
         });
+        var segments = file.name.split('.')
+        var filename = _id+'.'+segments[segments.length - 1];
+        var thumbnail = _id+'.thumbnail-small.'+segments[segments.length - 1];
         var fs = Npm.require('fs');
         content = content.replace(/^data:image\/\w+;base64,/, "");
         var buf = new Buffer(content, 'base64');
-        fs.writeFile(process.env.PWD + "/server/user-content/" + _id, buf,Meteor.bindEnvironment(function (err) {
+        var path = process.env.PWD + "/server/user-content/" + filename;
+        var thumbnailPath = process.env.PWD + "/server/user-content/" + thumbnail;
+
+        fs.writeFile(path, buf,Meteor.bindEnvironment(function (err) {
             if (err) {
                 return console.error(err);
             }
 
-            Meteor.users.update({_id: Meteor.userId()}, {$set: {'profile.avatar': _id}});
-            SignsCollection.update({poster_id: Meteor.userId()}, {$set: {'avatar': _id}}, {multi: true});
+            Imagemagick.resize({
+                srcPath: path,
+                dstPath: thumbnailPath,
+                width:   256
+            });
+
+            Meteor.users.update({_id: Meteor.userId()}, {$set: {'profile.avatar': thumbnail}});
+            SignsCollection.update({poster_id: Meteor.userId()}, {$set: {'avatar': thumbnail}}, {multi: true});
         }));
     }
 });

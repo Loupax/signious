@@ -60,17 +60,25 @@ Meteor.methods({
     'Sign:addURLData': function (sign_id) {
         var sign = SignsCollection.find({_id: sign_id}).fetch()[0];
         var urls = Meteor.call('Sign:scrapeURLs', sign);
+        console.log(urls);
         if (urls.length) {
-            var $ = cheerio.load(getHTMLOfURL(urls[0]).value);
-            var linkedWebpage = {
-                title: $('title').text(),
-                meta: []
-            };
+            if(/^(https|http):\/\/.+\.(gif|png|jpg|jpeg)$/i.test(urls[0])){
+                var linkedWebpage = {
+                    title: undefined,
+                    meta: [{property: 'og:image', content: urls[0]}]
+                };
+            }else {
+                var $ = cheerio.load(getHTMLOfURL(urls[0]).value);
+                var linkedWebpage = {
+                    title: $('title').text(),
+                    meta: []
+                };
 
-            $('meta').filter('[name="keywords"], [name="description"], [property^="og:"]').each(function (index, meta) {
-                var $meta = $(meta);
-                linkedWebpage.meta.push(meta.attribs);
-            });
+                $('meta').filter('[name="keywords"], [name="description"], [property^="og:"]').each(function (index, meta) {
+                    var $meta = $(meta);
+                    linkedWebpage.meta.push(meta.attribs);
+                });
+            }
         }
 
         SignsCollection.update(sign_id, {

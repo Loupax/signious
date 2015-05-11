@@ -61,33 +61,31 @@ Router.route('/scrape/html/:sign_id', {
 
 
 UploadedFilesCollection = new Meteor.Collection('uploaded_files');
-Router.route('/static/resource/:file_id', {
+Router.route('/static/resource/:filename', {
     where: 'server',
     action: function() {
         var fs = Npm.require('fs');
-        var _id = this.params.file_id;
-        var filePath = process.env.PWD + '/server/user-content/' + _id;
+        var _id = this.params.filename.split('.').slice(0, 1).join('.');
+        var filePath = process.env.PWD + '/server/user-content/' + this.params.filename;
         var stats = fs.statSync(filePath);
         var mtime = stats.mtime;
         var size = stats.size;
         var now = new Date();
         var ETag = _id + mtime.getTime();
 
-
         if(this.request.headers['if-none-match'] === ETag){
             this.response.writeHead(304);
             return this.response.end();
         }else {
-            var file = UploadedFilesCollection.find({_id: _id}, {limit: 1}).fetch().pop();
-            var data = fs.readFileSync(filePath);
             this.response.writeHead(200, {
-                'Content-Type': file.mimeType,
+                'Content-Type': Imagemagick.identify(filePath)['mime type'],
                 'Date': now.toString(),
                 'Content-Length': size,
                 'ETag': ETag
             });
-            this.response.write(data);
-            return this.response.end();
+
+            var readStream = fs.createReadStream(filePath);
+            return readStream.pipe(this.response);
         }
     }
 });

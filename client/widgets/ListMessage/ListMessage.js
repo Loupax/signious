@@ -23,6 +23,9 @@ Template.ListMessage.events({
 
 
 Template.ListMessage.helpers({
+    ownsAttachedContent: function(message){
+        return message.linkedWebpage && (message.linkedWebpage.title || (message.linkedWebpage.meta && message.linkedWebpage.meta.length));
+    },
     'FormatMessage': function FormatMessage(message) {
         var text = message.text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         text = text.replace(/\n/g, "<br>");
@@ -42,6 +45,7 @@ Template.ListMessage.helpers({
         if (!sign.linkedWebpage || !sign.linkedWebpage.meta) {
             return '';
         }
+
         var openGraph = sign.linkedWebpage.meta.filter(function (a) {
             return (a.property) && a.property.indexOf('og:') > -1
         });
@@ -51,6 +55,7 @@ Template.ListMessage.helpers({
         var ogImage = openGraph.filter(function (a) {
             return (a.property) && a.property === 'og:image';
         }).pop();
+
         var ogTitle = openGraph.filter(function (a) {
             return (a.property) && a.property === 'og:title';
         }).pop();
@@ -67,11 +72,14 @@ Template.ListMessage.helpers({
             return new Handlebars.SafeString('<iframe width="420" height="315" src="' + videoUrl.content + '" frameborder="0" allowfullscreen></iframe>');
         }
         // Are there any images we can get from the sign
-        if (ogTitle && ogImage) {
+        if (ogImage) {
+            if(sign._id == "vBXjtjskRjP9fPdbt")
+                console.log(sign.linkedWebpage.meta, ogImage);
+
             if (ogUrl) {
-                return new Handlebars.SafeString('<a target="_blank" href="' + ogUrl.content + '"><img class="responsive-image" src="' + (ogImage.content) + '" title="' + (ogTitle.content) + '"/></a>');
+                return new Handlebars.SafeString('<a target="_blank" href="' + ogUrl.content + '"><img class="responsive-image" src="' + (ogImage.content) + '" title="' + (ogTitle?ogTitle.content:'') + '"/></a>');
             } else {
-                return new Handlebars.SafeString('<img class="responsive-image" src="' + (ogImage.content) + '" title="' + (ogTitle.content) + '"/>');
+                return new Handlebars.SafeString('<a target="_blank" href="' + ogImage.content + '"><img class="responsive-image" src="' + (ogImage.content) + '" title="' + (ogTitle?ogTitle.content:'') + '"/></a>');
             }
         }
 
