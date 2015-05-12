@@ -22,6 +22,10 @@ SignController = ApplicationController.extend({
         }
         var sign = currentSign.get();
 
+        if(!sign || !sign.linkedWebpage){
+            return false;
+        }
+
         var metaData = {};
         sign.linkedWebpage.meta.map(function (a) {
             if((a.property) && a.property.indexOf('og:') > -1){
