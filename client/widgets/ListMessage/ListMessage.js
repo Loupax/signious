@@ -68,8 +68,8 @@ Template.ListMessage.helpers({
             var videoUrl = openGraph.filter(function (a) {
                 return (a.property) && a.property.indexOf('og:video:url') > -1
             }).pop();
-            if (videoUrl && videoUrl.content);
-            return new Handlebars.SafeString('<iframe width="420" height="315" src="' + videoUrl.content + '" frameborder="0" allowfullscreen></iframe>');
+            if (videoUrl && videoUrl.content)
+                return new Handlebars.SafeString('<iframe width="420" height="315" src="' + videoUrl.content + '" frameborder="0" allowfullscreen></iframe>');
         }
         // Are there any images we can get from the sign
         if (ogImage) {
