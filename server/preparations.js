@@ -8,6 +8,9 @@ Meteor.methods({
     }
 });
 
+Meteor.startup(function(){
+    console.log('Request made!');
+});
 
 Meteor.methods({
     'File:upload': function (file, content) {

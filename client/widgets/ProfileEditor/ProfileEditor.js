@@ -35,7 +35,6 @@ Template.ProfileEditor.events({
             Router.go('/profile/show');
         }).catch(function(){
             formIsSaving.set(false);
-            console.log(arguments);
         });
 
     },

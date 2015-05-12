@@ -73,13 +73,11 @@ Template.ListMessage.helpers({
         }
         // Are there any images we can get from the sign
         if (ogImage) {
-            if(sign._id == "vBXjtjskRjP9fPdbt")
-                console.log(sign.linkedWebpage.meta, ogImage);
-
-            if (ogUrl) {
-                return new Handlebars.SafeString('<a target="_blank" href="' + ogUrl.content + '"><img class="responsive-image" src="' + (ogImage.content) + '" title="' + (ogTitle?ogTitle.content:'') + '"/></a>');
-            } else {
-                return new Handlebars.SafeString('<a target="_blank" href="' + ogImage.content + '"><img class="responsive-image" src="' + (ogImage.content) + '" title="' + (ogTitle?ogTitle.content:'') + '"/></a>');
+            var header = sign.linkedWebpage.title?'<h1 class="messages-message-linked-webpage-title">'+sign.linkedWebpage.title+'</h1>':'';
+            var urls = $('<div>'+Autolinker.link(sign.text, {newWindow: true, twitter: false})+'</div>').find('a').map(function(){return this.href;});
+            
+            if (urls.length) {
+                return new Handlebars.SafeString('<a class="messages-message-linked-webpage-title-link" target="_blank" href="' + urls[0] + '">'+header+'<img class="responsive-image" src="' + (ogImage.content) + '" title="' + (ogTitle?ogTitle.content:'') + '"/></a>');
             }
         }
 

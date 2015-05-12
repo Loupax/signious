@@ -144,11 +144,28 @@ html{
 
 	.boxShadow(1px 1px 4px #F5E1FD);
 }
+.messages-messages-actions-reply{
+  border: none;
+  background: none;
+}
+.messages-message-linked-webpage-title-link{
+  text-decoration: none;
+  color: #000000;
+  .transition(250ms color);
+}
+.messages-message-linked-webpage-title-link:hover{
+  color: #003aee;
+}
 .messages-message-avatar-pic{
   float: left;
   margin: 0 1em 0 0em;
   width: 80px;
   height: auto;
+
+  -moz-box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  filter: progid:DXImageTransform.Microsoft.Shadow(direction=135,strength=3, color=#808080);
 }
 .messages-message:last-child{
   border-bottom-width: 1px;
