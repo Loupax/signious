@@ -13,25 +13,43 @@ SignController = ApplicationController.extend({
     data: {
         sign: function(){
             return currentSign.get();
-        },
-        metaTags: function(){
-            var sign = currentSign.get(),
-                meta = (sign && sign.linkedWebpage && sign.linkedWebpage.meta)?sign.linkedWebpage.meta:[],
-                domstring = '', iterator;
-
-            meta.push({name: "geo.position", content:currentSign.get().location.coordinates.join(';')});
-            for(var i = 0, len = meta.length; i < len; i++){
-                iterator = '';
-                for(var prop in meta[i]){
-                    iterator += prop+'="'+meta[i][prop]+'" ';
-                }
-                domstring += '<meta class="current-sign-meta" '+iterator+'>';
-            }
-            $(document.head).append(domstring);
         }
     },
-    unload: function(){
-        $('meta.current-sign-meta').remove();
+    onAfterAction: function(){
+
+        if (Meteor.isServer) {
+            return;
+        }
+        var sign = currentSign.get();
+
+        var metaData = {};
+        sign.linkedWebpage.meta.map(function (a) {
+            if((a.property) && a.property.indexOf('og:') > -1){
+                metaData[a.property.split(':')[1]] = a.content;
+            }
+            return '';
+        });
+
+        sign.linkedWebpage.meta.map(function (a) {
+            if((a.property) && a.property.indexOf('og:') === -1){
+                metaData[a.property] = a.content;
+            }
+            return '';
+        });
+
+        metaData['site_name'] = 'Signious';
+        metaData['url'] = Router.current().originalUrl;
+        metaData['description'] = 'You can any responses to this post that are nearby';
+        metaData['geo.position'] = sign.location.coordinates.join(';');
+        metaData['ICBM'] = metaData['geo.position'];
+
+        var title = metaData['title']?'Signious - '+metaData['title']:'Signious';
+
+        SEO.set({
+            title: title,
+            meta: metaData//metaData,
+            //og: openGraphMeta
+        });
     },
     index: function () {
         var sign = SignsCollection.find({}).fetch().pop();
