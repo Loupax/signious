@@ -44,10 +44,13 @@ var newMessageSave = function(template){
 };
 
 Session.setDefault('NewMessageFormOpenResponseForms', []);
-Session.setDefault('TypedInText', {});
+if (window.typedInTexts === undefined) {
+    typedInTexts = new ReactiveVar({});
+}
+
 
 Handlebars.registerHelper('unsavedMessageText', function(sign_id){
-    var texts = Session.get('TypedInText');
+    var texts = typedInTexts.get();
     return texts[sign_id||''] || '';
 });
 
@@ -61,18 +64,22 @@ Template.NewMessageForm.events({
 		newMessageSave(template);
 	},
 	'keyup [name="message"]': function keyupNewMessageFormHandler(event, template){
-		var texts = Session.get('TypedInText'),
-            response_id = template.find('[name="respond_to_sign_id"]').value;
-        texts[response_id] = template.find('textarea').value;
-        Session.set('TypedInText', _.extend(texts));
         if(event.which === 13 && !event.shiftKey){
 			newMessageSave(template).then(function(){
                 delete texts[response_id];
-                Session.set('TypedInText', _.extend(texts));
+                typedInTexts.set(_.extend(texts));
             }).catch(function(){
                 delete texts[response_id];
-                Session.set('TypedInText', _.extend(texts));
+                typedInTexts.set(_.extend(texts));
             });
 		}
-	}
+	},
+    'blur [name="message"]': function blurNewMessageFormHandler(event, template){
+        var texts = typedInTexts.get(),
+            response_id = template.find('[name="respond_to_sign_id"]').value;
+        if(template.find('textarea').value.trim()) {
+            texts[response_id] = template.find('textarea').value;
+            typedInTexts.set(_.extend(texts));
+        }
+    }
 });

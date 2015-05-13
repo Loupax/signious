@@ -2,10 +2,6 @@ Template.root.rendered = function(){
 	var routes = ['/','/profile'];
 	var current = routes.indexOf(Router.current().location.get().pathname);
 
-	//$(window).on('scroll', function(){
-	//	$('.top-navigation').css('top', $(window).scrollTop());
-	//});
-
 	var element = this.find('.signious');
 	if(element){
 		Hammer(element).on('swiperight', function() {
