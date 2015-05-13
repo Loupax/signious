@@ -71,14 +71,16 @@ Template.ListMessage.helpers({
             if (videoUrl && videoUrl.content)
                 return new Handlebars.SafeString('<iframe width="420" height="315" src="' + videoUrl.content + '" frameborder="0" allowfullscreen></iframe>');
         }
-        // Are there any images we can get from the sign
-        if (ogImage) {
-            var header = sign.linkedWebpage.title?'<h1 class="messages-message-linked-webpage-title">'+sign.linkedWebpage.title+'</h1>':'';
-            var urls = $('<div>'+Autolinker.link(sign.text, {newWindow: true, twitter: false})+'</div>').find('a').map(function(){return this.href;});
 
-            if (urls.length && ogImage) {
+        // Are there any images we can get from the sign
+        var urls = $('<div>'+Autolinker.link(sign.text, {newWindow: true, twitter: false})+'</div>').find('a').map(function(){return this.href;});
+        if (urls.length) {
+            var header = sign.linkedWebpage.title?'<h1 class="messages-message-linked-webpage-title">'+sign.linkedWebpage.title+'</h1>':'';
+
+            if (ogImage) {
                 return new Handlebars.SafeString('<a class="messages-message-linked-webpage-title-link" target="_blank" href="' + urls[0] + '">'+header+'<img class="responsive-image" src="' + (ogImage.content) + '" title="' + (ogTitle?ogTitle.content:'') + '"/></a>');
-            }else if(urls.length && !ogImage){
+            }else {
+                console.log(urls.length);
                 return new Handlebars.SafeString('<a class="messages-message-linked-webpage-title-link" target="_blank" href="' + urls[0] + '">'+header+'</a>');
             }
         }
