@@ -1,1 +1,0 @@
-he = Npm.require('he');

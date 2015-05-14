@@ -13,7 +13,6 @@ Router.route('/', {
 Router.route('/:username', {
     controller: 'ProfileController',
     waitOn: function(){
-        console.log('Show again');
         return Meteor.subscribe('SpecificProfilePublication', this.params.username);
     },
     action: 'index'
