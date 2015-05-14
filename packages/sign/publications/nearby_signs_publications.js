@@ -1,6 +1,6 @@
 Meteor.publish('NearbySigns', function NearbySigns(point) {
     point = new Location(point);
-    var self = this, published = {}, observers, users = {};
+    var self = this, published = {}, observers, users = {}, options = {fields: {location:0}};
 
     observers = {
         added: function (sign_id,sign) {
@@ -28,7 +28,7 @@ Meteor.publish('NearbySigns', function NearbySigns(point) {
                     $maxDistance: 1000
                 }
             }
-        });
+        }, options);
         var handle = cur1.observeChanges(observers);
         self.onStop(function(){handle.stop();});
     }
@@ -36,7 +36,7 @@ Meteor.publish('NearbySigns', function NearbySigns(point) {
     if (this.userId) {
         // If the user is logged in, also add any messages that refer to her. We don't care if these are public or not.
         // If they are about her, let her see it
-        var cur = SignsCollection.find({$or: [{poster_id: this.userId}, {'mentions._id': this.userId}, {'response_to_user_id': this.userId}]});
+        var cur = SignsCollection.find({$or: [{poster_id: this.userId}, {'mentions._id': this.userId}, {'response_to_user_id': this.userId}]}, options);
         var handle2 = cur.observeChanges(observers);
         self.onStop(function(){handle2.stop();});
     }

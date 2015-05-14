@@ -47,16 +47,6 @@ Meteor.methods({
             return $(el).attr('href');
         });
     },
-    'Sign:getCentralPointOfReference': function getCentralPointOfReference(position) {
-        return SignsCollection.find({
-            'location': {
-                $near: {
-                    $geometry: (new Location(position)).toMongo(),
-                    $maxDistance: 1000
-                }
-            }
-        }, {limit: 1, sort: {when: 1}, fields: {'location': 1}}).fetch().pop();
-    },
     'Sign:addURLData': function (sign_id) {
         var sign = SignsCollection.find({_id: sign_id}).fetch()[0];
         var urls = Meteor.call('Sign:scrapeURLs', sign);
@@ -89,6 +79,7 @@ Meteor.methods({
     },
     'Sign:save': function (sign) {
 
+        var mentions = Sign.getMentions(sign);
         var _id = SignsCollection.insert({
             poster_id: sign.poster_id,
             username: sign.username,
@@ -100,14 +91,18 @@ Meteor.methods({
             response_to_sign_id: sign.response_to_sign_id,
             discussion_root_sign_id: sign.discussion_root_sign_id,
             avatar: Meteor.user().profile.avatar,
-            mentions: Sign.getMentions(sign)
+            mentions: mentions
         });
 
         // Just make an asynchronous call to the route that will scrape the urls inside
         // the sign and add additional info to the record
-        Meteor.http.get(Meteor.absoluteUrl('/scrape/html/' + _id), function () {
-        });
-
+        HTTP.call('GET',Meteor.absoluteUrl('/scrape/html/' + _id), function () {});
+        if(mentions.length) {
+            var users = Meteor.users.find({_id: {$in: mentions.map(function(a){return a._id;})}}, {fields: {emails: 1, 'profile.realname': 1, username:1}}).fetch();
+            users.forEach(function(user){
+                HTTP.call('POST', Meteor.absoluteUrl('/mail_notifier/mention'), {data:{user: user, sign:_.extend(sign, {_id: _id})}}, function(){});
+            });
+        }
         return _id;
     }
 
