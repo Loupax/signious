@@ -97,7 +97,7 @@ Router.route('/mail_notifier/mention', {
 
         var user = this.request.body.user;
         var sign = this.request.body.sign;
-        var signUrl = Meteor.absoluteUrl(sign.username+'/sign/'+sign._id);
+        var signUrl = 'http://signious.com/'+sign.username+'/sign/'+sign._id;
         Meteor.call('sendEmail', {
             to:user.emails[0].address,
             from:'notifications@signious.com',
