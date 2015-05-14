@@ -80,7 +80,6 @@ Template.ListMessage.helpers({
             if (ogImage) {
                 return new Handlebars.SafeString('<a class="messages-message-linked-webpage-title-link" target="_blank" href="' + urls[0] + '">'+header+'<img class="responsive-image" src="' + (ogImage.content) + '" title="' + (ogTitle?ogTitle.content:'') + '"/></a>');
             }else {
-                console.log(urls.length);
                 return new Handlebars.SafeString('<a class="messages-message-linked-webpage-title-link" target="_blank" href="' + urls[0] + '">'+header+'</a>');
             }
         }

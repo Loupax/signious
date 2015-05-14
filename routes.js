@@ -89,3 +89,30 @@ Router.route('/static/resource/:filename', {
         }
     }
 });
+
+Router.route('/mail_notifier/mention', {
+   where: 'server',
+    action: function(){
+        this.response.end();
+
+        var user = this.request.body.user;
+        var sign = this.request.body.sign;
+        var signUrl = Meteor.absoluteUrl(sign.username+'/sign/'+sign._id);
+        Meteor.call('sendEmail', {
+            to:user.emails[0].address,
+            from:'notifications@signious.com',
+            subject:'You\'ve been mentioned on Signious!',
+            text:[
+                sign.username + ' mentioned you on a Sign',
+                'You can see the discussion by following this link',
+                signUrl
+            ].join('\r\n'),
+            html:[
+                '<style type="text/css">*{text-align: center; margin: auto;}</style>',
+                '<h1>'+sign.username + ' mentioned you on a Sign'+'</h1>',
+                '<p>You can see the discussion by following this link</p>',
+                '<a href="'+signUrl+'">'+signUrl+'</a>'
+            ].join('')
+        });
+    }
+});

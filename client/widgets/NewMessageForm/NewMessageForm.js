@@ -65,12 +65,14 @@ Template.NewMessageForm.events({
 	},
 	'keyup [name="message"]': function keyupNewMessageFormHandler(event, template){
         if(event.which === 13 && !event.shiftKey){
-			newMessageSave(template).then(function(){
+            newMessageSave(template).then(function(response_id){
+                var texts = typedInTexts.get();
                 delete texts[response_id];
                 typedInTexts.set(_.extend(texts));
             }).catch(function(){
-                delete texts[response_id];
-                typedInTexts.set(_.extend(texts));
+                //var texts = typedInTexts.get();
+                //delete texts[response_id];
+                //typedInTexts.set(_.extend(texts));
             });
 		}
 	},
