@@ -22,37 +22,47 @@ SignController = ApplicationController.extend({
         }
         var sign = currentSign.get();
 
-        if(!sign || !sign.linkedWebpage){
+        if(!sign){
             return false;
         }
 
         var metaData = {};
-        sign.linkedWebpage.meta.map(function (a) {
-            if((a.property) && a.property.indexOf('og:') > -1){
-                metaData[a.property.split(':')[1]] = a.content;
-            }
-            return '';
-        });
+        metaData['content'] = [];
+        if(sign.avatar){
+            metaData['image'] = [sign.avatar];
+        }
+        metaData['description'] = [];
+        metaData['content'] = [sign.text];
+        if(sign.linkedWebpage){
+            sign.linkedWebpage.meta.map(function (a) {
+                if((a.property) && a.property.indexOf('og:') > -1){
+                    var prop = a.property.split(':')[1];
+                    metaData[prop] = metaData[prop]||[];
+                    metaData[prop].push(a.content);
+                }
+                return '';
+            });
 
-        sign.linkedWebpage.meta.map(function (a) {
-            if((a.property) && a.property.indexOf('og:') === -1){
-                metaData[a.property] = a.content;
-            }
-            return '';
-        });
+            sign.linkedWebpage.meta.map(function (a) {
+                if((a.property) && a.property.indexOf('og:') === -1){
+                    metaData[a.property] = metaData[a.property]||[];
+                    metaData[a.property] = a.content;
+                }
+                return '';
+            });
+        }
 
-        metaData['site_name'] = 'Signious';
-        metaData['url'] = Router.current().originalUrl;
-        metaData['description'] = 'You can see any responses to this post if they are nearby';
+        metaData['site_name']    = 'Signious';
+        metaData['url']          = Router.current().originalUrl;
+        metaData['description']  = 'You can see any responses to this post if they are nearby';
         metaData['geo.position'] = sign.location.coordinates.join(';');
-        metaData['ICBM'] = metaData['geo.position'];
-
-        var title = metaData['title']?'Signious - '+metaData['title']:'Signious';
+        metaData['ICBM']         = metaData['geo.position'];
+        metaData['title']        = sign.text;
+        var title = metaData['title'].length?'Signious - '+metaData['title']:'Signious';
 
         SEO.set({
             title: title,
-            meta: metaData//metaData,
-            //og: openGraphMeta
+            meta: metaData
         });
     },
     index: function () {

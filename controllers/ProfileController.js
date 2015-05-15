@@ -37,6 +37,8 @@ ProfileController = ApplicationController.extend({
         }
     },
     edit: function(){
+        var user = Meteor.users.find({_id: Meteor.userId()}).fetch().pop();
+        currentUser.set(user);
         this.render('ProfileEditor');
     }
 });
