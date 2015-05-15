@@ -17,6 +17,14 @@ Template.ListMessage.events({
         } else {
             responses.push(this._id);
         }
+
+        Tracker.afterFlush(function(){
+             var input = template.find('.new-message-form-input');
+            if(input && !input.value.trim()){
+                input.value = '@'+template.data.username + ' ';
+                input.focus();
+            }
+        });
         Session.set('NewMessageFormOpenResponseForms', responses.slice());
     }
 });
