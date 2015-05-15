@@ -26,9 +26,7 @@ ProfileController = ApplicationController.extend({
         if(path.url.indexOf('/profile/show') > -1){
             var user = Meteor.users.find({_id: Meteor.userId()}).fetch().pop();
         }else{
-
             var user = Meteor.users.find({username: decodeURIComponent(path.url).split('/').pop()}).fetch().pop();
-            console.log(path.url, path.url.split('/').pop());
         }
         if(!user) {
             currentUser.set(undefined);

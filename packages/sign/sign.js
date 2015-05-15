@@ -52,7 +52,7 @@ Sign = function Sign(o){
 };
 
 Sign.getMentions = function(sign){
-    var re = /(?:^|\W)@(\w+)(?!\w)/g, match, mentions = [];
+    var re = /@(.+?)(?=\s|$)/g, match, mentions = [];
     while (match = re.exec(sign.text)) {
         mentions.push(match[1]);
     }
