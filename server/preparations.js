@@ -9,7 +9,7 @@ Meteor.methods({
 });
 
 Meteor.startup(function(){
-    console.log('Request made!');
+    logger.info('Request made!');
 });
 
 Meteor.methods({
