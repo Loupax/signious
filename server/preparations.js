@@ -52,6 +52,12 @@ Meteor.methods({
             throw new Meteor.Error(409, 'Duplicate', 'Username is taken');
         }
 
+        var disallowedCharacters = [' ', '/', '\\'];
+        disallowedCharacters.forEach(function(char){
+            if(data.username.indexOf(char) > -1){
+                throw new Meteor.Error(400, 'Bad input', 'This username contains disallowed characters');
+            }
+        });
         SignsCollection.update({poster_id: Meteor.userId()}, {$set:{
             username: data.username
         }}, {multi: true});

@@ -1,9 +1,13 @@
 var file;
 var formIsSaving = new ReactiveVar(false);
+var notificationText = new ReactiveVar();
 
 Template.ProfileEditor.helpers({
     disableOnSave: function(){
         return formIsSaving.get()?'disabled':'';
+    },
+    notification: function(){
+        return notificationText.get();
     }
 });
 
@@ -33,8 +37,9 @@ Template.ProfileEditor.events({
         Promise.all(promises).then(function(){
             formIsSaving.set(false);
             Router.go('/profile/show');
-        }).catch(function(){
+        }).catch(function(err){
             formIsSaving.set(false);
+            notificationText.set(err.details);
         });
 
     },
