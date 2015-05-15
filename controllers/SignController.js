@@ -53,7 +53,7 @@ SignController = ApplicationController.extend({
         }
 
         metaData['site_name']    = 'Signious';
-        metaData['url']          = Router.current().originalUrl;
+        metaData['url']          = Router.current().originalUrl.replace('http://localhost:3000', 'http://signious.com');
         metaData['description']  = 'You can see any responses to this post if they are nearby';
         metaData['geo.position'] = sign.location.coordinates.join(';');
         metaData['ICBM']         = metaData['geo.position'];
