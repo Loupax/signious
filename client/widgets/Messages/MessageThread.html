@@ -1,4 +1,18 @@
-<template name="ListMessage">
+<template name="MessageThread">
+    {{> Message this}}
+        {{#if this.discussion_root_sign_id}}
+            <div class="message-thread-link-to-discussion-head">
+                <a href="/discussion/sign/{{this.discussion_root_sign_id}}">
+                    See whole discussion
+                </a>
+            </div>
+        {{/if}}
+    {{#each responsesOfSign this}}
+        {{> Message this}}
+    {{/each}}
+</template>
+
+<template name="Message">
     <article class="messages-message">
         <header>
             <div class="messages-message-head">
@@ -33,8 +47,4 @@
             {{/if}}
         </footer>
     </article>
-    {{#each responsesOfSign this}}
-        {{> ListMessage this}}
-    {{/each}}
-
 </template>

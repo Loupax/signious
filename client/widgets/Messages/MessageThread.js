@@ -1,9 +1,9 @@
 /**
  * Created by loupax on 3/8/15.
  */
-Template.ListMessage.events({
+Template.Message.events({
     'click .js-show-response-form': function clickToggleResponseFormHandler(event, template) {
-        // ListMessage can be used as a reccursive template. Stopping propagation to avoid
+        // MessageThread can be used as a reccursive template. Stopping propagation to avoid
         // the handler from firing more than once per parent template instance
         if (this._id != template.data._id) {
             return;
@@ -30,7 +30,7 @@ Template.ListMessage.events({
 });
 
 
-Template.ListMessage.helpers({
+Template.Message.helpers({
     ownsAttachedContent: function(message){
         return message.linkedWebpage && (message.linkedWebpage.title || (message.linkedWebpage.meta && message.linkedWebpage.meta.length));
     },
