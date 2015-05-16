@@ -43,7 +43,7 @@
 	{{#unless isLoadingNearbySigns}}
 	<div class="messages">
 		<ol class="messages-list">
-			{{#each messages}}<li>{{> ListMessage this}}</li>{{/each}}
+			{{#each messages}}<li>{{> MessageThread this}}</li>{{/each}}
 		</ol>
 	</div>
 	{{/unless}}

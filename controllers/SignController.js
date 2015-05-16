@@ -3,12 +3,6 @@ if(Meteor.isClient){
 
 }
 var serverSideSubscription;
-/*if(Meteor.isServer){
-    FastRender.route('/:username/sign/:sign_id', function(params) {
-        serverSideSubscription = this.subscribe('SpecificPublicSign', params.sign_id);
-        console.log(serverSideSubscription);
-    });
-}*/
 SignController = ApplicationController.extend({
     data: {
         sign: function(){
@@ -53,10 +47,11 @@ SignController = ApplicationController.extend({
         }
 
         metaData['site_name']    = 'Signious';
-        metaData['url']          = encodeURI(Router.current().url).replace('http://localhost:3000', 'http://signious.com');
+        metaData['url']          = encodeURI(Router.current().url).replace('http://localhost:3000', Meteor.settings.public.baseUrl);
         metaData['description']  = 'You can see any responses to this post if they are nearby';
-        metaData['geo.position'] = sign.location.coordinates.join(';');
-        metaData['ICBM']         = metaData['geo.position'];
+        // Not sure if geolocation should be given away...
+        //metaData['geo.position'] = sign.location.coordinates.join(';');
+        //metaData['ICBM']         = metaData['geo.position'];
         metaData['title']        = sign.text;
         var title = metaData['title'].length?'Signious - '+metaData['title']:'Signious';
 
