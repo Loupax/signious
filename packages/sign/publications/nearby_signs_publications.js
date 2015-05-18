@@ -5,11 +5,13 @@ Meteor.publish('NearbySigns', function NearbySigns(point) {
     observers = {
         added: function (sign_id,sign) {
             if(!published[sign_id]) {
+                // Don't send exact coordinates to the client for security reasons
                 self.added('AccessibleSigns', sign_id, sign);
                 published[sign_id] = true;
             }
         },
         changed: function(sign_id, sign){
+            // Don't send exact coordinates to the client for security reasons
             self.changed('AccessibleSigns', sign_id, sign);
         },
         removed: function(sign_id, sign){

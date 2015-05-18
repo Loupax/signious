@@ -1,8 +1,8 @@
 var currentSign = new ReactiveVar(undefined);
 if(Meteor.isClient){
-    var showGoogleMaps = function showGoogleMaps() {
+    var showGoogleMaps = function showGoogleMaps(sign) {
 
-        var latLng = new google.maps.LatLng(Signious.geolocation.lastKnownLocation.latitude,Signious.geolocation.lastKnownLocation.longitude);
+        var latLng = new google.maps.LatLng(sign.location.coordinates[1],sign.location.coordinates[0]);
 
         var mapOptions = {
             zoom: 16, // initialize zoom level - the max value is 21
@@ -19,9 +19,7 @@ if(Meteor.isClient){
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
-        var map = new google.maps.Map($('.google-maps-background').get(0),
-            mapOptions);
-
+        new google.maps.Map($('.google-maps-background').get(0), mapOptions);
     }
 }else{
     var showGoogleMaps = function showGoogleMaps(){};
@@ -84,7 +82,7 @@ SignController = ApplicationController.extend({
             meta: metaData
         });
 
-        Meteor.setTimeout(showGoogleMaps, 1000);
+        Meteor.setTimeout(function(){showGoogleMaps(sign);}, 1000);
     },
     index: function () {
         var sign = SignsCollection.find({}).fetch().pop();
