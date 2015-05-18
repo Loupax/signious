@@ -57,7 +57,11 @@ Utilities = {};
 // We keep the fallback in a variable, to allow switching on the fly later
 // in the case the user denies us geolocation. Not as accurate but still better
 // than having an unusable app
-var geolocationFallback = {
+var geolocationFallback = function(){
+	var lastIp;
+	var lastKnownLocation;
+
+	return {
 	watchPosition: function watchPosition(onChange, onError, options){
 		var o = _.extend({timeout:5000, maximumAge:1000 * 60},options);
 
@@ -81,26 +85,31 @@ var geolocationFallback = {
 		Meteor.clearInterval(watchId);
 	},
 	getCurrentPosition: function getCurrentPosition(success,error){
-		Meteor.call('myGeoIPLocation',function(err, location){
-			var _loc = {
-				coords: {
-					accuracy: null,
-					altitude: null,
-					altitudeAccuracy: null,
-					heading: null,
-					latitude: location.latitude,
-					longitude: location.longitude,
-					speed: null
-				},
-				timestamp: new Date().getTime()
-			};
-			if(err)
+		Meteor.call('myGeoIPLocation',lastIp,function(err, location){
+			if(err && err.error == 304){
+				var _loc = _.extend(lastKnownLocation);
+			}else if(err && err.error !== 304){
 				error(err);
-			else
-				success(_loc);
+			} else {
+				lastIp = location.ip;
+				var _loc = {
+					coords: {
+						accuracy: null,
+						altitude: null,
+						altitudeAccuracy: null,
+						heading: null,
+						latitude: location.latitude,
+						longitude: location.longitude,
+						speed: null
+					},
+					timestamp: new Date().getTime()
+				};
+				lastKnownLocation = _loc;
+			}
+			success(_loc);
 		});
 	}
-};
+}}();
 if(!navigator.geolocation) {
 	Utilities.geolocation = geolocationFallback;
 }else{

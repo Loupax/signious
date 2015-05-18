@@ -8,12 +8,16 @@ Meteor.methods({
     }
 });
 
-Meteor.methods({'myGeoIPLocation': function(){
+Meteor.methods({'myGeoIPLocation': function(previousIp){
     var clientAddress = this.connection.httpHeaders['x-real-ip'] || this.connection.clientAddress;
-    if(!this.connection.httpHeaders['x-real-ip']){
+    if( ! this.connection.httpHeaders['x-real-ip'] ) {
         logger.warn('No x-real-ip header found for IP based geolocation. Using clientAddress instead', this.connection.httpHeaders);
     }
-    return JSON.parse(HTTP.call('GET', 'https://freegeoip.net/json/'+clientAddress).content);
+    if (previousIp === clientAddress) {
+        throw new Meteor.Error(304, 'Not modified', 'Not modified');
+    } else {
+        return JSON.parse(HTTP.call('GET', 'https://freegeoip.net/json/' + clientAddress).content);
+    }
 }});
 
 Meteor.methods({
