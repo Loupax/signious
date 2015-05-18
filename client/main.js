@@ -29,7 +29,7 @@ Signious = {
 					if(Utilities.geolocation !== geolocationFallback){
 						// User denied geolocation... Switching to IP geolocation instead
 						// just to keep the app running
-						Utilities.clearWatch(Signious.geolocation.LOCATION_WATCH_ID);
+						Utilities.geolocation.clearWatch(Signious.geolocation.LOCATION_WATCH_ID);
 						Utilities.geolocation = geolocationFallback;
 						Signious.geolocation.LOCATION_WATCH_ID = Utilities.geolocation.watchPosition(Signious.geolocation.onChange, Signious.geolocation.onError, Signious.geolocation.options);
 					}
