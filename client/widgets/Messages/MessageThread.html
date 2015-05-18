@@ -12,6 +12,23 @@
     {{/each}}
 </template>
 
+<template name="SingleMessageThread">
+    <div class="message-thread-header">
+        <div class="google-maps-background"></div>
+        {{> Message this}}
+    </div>
+    {{#if this.discussion_root_sign_id}}
+        <div class="message-thread-link-to-discussion-head">
+            <a href="/discussion/sign/{{this.discussion_root_sign_id}}">
+                See whole discussion
+            </a>
+        </div>
+    {{/if}}
+    {{#each responsesOfSign this}}
+        {{> Message this}}
+    {{/each}}
+</template>
+
 <template name="Message">
     <article class="messages-message">
         <header>

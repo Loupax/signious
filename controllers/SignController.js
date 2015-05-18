@@ -1,6 +1,30 @@
 var currentSign = new ReactiveVar(undefined);
 if(Meteor.isClient){
+    var showGoogleMaps = function showGoogleMaps() {
 
+        var latLng = new google.maps.LatLng(Signious.geolocation.lastKnownLocation.latitude,Signious.geolocation.lastKnownLocation.longitude);
+
+        var mapOptions = {
+            zoom: 16, // initialize zoom level - the max value is 21
+            streetViewControl: false, // hide the yellow Street View pegman
+            scaleControl: false, // allow users to zoom the Google Map
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: latLng,
+            disableDefaultUI: true,
+            scrollwheel: false,
+            navigationControl: false,
+            mapTypeControl: false,
+            scaleControl: false,
+            draggable: false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map($('.google-maps-background').get(0),
+            mapOptions);
+
+    }
+}else{
+    var showGoogleMaps = function showGoogleMaps(){};
 }
 var serverSideSubscription;
 SignController = ApplicationController.extend({
@@ -59,6 +83,8 @@ SignController = ApplicationController.extend({
             title: title,
             meta: metaData
         });
+
+        Meteor.setTimeout(showGoogleMaps, 1000);
     },
     index: function () {
         var sign = SignsCollection.find({}).fetch().pop();

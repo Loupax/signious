@@ -29,6 +29,10 @@ Router.route('/profile/show', {
 
 Router.route('/:username/sign/:sign_id', {
     controller: 'SignController',
+    onBeforeAction: function(){
+        GoogleMaps.load();
+        this.next();
+    },
     waitOn: function(){
         return Meteor.subscribe('SpecificPublicSign', this.params.sign_id);
     },
