@@ -9,7 +9,11 @@ Meteor.methods({
 });
 
 Meteor.methods({'myGeoIPLocation': function(){
-    return JSON.parse(HTTP.call('GET', 'https://freegeoip.net/json/'+this.connection.clientAddress).content);
+    var clientAddress = this.connection.httpHeaders['x-real-ip'] || this.connection.clientAddress;
+    if(!this.connection.httpHeaders['x-real-ip']){
+        logger.warn('No x-real-ip header found for IP based geolocation. Using clientAddress instead', this.connection.httpHeaders);
+    }
+    return JSON.parse(HTTP.call('GET', 'https://freegeoip.net/json/'+clientAddress).content);
 }});
 
 Meteor.methods({
