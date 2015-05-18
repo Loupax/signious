@@ -60,6 +60,15 @@ Utilities = {};
 var geolocationFallback = {
 	watchPosition: function watchPosition(onChange, onError, options){
 		var o = _.extend({timeout:5000, maximumAge:1000 * 60},options);
+
+		// Interval begins after maximumAge miliseconds, so
+		// we run the first call by ourselves
+		Utilities.geolocation.getCurrentPosition(function(data){
+			onChange(data);
+		}, function(error){
+			onError(error);
+		});
+
 		return Meteor.setInterval(function(){
 			Utilities.geolocation.getCurrentPosition(function(data){
 				onChange(data);
