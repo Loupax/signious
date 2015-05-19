@@ -36,10 +36,11 @@
   border-radius: @a;
 }
 
-.transition(@a){
-  -webkit-transition: @a;
-  -moz-transition: @a;
-  -ms-transition: @a;
-  -o-transition: @a;
-  transition: @a;
+.transition(...){
+  @props: ~`"@{arguments}".replace(/[\[\]]/g, '')`;
+  -webkit-transition: @props;
+  -moz-transition: @props;
+  -ms-transition: @props;
+  -o-transition: @props;
+  transition: @props;
 }

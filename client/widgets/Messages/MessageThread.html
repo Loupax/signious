@@ -1,12 +1,5 @@
 <template name="MessageThread">
     {{> Message this}}
-        {{#if this.discussion_root_sign_id}}
-            <div class="message-thread-link-to-discussion-head">
-                <a href="/discussion/sign/{{this.discussion_root_sign_id}}">
-                    See whole discussion
-                </a>
-            </div>
-        {{/if}}
     {{#each responsesOfSign this}}
         {{> Message this}}
     {{/each}}
@@ -17,9 +10,9 @@
         <div class="google-maps-background"></div>
         {{> Message this}}
     </div>
-    {{#if this.discussion_root_sign_id}}
+    {{#if topAvailableDiscussionId this}}
         <div class="message-thread-link-to-discussion-head">
-            <a href="/discussion/sign/{{this.discussion_root_sign_id}}">
+            <a href="/discussion/sign/{{topAvailableDiscussionId this}}">
                 See whole discussion
             </a>
         </div>
@@ -30,7 +23,7 @@
 </template>
 
 <template name="Message">
-    <article class="messages-message">
+    <article class="messages-message {{isDeletedClass this}}">
         <header>
             <div class="messages-message-head">
                 {{#if avatar}}
@@ -45,19 +38,35 @@
             </div>
         </header>
         <div class="messages-message-body">
+        {{#if this.is_deleted}}
+            You deleted this message<br>
+            You can still undelete until you navigate out of this page or refresh your browser
+        {{/if}}
+        {{#unless this.is_deleted}}
             {{FormatMessage this}}
+        {{/unless}}
         </div>
         <div class="messages-message-attached-content">
-            {{#if ownsAttachedContent this}}
-                <hr>
-            {{/if}}
-            {{attachedContent this}}
+            {{#unless this.is_deleted}}
+                {{#if ownsAttachedContent this}}
+                    <hr>
+                {{/if}}
+                {{attachedContent this}}
+            {{/unless}}
         </div>
         <footer>
             <div class="messages-message-actions">
-                <a class="link-to-sign" href="/{{username}}/sign/{{_id}}"><i class="fa fa-link"></i></a>
-                <button value="{{this._id}}" class="js-show-response-form messages-messages-actions-reply"><i
-                        class="fa fa-reply"></i></button>
+                <button class="js-show-response-form messages-messages-actions-reply"><i
+                        class="fa fa-reply"></i> Reply</button>
+                {{#if belongsToCurrentUser this}}
+                    {{#unless this.is_deleted}}
+                        <button class="js-delete-message messages-messages-actions-delete"><i class="fa fa-trash-o"></i></button>
+                    {{/unless}}
+                    {{#if this.is_deleted}}
+                        <button class="js-undelete-message messages-messages-actions-undelete"><i class="fa fa-undo"></i></button>
+                    {{/if}}
+                {{/if}}
+                <a class="link-to-sign" title="share" href="/{{username}}/sign/{{_id}}"><i class="fa fa-link"></i></a>
             </div>
             {{#if isRespondingTo this}}
                 {{> NewMessageForm this}}
