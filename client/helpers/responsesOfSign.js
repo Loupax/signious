@@ -4,7 +4,7 @@
 Handlebars.registerHelper('responsesOfSign', function (sign){
 
     if(sign.discussion_root_sign_id){
-        var cursor = AccessibleSigns.find({
+        var cursor = SignsCollection.find({
             discussion_root_sign_id: sign.discussion_root_sign_id,
             _id: {$ne: sign._id},
             when: {$gt: sign.when}
@@ -14,7 +14,7 @@ Handlebars.registerHelper('responsesOfSign', function (sign){
             }
         });
     }else{
-        var cursor = AccessibleSigns.find({
+        var cursor = SignsCollection.find({
             discussion_root_sign_id: sign._id,
             _id: {$ne: sign._id}
         }, {

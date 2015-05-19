@@ -85,7 +85,8 @@ SignController = ApplicationController.extend({
         Meteor.setTimeout(function(){showGoogleMaps(sign);}, 1000);
     },
     index: function () {
-        var sign = SignsCollection.find({}).fetch().pop();
+        var id = Router.current().params.sign_id;
+        var sign = SignsCollection.find({_id: id}).fetch().pop();
 
         if(!sign) {
             this.render('signNotFound');

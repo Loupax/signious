@@ -1,5 +1,5 @@
 Handlebars.registerHelper('topAvailableDiscussionId', function(sign){
-    var result = AccessibleSigns.find({
+    var result = SignsCollection.find({
         _id: sign.discussion_root_sign_id,
         is_deleted: false
     }, {limit: 1}).fetch().pop();
