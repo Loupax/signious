@@ -99,7 +99,7 @@ Meteor.publish('OwnMessages', function(){
             {'response_to_user_id': this.userId},
         ]
     }, options);
-
+    console.log(cursor.fetch());
     return cursor;
 
 });
