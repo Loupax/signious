@@ -10,5 +10,5 @@ Package.on_use(function (api, where) {
       'publications/public_sign_publication.js'
   ], ['server']);
   api.use(['location', 'session', 'deps']);
-  api.export(['Sign','SignsCollection', 'AccessibleSigns']);
+  api.export(['Sign','SignsCollection', 'SignsCollection']);
 });

@@ -1,7 +1,7 @@
 HomeController = ApplicationController.extend({
     data: {
         messages: function(){
-            return AccessibleSigns.find({
+            return SignsCollection.find({
                 response_to_sign_id: ''
             },{
                 sort:{

@@ -8,12 +8,12 @@ SignsCollection.deny({
 // It only exists as a fake collection that we can query for
 // published data. Check the publications of the package
 // for more info
-AccessibleSigns = new Meteor.Collection('AccessibleSigns');
-AccessibleSigns.deny({
+/*SignsCollection = new Meteor.Collection('SignsCollection');
+SignsCollection.deny({
     'insert': function(){return true;},
     'update': function(){return true;},
     'remove': function(){return true;}
-});
+});*/
 
 SignsCollection.allow({
 	// We wouldn't want impersonators...
@@ -23,16 +23,22 @@ SignsCollection.allow({
 
 if(Meteor.isServer){
 	SignsCollection._ensureIndex({location: '2dsphere'});
-    AccessibleSigns._ensureIndex({location: '2dsphere'});
 }
 
 if(Meteor.isClient){
 	Session.setDefault('loadingNearbySigns', true);
 	var handler = Deps.autorun(function () {
 		var loc = new Location(Session.get('lastKnownLocation'));
-		Meteor.subscribe('NearbySigns', loc, function(){
+		var subscriptions = [
+			Meteor.subscribe('OwnMessages'),
+			Meteor.subscribe('NearbyMessages', loc)
+		];
+
+		var i = 0;
+		subscriptions.forEach(function(sub){if(sub.ready()){i++;} console.log(sub.ready())});
+		if(i === subscriptions.length)
 			Session.set('loadingNearbySigns', false);
-		});
+
 	});
 }
 

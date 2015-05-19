@@ -3,7 +3,7 @@
  */
 Template.Message.events({
     'click .js-delete-message': function signDeletionClickHandler(event, template){
-        if(confirm('Are you sure you want to delete this message?'))Meteor.call('Sign:delete', this._id);
+        Meteor.call('Sign:delete', this._id);
     },
     'click .js-undelete-message': function signUndeletionClickHandler(event, template){
         Meteor.call('Sign:undelete', this._id);

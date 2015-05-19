@@ -9,7 +9,7 @@ ProfileController = ApplicationController.extend({
             return currentUser.get() && Meteor.user() && (currentUser.get().username === Meteor.user().username);
         },
         messages: function(){
-            return AccessibleSigns.find({
+            return SignsCollection.find({
                 response_to_sign_id: '',
                 $or:[
                     {poster_id: currentUser.get()?currentUser.get()._id:-1}
