@@ -2,8 +2,6 @@ Meteor.publish('NearbySigns', function NearbySigns(point) {
     point = new Location(point);
     var self = this, published = {}, observers, options = {sort: {when: -1}, fields: {location:0}};
 
-    //observers =
-
     if (point.isValid()) {
         // add any nearby messages to the publication, but only if they are not direct messages to anyone
         // In other words "if you are nearby, and it's public, you can see it"
@@ -89,12 +87,10 @@ Meteor.publish('NearbyMessages', function(point){
         }
     }, options);
 
-    return cursor;//{this.ready(); console.log('Ready!');}
+    return cursor;
 });
 
 Meteor.publish('OwnMessages', function(){
-    if(!this.userId)
-        return false;
     var options = {sort: {when: -1}, fields: {location:0}};
     var cursor = SignsCollection.find({
         $or: [
