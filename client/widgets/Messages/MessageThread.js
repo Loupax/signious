@@ -2,6 +2,12 @@
  * Created by loupax on 3/8/15.
  */
 Template.Message.events({
+    'click .js-delete-message': function signDeletionClickHandler(event, template){
+        if(confirm('Are you sure you want to delete this message?'))Meteor.call('Sign:delete', this._id);
+    },
+    'click .js-undelete-message': function signUndeletionClickHandler(event, template){
+        Meteor.call('Sign:undelete', this._id);
+    },
     'click .js-show-response-form': function clickToggleResponseFormHandler(event, template) {
         // MessageThread can be used as a reccursive template. Stopping propagation to avoid
         // the handler from firing more than once per parent template instance
@@ -31,7 +37,13 @@ Template.Message.events({
 
 
 Template.Message.helpers({
-    ownsAttachedContent: function(message){
+    'belongsToCurrentUser': function(sign){
+        return Meteor.userId() && sign.poster_id && (Meteor.userId() === sign.poster_id);
+    },
+    'isDeletedClass': function(sign){
+        return sign.is_deleted?'deleted':'';
+    },
+    'ownsAttachedContent': function(message){
         return message.linkedWebpage && (message.linkedWebpage.title || (message.linkedWebpage.meta && message.linkedWebpage.meta.length));
     },
     'FormatMessage': function FormatMessage(message) {

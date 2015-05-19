@@ -1,5 +1,8 @@
 @import (reference) url('/mixins.less');
 .messages-message{
+  &.deleted{
+    background: #FFF6F6;
+  }
   .messages-message-attached-content{
     clear: both;
     margin-top: 1.5em;
@@ -17,8 +20,60 @@
   }
 }
 
+.messages-message-actions{
+  .flex-display();
+  .flex-direction(row-reverse);
+  .transition(opacity 250ms);
+  opacity: 0.5;
+  align-items: center;
+}
+.messages-message-actions:hover{
+  opacity: 1;
+}
+
+.messages-message-actions>*{
+  padding: 8px 11px;
+  border: none;
+  background: transparent;
+  color: #a8a8a8;
+  margin-right: 1em;
+  .transition(background-color 250ms, color 250ms);
+}
+
+.messages-message-actions a:visited{
+  color: #a8a8a8;
+}
+
+.messages-message-actions>*:hover, .messages-message-actions>a:visited:hover{
+  color: #000;
+  background: #a8a8a8;
+}
+
+.messages-message-actions + form{
+  margin: 1em 0 0 0;
+}
+
+.messages-messages-actions-reply{
+  padding: 8px 20px;
+  border-width: 0;
+  display: inline-block;
+  color: #08c;
+  background: #e0f5ff;
+  margin-left: 10px;
+  .transition(background-color 250ms, color 250ms);
+}
+.messages-messages-actions-reply:hover{
+  background: #08c;
+  color: #fff;
+}
 .message-thread-link-to-discussion-head{
   text-align: center;
+}
+
+.link-to-sign{
+  margin-top:3px;
+  margin-left: 1em;
+  text-decoration: none;
 }
 
 .message-thread-link-to-discussion-head {

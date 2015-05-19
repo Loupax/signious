@@ -21,10 +21,8 @@ function getHTMLOfURL(url) {
         }
     }));
 
-
     fut.wait();
     return fut;
-
 }
 
 
@@ -76,6 +74,14 @@ Meteor.methods({
                 linkedWebpage: linkedWebpage
             }
         });
+    },
+    'Sign:delete': function(sign_id){
+        SignsCollection.remove({poster_id: Meteor.userId(), _id: sign_id});
+        // Handle orphan messages
+        SignsCollection.update({response_to_sign_id: sign_id}, {$set: {'response_to_sign_id':''}}, {multi: true});
+    },
+    'Sign:undelete': function(sign_id){
+        return SignsCollection.update({poster_id: Meteor.userId(), _id: sign_id}, {$set: {'is_deleted': false}}, {multi: false});
     },
     'Sign:save': function (sign) {
 
