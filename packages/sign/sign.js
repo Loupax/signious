@@ -1,29 +1,9 @@
 // This is the collection that all signs get stored into
 SignsCollection = new Meteor.Collection('Signs');
 SignsCollection.deny({
-	'remove': function(){return true;},
+	'remove': function(){return true},
 	'update': function(){return true;}
 });
-// This collection is not to be used as a real collection
-// It only exists as a fake collection that we can query for
-// published data. Check the publications of the package
-// for more info
-/*SignsCollection = new Meteor.Collection('SignsCollection');
-SignsCollection.deny({
-    'insert': function(){return true;},
-    'update': function(){return true;},
-    'remove': function(){return true;}
-});*/
-
-SignsCollection.allow({
-	// We wouldn't want impersonators...
-	'insert': function(userId, doc){return userId === doc.poster_id;}
-});
-
-
-if(Meteor.isServer){
-	SignsCollection._ensureIndex({location: '2dsphere'});
-}
 
 if(Meteor.isClient){
 	Session.setDefault('loadingNearbySigns', true);
@@ -35,12 +15,23 @@ if(Meteor.isClient){
 		];
 
 		var i = 0;
-		subscriptions.forEach(function(sub){if(sub.ready()){i++;} console.log(sub.ready())});
+		subscriptions.forEach(function(sub){if(sub.ready()){i++;}});
 		if(i === subscriptions.length)
 			Session.set('loadingNearbySigns', false);
 
 	});
 }
+
+
+SignsCollection.allow({
+	// We wouldn't want impersonators...
+	'remove': function(userId, doc){return userId === doc.poster_id;},
+	'insert': function(userId, doc){return userId === doc.poster_id;}
+});
+if(Meteor.isServer){
+	SignsCollection._ensureIndex({location: '2dsphere'});
+}
+
 
 
 Sign = function Sign(o){

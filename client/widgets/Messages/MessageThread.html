@@ -7,7 +7,7 @@
 
 <template name="SingleMessageThread">
     <div class="message-thread-header">
-        <div class="google-maps-background"></div>
+        <div class="google-maps-background">{{> googleMap type="Map" name="BackgroundMap" options=mapOptions}}</div>
         {{> Message this}}
     </div>
     {{#if topAvailableDiscussionId this}}
@@ -39,8 +39,7 @@
         </header>
         <div class="messages-message-body">
         {{#if this.is_deleted}}
-            You deleted this message<br>
-            You can still undelete until you navigate out of this page or refresh your browser
+            Deleted
         {{/if}}
         {{#unless this.is_deleted}}
             {{FormatMessage this}}
@@ -66,7 +65,12 @@
                         <button class="js-undelete-message messages-messages-actions-undelete"><i class="fa fa-undo"></i></button>
                     {{/if}}
                 {{/if}}
-                <a class="link-to-sign" title="share" href="/{{username}}/sign/{{_id}}"><i class="fa fa-link"></i></a>
+                {{#unless this.is_deleted}}
+                     <a class="link-to-sign" title="share" href="/{{username}}/sign/{{_id}}"><i class="fa fa-link"></i></a>
+                {{/unless}}
+                {{#if this.is_deleted}}
+                    <a class="link-to-sign" title="share" href=""><i class="fa fa-link"></i></a>
+                {{/if}}
             </div>
             {{#if isRespondingTo this}}
                 {{> NewMessageForm this}}

@@ -6,6 +6,8 @@ ApplicationController = RouteController.extend({
         this.next();
     },
     unload: function () {
+        if(Meteor.userId())
+            Meteor.call('Sign:DeleteHangingMessages');
         // We do not actually stop the Autorun handler, because
         // we work under the premise that a: All our controllers extend ApplicationController
         // and b: These are all the signs we are going to need. We won't have permissions to see anything more

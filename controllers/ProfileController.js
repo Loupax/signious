@@ -10,11 +10,7 @@ ProfileController = ApplicationController.extend({
         },
         messages: function(){
             return SignsCollection.find({
-                response_to_sign_id: '',
-                $or:[
-                    {poster_id: currentUser.get()?currentUser.get()._id:-1}
-                ]
-
+                poster_id: currentUser.get()?currentUser.get()._id:-1
             },{
                 sort:{
                     when:-1
