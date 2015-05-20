@@ -1,30 +1,4 @@
 var currentSign = new ReactiveVar(undefined);
-if(Meteor.isClient){
-    var showGoogleMaps = function showGoogleMaps(sign) {
-
-        var latLng = new google.maps.LatLng(sign.location.coordinates[1],sign.location.coordinates[0]);
-
-        var mapOptions = {
-            zoom: 16, // initialize zoom level - the max value is 21
-            streetViewControl: false, // hide the yellow Street View pegman
-            scaleControl: false, // allow users to zoom the Google Map
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            center: latLng,
-            disableDefaultUI: true,
-            scrollwheel: false,
-            navigationControl: false,
-            mapTypeControl: false,
-            scaleControl: false,
-            draggable: false,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
-        new google.maps.Map($('.google-maps-background').get(0), mapOptions);
-    }
-}else{
-    var showGoogleMaps = function showGoogleMaps(){};
-}
-var serverSideSubscription;
 SignController = ApplicationController.extend({
     data: {
         sign: function(){
@@ -82,12 +56,11 @@ SignController = ApplicationController.extend({
             meta: metaData
         });
 
-        Meteor.setTimeout(function(){showGoogleMaps(sign);}, 1000);
+        //Meteor.setTimeout(function(){showGoogleMaps(sign);}, 1000);
     },
     index: function () {
         var id = Router.current().params.sign_id;
         var sign = SignsCollection.find({_id: id}).fetch().pop();
-
         if(!sign) {
             this.render('signNotFound');
         }else {
@@ -96,4 +69,25 @@ SignController = ApplicationController.extend({
             GAnalytics.pageview();
         }
     }
+});
+
+Handlebars.registerHelper('mapOptions', function(){
+    if(GoogleMaps.loaded()) {
+        var sign = currentSign.get();
+        var latLng = new google.maps.LatLng(sign.location.coordinates[1], sign.location.coordinates[0]);
+        return mapOptions = {
+            zoom: 16, // initialize zoom level - the max value is 21
+            streetViewControl: false, // hide the yellow Street View pegman
+            scaleControl: false, // allow users to zoom the Google Map
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: latLng,
+            disableDefaultUI: true,
+            scrollwheel: false,
+            navigationControl: false,
+            mapTypeControl: false,
+            scaleControl: false,
+            draggable: false
+        };
+    }
+
 });

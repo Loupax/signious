@@ -27,6 +27,9 @@ function getHTMLOfURL(url) {
 
 
 Meteor.methods({
+    'Sign:DeleteHangingMessages': function(){
+        return SignsCollection.remove({is_deleted: true, poster_id: Meteor.userId()});
+    },
     'Sign:fetch': function(_id){
       var sign = SignsCollection.find({_id: _id}).fetch().pop();
         if(!sign)
