@@ -30,6 +30,7 @@ Meteor.methods({
     'Sign:DeleteHangingMessages': function(){
         SignsCollection.find({is_deleted: true, poster_id: Meteor.userId()}, {fields:{_id: true}}).forEach(function(record){
             SignsCollection.remove({_id: record._id})
+            SignsCollection.update({response_to_sign_id: record._id}, {$set:{response_to_sign_id:record.discussion_root_sign_id}}, {multi: true});
         });
     },
     'Sign:fetch': function(_id){
