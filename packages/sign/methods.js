@@ -28,9 +28,22 @@ function getHTMLOfURL(url) {
 
 Meteor.methods({
     'Sign:DeleteHangingMessages': function(){
-        SignsCollection.find({is_deleted: true, poster_id: Meteor.userId()}, {fields:{_id: true}}).forEach(function(record){
-            SignsCollection.remove({_id: record._id})
-            SignsCollection.update({response_to_sign_id: record._id}, {$set:{response_to_sign_id:record.discussion_root_sign_id}}, {multi: true});
+        SignsCollection.find({is_deleted: true, poster_id: Meteor.userId()}, {fields:{_id: true, when:true, response_to_sign_id:true, discussion_root_sign_id: true}, order: {when: -1}}).forEach(function(record){
+            // Mark the next sign as a head
+            var newHead = SignsCollection.find({
+                discussion_root_sign_id: record.discussion_root_sign_id,
+                when: {$gt: record.when}
+            }, {
+                sort: {when: 1},
+                fields: {_id: 1},
+                limit:1
+            }).fetch().pop();
+
+            SignsCollection.remove({_id: record._id});
+
+            if (!record.response_to_sign_id && newHead) {
+                SignsCollection.update({_id: newHead._id}, {$set:{response_to_sign_id: ''}});
+            }
         });
     },
     'Sign:fetch': function(_id){
@@ -82,9 +95,6 @@ Meteor.methods({
         });
     },
     'Sign:delete': function(sign_id){
-        //SignsCollection.remove({poster_id: Meteor.userId(), _id: sign_id});
-        // Handle orphan messages
-        //SignsCollection.update({response_to_sign_id: sign_id}, {$set: {'response_to_sign_id':''}}, {multi: true});
         return SignsCollection.update({poster_id: Meteor.userId(), _id: sign_id}, {$set: {'is_deleted': true}}, {multi: false});
     },
     'Sign:undelete': function(sign_id){
@@ -106,6 +116,11 @@ Meteor.methods({
             avatar: Meteor.user()?Meteor.user().profile.avatar:'',
             mentions: mentions
         });
+
+        if (!sign.discussion_root_sign_id) {
+            sign.discussion_root_sign_id = _id;
+            SignsCollection.find({_id: _id}, {$set:{discussion_root_sign_id: sign.discussion_root_sign_id}});
+        }
 
         // Just make an asynchronous call to the route that will scrape the urls inside
         // the sign and add additional info to the record

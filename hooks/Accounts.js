@@ -12,6 +12,7 @@ if(Meteor.isServer){
             var count = Meteor.users.find({username: regex}, {limit:1, fields:{_id:1}}).fetch().length;
             user.username = [user.username, count + 1].join('_');
         }
+        user.profile = user.profile || {avatar: ''};
         return user;
     });
 

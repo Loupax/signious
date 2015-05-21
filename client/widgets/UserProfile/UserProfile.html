@@ -8,7 +8,9 @@
     <section class="user-info">
         {{#if user}}
         <div class="user-info-avatar">
+            {{#if user.profile.avatar}}
             <img class="user-info-avatar-pic" src="/static/resource/{{user.profile.avatar}}">
+            {{/if}}
             <div class="user-info-avatar-realname">
               {{user.profile.realname}}
             </div>
