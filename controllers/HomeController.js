@@ -1,7 +1,9 @@
 HomeController = ApplicationController.extend({
     data: {
         messages: function(){
-            return SignsCollection.find({},{
+            return SignsCollection.find({
+                response_to_sign_id: ''
+            },{
                 sort:{
                     when:-1
                 }
