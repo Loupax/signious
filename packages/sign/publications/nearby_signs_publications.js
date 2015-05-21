@@ -19,18 +19,17 @@ Meteor.publish('NearbyMessages', function(point){
 
 Meteor.publish('OwnMessages', function(){
     var userId = this.userId || '';
-    var query = {
-        $or: [
-            { poster_id: userId },
-            {'mentions._id': userId},
-            {'response_to_user_id': userId},
-        ]
-    };
+    var query = {};
 
     if(!this.userId){
         query.is_deleted = false;
     }else{
-        query.$or.push({poster_id: userId, is_deleted: true});
+        query.$or = [];
+        query.$or.push(
+            { 'poster_id': userId },
+            { 'mentions._id': userId, is_deleted: false },
+            { 'response_to_user_id': userId, is_deleted: false }
+        );
     }
     var cursor = SignsCollection.find(query, options);
 
