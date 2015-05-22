@@ -30,10 +30,16 @@ SignController = ApplicationController.extend({
                 return '';
             });
         }
-        metaData['image'] = metaData['image'].map(function(a){if(a[0]!=='http:'){return 'http://signious.com/static/resource/'+a;} return a;});
-	metaData['og:image'] = metaData['image'];
-	metaData['twitter:image'] = metaData['image'];
-	console.log(metaData);
+        var baseUrl = Meteor.settings.public.baseUrl;
+        metaData['image'] = metaData['image'].map(function(a){
+            if(a.indexOf(baseUrl) !== 0){
+                return baseUrl+'/static/resource/'+a;
+            }
+            return a;
+        });
+
+        metaData['og:image'] = metaData['image'].slice(0);
+	    metaData['twitter:image'] = metaData['image'].slice(0);
         metaData['site_name']    = 'Signious';
         metaData['url']          = encodeURI(Router.current().url).replace('http://localhost:3000', Meteor.settings.public.baseUrl);
         metaData['description']  = 'You can see any responses to this post if they are nearby';
@@ -42,7 +48,7 @@ SignController = ApplicationController.extend({
         //metaData['ICBM']         = metaData['geo.position'];
         metaData['title']        = sign.text;
         var title = metaData['title'].length?'Signious - '+metaData['title']:'Signious';
-	console.log(metaData);
+	    console.log(metaData);
         SEO.set({
             title: title,
             meta: metaData

@@ -76,7 +76,9 @@ Template.Message.helpers({
         var image = meta.filter(function (a) {
             return (a.property) && a.property === 'image';
         }).pop();
-        if(image && image.content[0] !== '/'){image.content = '/static/resource/'+image.content;}
+        if(image && image.content.indexOf(Meteor.settings.public.baseUrl) !== 0){
+            image.content = Meteor.settings.public.baseUrl+'/static/resource/'+image.content;
+        }
         var pageTitle = meta.filter(function (a) {
             return (a.property) && a.property === 'title';
         }).pop();
