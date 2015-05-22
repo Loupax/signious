@@ -65,7 +65,9 @@ Template.Message.helpers({
         if (!sign.linkedWebpage || !sign.linkedWebpage.meta) {
             return '';
         }
-
+	// Make a copy of this object, because we are going to
+	// manipulate the shit out of it
+	sign = _.extend(sign);
         var meta = sign.linkedWebpage.meta;
         var siteName = meta.filter(function (a) {
             return (a.property) && a.property === 'site_name';
@@ -75,7 +77,7 @@ Template.Message.helpers({
             return (a.property) && a.property === 'image';
         }).pop();
         if(image){image.content = '/static/resource/'+image.content;}
-
+	console.log(image);
         var pageTitle = meta.filter(function (a) {
             return (a.property) && a.property === 'title';
         }).pop();
