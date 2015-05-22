@@ -66,7 +66,7 @@ Router.route('/scrape/html/:sign_id', {
 UploadedFilesCollection = new Meteor.Collection('uploaded_files');
 Router.route('/static/resource/:filename', {
     where: 'server',
-    action: function() {
+    action: function fileServingControllerAction() {
         var fs = Npm.require('fs');
         var _id = this.params.filename.split('.').slice(0, 1).join('.');
         var filePath = process.env.PWD + '/server/user-content/' + this.params.filename;
@@ -76,7 +76,7 @@ Router.route('/static/resource/:filename', {
         var now = new Date();
         var ETag = _id + mtime.getTime();
 
-        if(this.request.headers['if-none-match'] === ETag){
+	if(this.request.headers['if-none-match'] === ETag){
             this.response.writeHead(304);
             return this.response.end();
         }
@@ -88,22 +88,15 @@ Router.route('/static/resource/:filename', {
             console.error(e);
 	    var ContentType = null;
         }
-        //if(ContentType){
-            this.response.writeHead(200, {
-                'Content-Type': ContentType,
-                'Date': now.toString(),
-                'Content-Length': size,
-                'ETag': ETag
-            });
-            var readStream = fs.createReadStream(filePath);
-            return readStream.pipe(this.response);
-        //} else {
-        //    // Unsupported media type
-        //    this.response.writeHead(415);
-        //    return this.response.end();
-        //}
+        this.response.writeHead(200, {
+           'Content-Type': ContentType,
+            'Date': now.toString(),
+            'Content-Length': size,
+            'ETag': ETag
+        });
 
-
+        var readStream = fs.createReadStream(filePath);
+        return readStream.pipe(this.response);
     }
 });
 

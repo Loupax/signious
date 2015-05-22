@@ -26,7 +26,7 @@ SignController = ApplicationController.extend({
         if(sign.linkedWebpage){
             sign.linkedWebpage.meta.map(function (a) {
                 metaData[a.property] = metaData[a.property]||[];
-            	metaData[a.property].push(a.content);
+            	metaData[a.property].push(a.content)
                 return '';
             });
         }
@@ -38,8 +38,6 @@ SignController = ApplicationController.extend({
             return a;
         });
 
-        metaData['og:image'] = metaData['image'].slice(0);
-	    metaData['twitter:image'] = metaData['image'].slice(0);
         metaData['site_name']    = 'Signious';
         metaData['url']          = encodeURI(Router.current().url).replace('http://localhost:3000', Meteor.settings.public.baseUrl);
         metaData['description']  = 'You can see any responses to this post if they are nearby';
@@ -51,7 +49,9 @@ SignController = ApplicationController.extend({
 	    console.log(metaData);
         SEO.set({
             title: title,
-            meta: metaData
+            meta: metaData,
+	    og: metaData,
+	    twitter: metaData
         });
 
         //Meteor.setTimeout(function(){showGoogleMaps(sign);}, 1000);
