@@ -108,6 +108,7 @@ Meteor.methods({
             username: sign.username,
             text: sign.text,
             when: sign.when,
+            is_deleted: false,
             location: Location.prototype.toMongo.call(sign.location),
             direct_message: sign.direct_message,
             response_to_user_id: sign.response_to_user_id,
