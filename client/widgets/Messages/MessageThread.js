@@ -70,10 +70,11 @@ Template.Message.helpers({
         var siteName = meta.filter(function (a) {
             return (a.property) && a.property === 'site_name';
         }).pop();
+        // Images are stored inside out own folder
         var image = meta.filter(function (a) {
-
             return (a.property) && a.property === 'image';
         }).pop();
+        if(image){image.content = '/static/resource/'+image.content;}
 
         var pageTitle = meta.filter(function (a) {
             return (a.property) && a.property === 'title';
