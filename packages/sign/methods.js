@@ -141,8 +141,12 @@ Meteor.methods({
                 return true;
             });
             console.log(linkedWebpage.meta);
-            // Download remote images here to avoid 403s
-            downloadAttachedImages(linkedWebpage.meta);
+            try {
+                // Download remote images here to avoid 403s
+                downloadAttachedImages(linkedWebpage.meta);
+            }catch(e){
+                console.error(e);
+            }
         }
         SignsCollection.update(sign_id, {
             $set: {

@@ -94,13 +94,14 @@ if (Meteor.isServer) {
         var readStream = fs.createReadStream(filePath);
         return readStream.pipe(res);
     });
-
+    var bodyParser = Meteor.npmRequire('body-parser'); // using meteorhacks:npm package
+    Picker.middleware(bodyParser.json());
     Picker.route('/mail_notifier/mention', function (params, req, res, next) {
         res.end();
 
         var user = req.body.user;
         var sign = req.body.sign;
-        var signUrl = 'http://signious.com/' + sign.username + '/sign/' + sign._id;
+        var signUrl = Meteor.settings.public.baseUrl+'/' + sign.username + '/sign/' + sign._id;
         Meteor.call('sendEmail', {
             to: user.emails[0].address,
             from: 'notifications@signious.com',
