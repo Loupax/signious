@@ -66,25 +66,24 @@ Template.Message.helpers({
             return '';
         }
 
-        var openGraph = sign.linkedWebpage.meta.filter(function (a) {
-            return (a.property) && a.property.indexOf('og:') > -1
-        });
-        var ogName = openGraph.filter(function (a) {
-            return (a.property) && a.property === 'og:site_name';
+        var meta = sign.linkedWebpage.meta;
+        var siteName = meta.filter(function (a) {
+            return (a.property) && a.property === 'site_name';
         }).pop();
-        var ogImage = openGraph.filter(function (a) {
-            return (a.property) && a.property === 'og:image';
+        var image = meta.filter(function (a) {
+
+            return (a.property) && a.property === 'image';
         }).pop();
 
-        var ogTitle = openGraph.filter(function (a) {
-            return (a.property) && a.property === 'og:title';
+        var pageTitle = meta.filter(function (a) {
+            return (a.property) && a.property === 'title';
         }).pop();
-        var ogUrl = openGraph.filter(function (a) {
-            return (a.property) && a.property === 'og:url';
+        var contentUrl = meta.filter(function (a) {
+            return (a.property) && a.property === 'url';
         }).pop();
 
         // Is it a youtube video we can embed?
-        if (ogName && ogName.content === 'YouTube') {
+        if (siteName && siteName.content === 'YouTube') {
             var videoUrl = openGraph.filter(function (a) {
                 return (a.property) && a.property.indexOf('og:video:url') > -1
             }).pop();
@@ -97,8 +96,8 @@ Template.Message.helpers({
         if (urls.length) {
             var header = sign.linkedWebpage.title?'<h1 class="messages-message-linked-webpage-title">'+sign.linkedWebpage.title+'</h1>':'';
 
-            if (ogImage) {
-                return new Handlebars.SafeString('<a class="messages-message-linked-webpage-title-link" target="_blank" href="' + urls[0] + '">'+header+'<img class="responsive-image" src="' + (ogImage.content) + '" title="' + (ogTitle?ogTitle.content:'') + '"/></a>');
+            if (image) {
+                return new Handlebars.SafeString('<a class="messages-message-linked-webpage-title-link" target="_blank" href="' + urls[0] + '">'+header+'<img class="responsive-image" src="/static/resource/' + (image.content) + '" title="' + (pageTitle?pageTitle.content:'') + '"/></a>');
             }else {
                 return new Handlebars.SafeString('<a class="messages-message-linked-webpage-title-link" target="_blank" href="' + urls[0] + '">'+header+'</a>');
             }

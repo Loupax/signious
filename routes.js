@@ -79,17 +79,30 @@ Router.route('/static/resource/:filename', {
         if(this.request.headers['if-none-match'] === ETag){
             this.response.writeHead(304);
             return this.response.end();
-        }else {
+        }
+
+        try {
+            var ContentType = Imagemagick.identify(filePath)['mime type'];
+        }catch(e){
+            var ContentType = null;
+        }
+
+        if(ContentType){
             this.response.writeHead(200, {
-                'Content-Type': Imagemagick.identify(filePath)['mime type'],
+                'Content-Type': ContentType,
                 'Date': now.toString(),
                 'Content-Length': size,
                 'ETag': ETag
             });
-
             var readStream = fs.createReadStream(filePath);
             return readStream.pipe(this.response);
+        } else {
+            // Unsupported media type
+            this.response.writeHead(415);
+            return this.response.end();
         }
+
+
     }
 });
 
