@@ -6,7 +6,7 @@ Meteor.publish('NearbyMessages', function(point){
 
     var cursor = SignsCollection.find({
         direct_message: false,
-        is_deleted: false,
+        $or: [{is_deleted: false}, {is_deleted: {$exists: false}}],
         'location': {
             $near: {
                 $geometry: point.toMongo(),
@@ -22,7 +22,7 @@ Meteor.publish('OwnMessages', function(){
     var query = {};
 
     if(!this.userId){
-        query.$or = [{is_deleted: false}, {is_deleted: {$exists:false}}];
+        query._id = -1;
     }else{
         query.$or = [];
         query.$or.push(
