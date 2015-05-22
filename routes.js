@@ -82,12 +82,13 @@ Router.route('/static/resource/:filename', {
         }
 
         try {
-            var ContentType = Imagemagick.identify(filePath)['mime type'];
+	    var identity = Imagemagick.identify(filePath);
+            var ContentType = identity['mime type'];
         }catch(e){
-            var ContentType = null;
+            console.error(e);
+	    var ContentType = null;
         }
-
-        if(ContentType){
+        //if(ContentType){
             this.response.writeHead(200, {
                 'Content-Type': ContentType,
                 'Date': now.toString(),
@@ -96,11 +97,11 @@ Router.route('/static/resource/:filename', {
             });
             var readStream = fs.createReadStream(filePath);
             return readStream.pipe(this.response);
-        } else {
-            // Unsupported media type
-            this.response.writeHead(415);
-            return this.response.end();
-        }
+        //} else {
+        //    // Unsupported media type
+        //    this.response.writeHead(415);
+        //    return this.response.end();
+        //}
 
 
     }
