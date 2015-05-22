@@ -31,7 +31,7 @@ Meteor.publish('OwnMessages', function(){
             { 'response_to_user_id': userId, is_deleted: false }
         );
     }
-    var cursor = SignsCollection.find(query, options);
+    var cursor = SignsCollection.find({}, options);
 
     return cursor;
 });
