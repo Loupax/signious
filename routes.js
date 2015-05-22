@@ -64,41 +64,40 @@ Router.route('/scrape/html/:sign_id', {
 
 
 UploadedFilesCollection = new Meteor.Collection('uploaded_files');
-Router.route('/static/resource/:filename', {
-    where: 'server',
-    action: function fileServingControllerAction() {
+Picker.route('/static/resource/:filename',
+    function serverSideControllerAction(params, req, res, next) {
         var fs = Npm.require('fs');
-        var _id = this.params.filename.split('.').slice(0, 1).join('.');
-        var filePath = process.env.PWD + '/server/user-content/' + this.params.filename;
+        var _id = params.filename.split('.').slice(0, 1).join('.');
+        var filePath = process.env.PWD + '/server/user-content/' + params.filename;
         var stats = fs.statSync(filePath);
         var mtime = stats.mtime;
         var size = stats.size;
         var now = new Date();
         var ETag = _id + mtime.getTime();
 
-	if(this.request.headers['if-none-match'] === ETag){
-            this.response.writeHead(304);
-            return this.response.end();
+        if (req.headers['if-none-match'] === ETag) {
+            res.writeHead(304);
+            return res.end();
         }
 
         try {
-	    var identity = Imagemagick.identify(filePath);
+            var identity = Imagemagick.identify(filePath);
             var ContentType = identity['mime type'];
-        }catch(e){
+        } catch (e) {
             console.error(e);
-	    var ContentType = null;
+            var ContentType = null;
         }
-        this.response.writeHead(200, {
-           'Content-Type': ContentType,
+        res.writeHead(200, {
+            'Content-Type': ContentType,
             'Date': now.toString(),
             'Content-Length': size,
             'ETag': ETag
         });
 
         var readStream = fs.createReadStream(filePath);
-        return readStream.pipe(this.response);
-    }
-});
+        return readStream.pipe(res);
+
+    });
 
 Router.route('/mail_notifier/mention', {
    where: 'server',
