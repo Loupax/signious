@@ -88,8 +88,8 @@ Template.Message.helpers({
 
         // Is it a youtube video we can embed?
         if (siteName && siteName.content === 'YouTube') {
-            var videoUrl = openGraph.filter(function (a) {
-                return (a.property) && a.property.indexOf('og:video:url') > -1
+            var videoUrl = meta.filter(function (a) {
+                return (a.property) && a.property.indexOf('video:url') > -1
             }).pop();
             if (videoUrl && videoUrl.content)
                 return new Handlebars.SafeString('<iframe width="420" height="315" src="' + videoUrl.content + '" frameborder="0" allowfullscreen></iframe>');
