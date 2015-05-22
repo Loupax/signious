@@ -1,5 +1,5 @@
 Router.configure({
-  // the default layout
+    // the default layout
     layoutTemplate: 'root',
     notFoundTemplate: "routeNotFound"
 });
@@ -12,7 +12,7 @@ Router.route('/', {
 
 Router.route('/:username', {
     controller: 'ProfileController',
-    waitOn: function(){
+    waitOn: function () {
         return Meteor.subscribe('SpecificProfilePublication', this.params.username);
     },
     action: 'index'
@@ -20,7 +20,7 @@ Router.route('/:username', {
 
 Router.route('/profile/show', {
     controller: 'ProfileController',
-    waitOn: function(){
+    waitOn: function () {
         console.log('Show');
         return Meteor.subscribe('SpecificProfilePublication', Meteor.userId());
     },
@@ -29,11 +29,11 @@ Router.route('/profile/show', {
 
 Router.route('/:username/sign/:sign_id', {
     controller: 'SignController',
-    onBeforeAction: function(){
+    onBeforeAction: function () {
         GoogleMaps.load();
         this.next();
     },
-    waitOn: function(){
+    waitOn: function () {
         return Meteor.subscribe('SpecificPublicSign', this.params.sign_id);
     },
     action: 'index'
@@ -44,28 +44,25 @@ Router.route('/profile/edit', {
     action: 'edit'
 });
 
-Router.route('/deploy/git', {
-    action:function(req, res){
-        var exec = Npm.require('child_process').exec;
-        function puts(error, stdout, stderr) { res.end(stdout); }
-        exec("git pull", puts);
-    },
-    where: 'server'
-});
-
-
-Router.route('/scrape/html/:sign_id', {
-    action:function(req, res){
-        Meteor.call('Sign:addURLData', this.params.sign_id);
-        res.end();
-    },
-    where: 'server'
-});
-
 
 UploadedFilesCollection = new Meteor.Collection('uploaded_files');
-Picker.route('/static/resource/:filename',
-    function serverSideControllerAction(params, req, res, next) {
+if (Meteor.isServer) {
+    Picker.route('/deploy/git', function (params, req, res) {
+        var exec = Npm.require('child_process').exec;
+
+        function puts(error, stdout, stderr) {
+            res.end(stdout);
+        }
+
+        exec("git pull", puts);
+    });
+
+    Picker.route('/scrape/html/:sign_id', function (params, req, res) {
+        Meteor.call('Sign:addURLData', params.sign_id);
+        res.end();
+    });
+
+    Picker.route('/static/resource/:filename', function serverSideControllerAction(params, req, res, next) {
         var fs = Npm.require('fs');
         var _id = params.filename.split('.').slice(0, 1).join('.');
         var filePath = process.env.PWD + '/server/user-content/' + params.filename;
@@ -96,32 +93,31 @@ Picker.route('/static/resource/:filename',
 
         var readStream = fs.createReadStream(filePath);
         return readStream.pipe(res);
-
     });
 
-Router.route('/mail_notifier/mention', {
-   where: 'server',
-    action: function(){
-        this.response.end();
+    Picker.route('/mail_notifier/mention', function (params, req, res, next) {
+        res.end();
 
-        var user = this.request.body.user;
-        var sign = this.request.body.sign;
-        var signUrl = 'http://signious.com/'+sign.username+'/sign/'+sign._id;
+        var user = req.body.user;
+        var sign = req.body.sign;
+        var signUrl = 'http://signious.com/' + sign.username + '/sign/' + sign._id;
         Meteor.call('sendEmail', {
-            to:user.emails[0].address,
-            from:'notifications@signious.com',
-            subject:'You\'ve been mentioned on Signious!',
-            text:[
+            to: user.emails[0].address,
+            from: 'notifications@signious.com',
+            subject: 'You\'ve been mentioned on Signious!',
+            text: [
                 sign.username + ' mentioned you on a Sign',
                 'You can see the discussion by following this link',
                 signUrl
             ].join('\r\n'),
-            html:[
+            html: [
                 '<style type="text/css">*{text-align: center; margin: auto;}</style>',
-                '<h1>'+sign.username + ' mentioned you on a Sign'+'</h1>',
+                '<h1>' + sign.username + ' mentioned you on a Sign' + '</h1>',
                 '<p>You can see the discussion by following this link</p>',
-                '<a href="'+signUrl+'">'+signUrl+'</a>'
+                '<a href="' + signUrl + '">' + signUrl + '</a>'
             ].join('')
         });
-    }
-});
+    });
+
+
+}
