@@ -33,8 +33,11 @@ function downloadAttachedImages(meta){
     var Future = Npm.require('fibers/future');
 
     meta.forEach(function(meta, index, coll){
+	//meta.content = meta.content.split('?')[0];
         if(meta.property && meta.property === 'image') {
-            var _id = UploadedFilesCollection.insert({
+            if(! /^(https|http):\/\/.+\.(gif|png|jpg|jpeg)$/i.test(meta.content)){return;}
+	    console.log(meta);
+	    var _id = UploadedFilesCollection.insert({
                 'originalFilename': meta.content,
                 'mimeType': null
             });
@@ -42,7 +45,9 @@ function downloadAttachedImages(meta){
             var path = process.env.PWD + "/server/user-content/" + filename;
             var file = fs.createWriteStream(path);
 
-            var future = new Future();
+            try{
+	    console.log(filename);
+	    var future = new Future();
             futures.push(future);
             (meta.content.indexOf('http:')===0?http:https).get(meta.content, function (response) {
                 response.pipe(file);
@@ -50,6 +55,7 @@ function downloadAttachedImages(meta){
                 response.on('end', function(){future.return();})
             });
             meta.content = filename;
+	    } catch (e){}
         }
         return;
     });
