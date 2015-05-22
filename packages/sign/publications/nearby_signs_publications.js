@@ -27,8 +27,8 @@ Meteor.publish('OwnMessages', function(){
         query.$or = [];
         query.$or.push(
             { 'poster_id': userId },
-            { 'mentions._id': userId, $or:[{is_deleted: false}, {is_deleted: {$exists: false}}] },
-            { 'response_to_user_id': userId, $or:[{is_deleted: false}, {is_deleted: {$exists: false}}] }
+            { 'mentions._id': userId, is_deleted: false},
+            { 'response_to_user_id': userId, is_deleted: false}
         );
     }
     var cursor = SignsCollection.find(query, options);
