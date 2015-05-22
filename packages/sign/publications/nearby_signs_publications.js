@@ -22,7 +22,7 @@ Meteor.publish('OwnMessages', function(){
     var query = {};
 
     if(!this.userId){
-        query.is_deleted = false;
+        query.$or = [{is_deleted: false}, {is_deleted: {$exists:false}}];
     }else{
         query.$or = [];
         query.$or.push(
@@ -31,7 +31,7 @@ Meteor.publish('OwnMessages', function(){
             { 'response_to_user_id': userId, is_deleted: false }
         );
     }
-    var cursor = SignsCollection.find({}, options);
+    var cursor = SignsCollection.find(query, options);
 
     return cursor;
 });
