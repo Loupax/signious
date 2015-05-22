@@ -98,7 +98,7 @@ Template.Message.helpers({
             var header = sign.linkedWebpage.title?'<h1 class="messages-message-linked-webpage-title">'+sign.linkedWebpage.title+'</h1>':'';
 
             if (image) {
-                return new Handlebars.SafeString('<a class="messages-message-linked-webpage-title-link" target="_blank" href="' + urls[0] + '">'+header+'<img class="responsive-image" src="/static/resource/' + (image.content) + '" title="' + (pageTitle?pageTitle.content:'') + '"/></a>');
+                return new Handlebars.SafeString('<a class="messages-message-linked-webpage-title-link" target="_blank" href="' + urls[0] + '">'+header+'<img class="responsive-image" src="' + (image.content) + '" title="' + (pageTitle?pageTitle.content:'') + '"/></a>');
             }else {
                 return new Handlebars.SafeString('<a class="messages-message-linked-webpage-title-link" target="_blank" href="' + urls[0] + '">'+header+'</a>');
             }
