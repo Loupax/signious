@@ -1,4 +1,4 @@
-Meteor.startup(function(){
+Meteor.startup(function () {
     Meteor.Mailgun.config(Meteor.settings.mailgun);
 });
 

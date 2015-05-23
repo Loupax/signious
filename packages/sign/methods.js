@@ -51,13 +51,13 @@ function downloadAttachedImages(meta){
             futures.push(future);
             (meta.content.indexOf('http:')===0?http:https).get(meta.content, function (response) {
                 response.pipe(file);
-                response.on('close', function(){future.reject();})
+                response.on('close', function(){future.reject();});
                 response.on('end', function(){future.return();})
             });
             meta.content = filename;
 	    } catch (e){}
         }
-        return;
+
     });
     futures.map(function(future){return future.wait();});
 }
@@ -122,7 +122,7 @@ Meteor.methods({
                     var attrs = meta.attribs;
                     if(attrs.property){
                         var segments = attrs.property.split(':');
-                        var prefix = segments.shift()
+                        var prefix = segments.shift();
                         if(['twitter', 'og'].indexOf(prefix)>-1)
                         {
                             attrs.property = segments.join(':');

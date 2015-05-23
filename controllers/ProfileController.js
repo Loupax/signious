@@ -2,38 +2,38 @@ var currentUser = new ReactiveVar(undefined);
 
 ProfileController = ApplicationController.extend({
     data: {
-        user: function(){
-          return currentUser.get();
+        user: function () {
+            return currentUser.get();
         },
-        ownedProfile: function(){
+        ownedProfile: function () {
             return currentUser.get() && Meteor.user() && (currentUser.get().username === Meteor.user().username);
         },
-        messages: function(){
+        messages: function () {
             return SignsCollection.find({
                 response_to_sign_id: '',
-                poster_id: currentUser.get()?currentUser.get()._id:-1
-            },{
-                sort:{
-                    when:-1
+                poster_id: currentUser.get() ? currentUser.get()._id : -1
+            }, {
+                sort: {
+                    when: -1
                 }
             });
         }
     },
     index: function (path) {
-        if(path.url.indexOf('/profile/show') > -1){
+        if (path.url.indexOf('/profile/show') > -1) {
             var user = Meteor.users.find({_id: Meteor.userId()}).fetch().pop();
-        }else{
+        } else {
             var user = Meteor.users.find({username: decodeURIComponent(path.url).split('/').pop()}).fetch().pop();
         }
-        if(!user) {
+        if (!user) {
             currentUser.set(undefined);
             this.render('userNotFound');
-        }else {
+        } else {
             currentUser.set(user);
             this.render('profile');
         }
     },
-    edit: function(){
+    edit: function () {
         var user = Meteor.users.find({_id: Meteor.userId()}).fetch().pop();
         currentUser.set(user);
         this.render('ProfileEditor');

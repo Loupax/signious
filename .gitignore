@@ -4,3 +4,4 @@ npm-debug.log
 settings.json
 server/user-content
 server/attached-content
+*.DS_Store

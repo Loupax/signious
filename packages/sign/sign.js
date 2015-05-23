@@ -60,7 +60,7 @@ Sign.getMentions = function(sign){
 
 Sign.prototype.update = function(){
 	throw new Error('Not yet implemented');
-}
+};
 
 Sign.prototype.delete = function(){
 	var self = this;

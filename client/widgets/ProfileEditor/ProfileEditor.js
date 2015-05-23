@@ -3,10 +3,10 @@ var formIsSaving = new ReactiveVar(false);
 var notificationText = new ReactiveVar();
 
 Template.ProfileEditor.helpers({
-    disableOnSave: function(){
-        return formIsSaving.get()?'disabled':'';
+    disableOnSave: function () {
+        return formIsSaving.get() ? 'disabled' : '';
     },
-    notification: function(){
+    notification: function () {
         return notificationText.get();
     }
 });
@@ -22,22 +22,22 @@ Template.ProfileEditor.events({
         };
 
         var promises = [];
-        if(file){
+        if (file) {
             promises.push(uploadAvatar(file));
-        }else {
-            promises.push(new Promise(function(resolve, reject){
-                Meteor.call('Profile:update', data, function(err){
-                    if(err)
+        } else {
+            promises.push(new Promise(function (resolve, reject) {
+                Meteor.call('Profile:update', data, function (err) {
+                    if (err)
                         reject(err);
 
                     resolve();
                 });
             }));
         }
-        Promise.all(promises).then(function(){
+        Promise.all(promises).then(function () {
             formIsSaving.set(false);
             Router.go('/profile/show');
-        }).catch(function(err){
+        }).catch(function (err) {
             formIsSaving.set(false);
             notificationText.set(err.details);
         });
@@ -52,8 +52,8 @@ Template.ProfileEditor.events({
     }
 });
 
-function uploadAvatar(file){
-    return new Promise(function(resolve, reject){
+function uploadAvatar(file) {
+    return new Promise(function (resolve, reject) {
         if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
             resolve();
             return false;
@@ -65,7 +65,8 @@ function uploadAvatar(file){
         }
 
         var reader = new FileReader();
-        var noop = function () {};
+        var noop = function () {
+        };
         // Closure to capture the file information.
         reader.onerror = noop;
         reader.onprogress = noop;
