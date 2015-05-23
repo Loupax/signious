@@ -1,0 +1,6 @@
+[submodule "packages/Meteor-url-utils"]
+	path = packages/Meteor-url-utils
+	url = https://github.com/Loupax/Meteor-url-utils.git
+[submodule "packages/url-utils"]
+	path = packages/url-utils
+	url = https://github.com/Loupax/Meteor-url-utils.git
