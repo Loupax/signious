@@ -3,7 +3,7 @@ function getHTMLOfURL(url) {
     var fut = new Future();
     var spawn = Npm.require('child_process').spawn;
 
-    var phantom = spawn('phantomjs', [process.env.PWD + '/assets/app/phantom_driver.js.phantom', url]);
+    var phantom = spawn('phantomjs', [process.env.PWD + '/server/assets/app/phantom_driver.js.phantom', url]);
     var dataBucket = [];
     var errBucket = [];
     phantom.stdout.on('data', Meteor.bindEnvironment(function (data) {
