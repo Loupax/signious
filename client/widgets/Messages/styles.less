@@ -1,7 +1,8 @@
 @import (reference) url('/mixins.less');
+@import (reference) url('/palette.less');
 .messages-message{
   &.deleted{
-    background: #FFF6F6;
+    background: @msg-background-delete-color;
   }
   .messages-message-attached-content{
     clear: both;
@@ -49,6 +50,9 @@
   background: #a8a8a8;
 }
 
+.messages-message.private-message{
+  background: @msg-background-private-color;
+}
 .messages-message-actions + form{
   margin: 1em 0 0 0;
 }

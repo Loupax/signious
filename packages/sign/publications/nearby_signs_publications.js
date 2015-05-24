@@ -5,7 +5,7 @@ Meteor.publish('NearbyMessages', function(point){
         return false;
 
     var cursor = SignsCollection.find({
-        direct_message: false,
+        is_private: false,
         $or: [{is_deleted: false}, {is_deleted: {$exists: false}}],
         'location': {
             $near: {

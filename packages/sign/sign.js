@@ -38,7 +38,7 @@ Sign = function Sign(o){
 	this.text 		= o.text;
 	this.when 		= new Date;
 	this.location   = o.location;
-    this.direct_message = o.direct_message || false;
+    this.is_private = o.is_private || false;
     //this.mentions is populated on the server
 
 	for(var prop in o){

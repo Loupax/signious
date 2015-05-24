@@ -37,6 +37,9 @@ Template.Message.events({
 
 
 Template.Message.helpers({
+    'isPrivateMessage': function isPrivateMessage(message){
+        return message.is_private?'private-message':'';
+    },
     'belongsToCurrentUser': function(sign){
         return Meteor.userId() && sign.poster_id && (Meteor.userId() === sign.poster_id);
     },

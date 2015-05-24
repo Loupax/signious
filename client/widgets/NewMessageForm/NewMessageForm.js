@@ -4,11 +4,21 @@ var newMessageSave = function (template) {
         response_to_sign_id = template.find('[name="respond_to_sign_id"]').value,
         response_to_user_id = template.find('[name="respond_to_user_id"]').value,
         root_sign_id = response_to_sign_id,
-        parent;
+        parent,
+        // If the message begins with a single d character
+        // consider it private
+        is_private = /^d\s/i.test(text);
 
     parent = SignsCollection.find({_id: root_sign_id}, {limit: 1}).fetch()[0];
-    if (parent && parent.discussion_root_sign_id)
+    console.log(parent, is_private);
+    if (parent && parent.discussion_root_sign_id) {
         root_sign_id = parent.discussion_root_sign_id;
+    }
+    // If the message does NOT have it's is_private value set, inherit
+    // whatever value the parent has
+    if(parent && !is_private) {
+        is_private = parent.is_private;
+    }
 
     if (!text.trim()) {
 
@@ -19,7 +29,7 @@ var newMessageSave = function (template) {
             location: Signious.geolocation.lastKnownLocation,
             poster_id: Meteor.user() ? Meteor.user()._id : undefined,
             username: Meteor.user() ? Meteor.user().username : 'Anonymous',
-            is_direct_message: false,
+            is_private: is_private,
             response_to_sign_id: response_to_sign_id,
             response_to_user_id: response_to_user_id,
             discussion_root_sign_id: root_sign_id

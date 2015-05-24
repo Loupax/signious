@@ -23,7 +23,7 @@
 </template>
 
 <template name="Message">
-    <article class="messages-message {{isDeletedClass this}}">
+    <article class="messages-message {{isDeletedClass this}} {{isPrivateMessage this}}">
         <header>
             <div class="messages-message-head">
                 {{#if avatar}}

@@ -99,7 +99,7 @@ Meteor.methods({
             when: sign.when,
             is_deleted: false,
             location: Location.prototype.toMongo.call(sign.location),
-            direct_message: sign.direct_message,
+            is_private: sign.is_private,
             response_to_user_id: sign.response_to_user_id,
             response_to_sign_id: sign.response_to_sign_id,
             discussion_root_sign_id: sign.discussion_root_sign_id,
@@ -109,7 +109,7 @@ Meteor.methods({
 
         if (!sign.discussion_root_sign_id) {
             sign.discussion_root_sign_id = _id;
-            SignsCollection.find({_id: _id}, {$set: {discussion_root_sign_id: sign.discussion_root_sign_id}});
+            SignsCollection.update({_id: _id}, {$set: {discussion_root_sign_id: sign.discussion_root_sign_id}});
         }
 
         // Just make an asynchronous call to the route that will scrape the urls inside
