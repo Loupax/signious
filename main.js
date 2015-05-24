@@ -1,3 +1,7 @@
+if( Meteor.isClient )
+    ClientDebugger.debugMode = Meteor.settings.public.debug;
+
+
 Meteor.startup(function() {
     if(Meteor.isClient){
         return SEO.config({

@@ -44,6 +44,7 @@ livedata@1.0.13
 localstorage@1.0.3
 location@0.0.0
 logging@1.0.7
+loupax:url-utils@0.0.1
 loupax:winston@0.0.1
 manuelschoebel:ms-seo@0.4.1
 meteor@1.1.6
@@ -65,6 +66,7 @@ npm-bcrypt@0.7.8_2
 npm-container@1.0.0
 observe-sequence@1.0.6
 ordered-dict@1.0.3
+prasad19sara:client-debugger@0.2.1
 random@1.0.3
 reactive-dict@1.1.0
 reactive-var@1.0.5
