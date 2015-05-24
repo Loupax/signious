@@ -1,78 +1,3 @@
-function getHTMLOfURL(url) {
-    var Future = Npm.require('fibers/future');
-    var fut = new Future();
-    var spawn = Npm.require('child_process').spawn;
-
-    var phantom = spawn('phantomjs', [process.env.PWD + '/server/assets/app/phantom_driver.js.phantom', url]);
-    var dataBucket = [];
-    var errBucket = [];
-    phantom.stdout.on('data', Meteor.bindEnvironment(function (data) {
-        dataBucket.push(data.toString());
-    }));
-    phantom.stderr.on('data', Meteor.bindEnvironment(function (data) {
-        errBucket.push(data.toString());
-    }));
-    phantom.on('exit', Meteor.bindEnvironment(function (code) {
-        if (errBucket.length) {
-            fut.throw(new Meteor.Error(500, 'Error while running phantomjs' + errBucket.join()));
-        } else {
-            var doc = dataBucket.join('');
-            fut.return(doc.substr(0, doc.indexOf('</html>') + 8));
-        }
-    }));
-
-    fut.wait();
-    return fut;
-}
-
-function downloadAttachedImages(meta) {
-    var futures = [];
-    var fs = Npm.require('fs');
-    var http = Npm.require('http');
-    var https = Npm.require('https');
-    var Future = Npm.require('fibers/future');
-
-    meta.forEach(function (meta, index, coll) {
-        //meta.content = meta.content.split('?')[0];
-        if (meta.property && meta.property === 'image') {
-
-            if (!URLUtils.isImage(meta.content)) {
-                return;
-            }
-            console.log(meta);
-            var _id = UploadedFilesCollection.insert({
-                'originalFilename': meta.content,
-                'mimeType': null
-            });
-            var filename = [_id, meta.content.split('.').pop()].join('.');
-            var path = process.env.PWD + "/server/user-content/" + filename;
-            var file = fs.createWriteStream(path);
-
-            try {
-
-                var future = new Future();
-                futures.push(future);
-                (meta.content.indexOf('http:') === 0 ? http : https).get(meta.content, function (response) {
-                    response.pipe(file);
-                    response.on('close', function () {
-                        future.reject();
-                    });
-                    response.on('end', function () {
-                        future.return();
-                    })
-                });
-                meta.content = filename;
-            } catch (e) {
-            }
-        }
-
-    });
-    futures.map(function (future) {
-        return future.wait();
-    });
-}
-
-
 Meteor.methods({
     'Sign:DeleteHangingMessages': function () {
         SignsCollection.find({is_deleted: true, poster_id: Meteor.userId()}, {
@@ -128,46 +53,23 @@ Meteor.methods({
                     meta: [{property: 'image', content: urls[0]}]
                 };
             } else {
-                var $ = cheerio.load(getHTMLOfURL(urls[0]).value);
+                var webpage = Scraper.create(urls[0]);
+
                 var linkedWebpage = {
-                    title: $('title').text(),
-                    meta: []
+                    title: webpage.title(),
+                    meta: webpage.getMeta({
+                        fixRelativePaths: true,
+                        filterSelector: '[name="keywords"], [name="description"], [property^="og:"], [property^="twitter:"]',
+                        prunePrefixes: ['twitter', 'og']
+                    })
                 };
 
-                var duplicates = [];
-                $('meta').filter('[name="keywords"], [name="description"], [property^="og:"], [property^="twitter:"]').each(function (index, meta) {
-                    var attrs = meta.attribs;
-                    if (attrs.property) {
-                        var segments = attrs.property.split(':');
-                        var prefix = segments.shift();
-                        if (['twitter', 'og'].indexOf(prefix) > -1) {
-                            attrs.property = segments.join(':');
-                        }
-                    }
-                    // We store the string representations to an array
-                    // to make sure we don't add the same property set multiple times
-                    var json = JSON.stringify(attrs);
-                    if (duplicates.indexOf(json) === -1) {
-                        duplicates.push(json);
-                        linkedWebpage.meta.push(attrs);
-                    }
+                Scraper.downloadMetadataImages({
+                    meta: linkedWebpage.meta,
+                    imageCollection:UploadedFilesCollection,
+                    imageLocation:process.env.PWD + "/server/user-content/",
+                    imageUrl: '/static/resource'
                 });
-            }
-            linkedWebpage.meta = linkedWebpage.meta.filter(function (meta) {
-                if (meta.property === 'image') {
-                    if (meta.content.indexOf('http://') === 0 || meta.content.indexOf('https://') === 0) {
-                        return true;
-                    }
-                    return false;
-                }
-                return true;
-            });
-            console.log(linkedWebpage.meta);
-            try {
-                // Download remote images here to avoid 403s
-                downloadAttachedImages(linkedWebpage.meta);
-            } catch (e) {
-                console.error(e);
             }
         }
         SignsCollection.update(sign_id, {
