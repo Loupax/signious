@@ -6,11 +6,11 @@ Meteor.publish('NearbyMessages', function(point){
 
     var cursor = SignsCollection.find({
         is_private: false,
-        $or: [{is_deleted: false}, {is_deleted: {$exists: false}}],
+        is_deleted: false,
         'location': {
             $near: {
                 $geometry: point.toMongo(),
-                $maxDistance: 1
+                $maxDistance: 1000
             }
         }
     }, options);
