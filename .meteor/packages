@@ -33,5 +33,6 @@ meteorhacks:npm
 
 
 npm-container
-loupax:url-utils
 prasad19sara:client-debugger
+loupax:url-utils
+loupax:web-scraper
