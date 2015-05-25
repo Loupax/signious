@@ -68,11 +68,13 @@
                 {{#unless this.is_deleted}}
                      <a class="link-to-sign" title="share" href="/{{username}}/sign/{{_id}}"><i class="fa fa-link"></i></a>
                 {{/unless}}
-                {{#unless isFaved this}}
-                    <button class="js-fave-message messages-messages-actions-fave"><i class="fa fa-star-o"></i></button>
-                {{/unless}}
-                {{#if isFaved this}}
-                    <button class="js-unfave-message messages-messages-actions-unfave"><i class="fa fa-star"></i></button>
+                {{#if isLoggedIn}}
+                    {{#unless isFaved this}}
+                        <button class="js-fave-message messages-messages-actions-fave"><i class="fa fa-star-o"></i></button>
+                    {{/unless}}
+                    {{#if isFaved this}}
+                        <button class="js-unfave-message messages-messages-actions-unfave"><i class="fa fa-star"></i></button>
+                    {{/if}}
                 {{/if}}
                 {{#if this.is_deleted}}
                     <a class="link-to-sign" title="share" href=""><i class="fa fa-link"></i></a>

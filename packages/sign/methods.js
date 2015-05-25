@@ -1,12 +1,12 @@
 Meteor.methods({
     'Sign:unfave': function(sign_id){
-        if(Meteor.user().profile.favorites.indexOf(sign_id) > -1) {
+        if(Meteor.userId() && Meteor.user().profile.favorites.indexOf(sign_id) > -1) {
             Meteor.users.update({_id: Meteor.userId()}, {$pull: {'profile.favorites': sign_id}});
             SignsCollection.update({_id: sign_id}, {$inc: {'favorites': -1}});
         }
     },
     'Sign:fave': function(sign_id){
-        if(Meteor.user().profile.favorites.indexOf(sign_id) === -1) {
+        if(Meteor.userId() && Meteor.user().profile.favorites.indexOf(sign_id) === -1) {
             Meteor.users.update({_id: Meteor.userId()}, {$addToSet: {'profile.favorites': sign_id}});
             SignsCollection.update({_id: sign_id}, {$inc: {favorites: 1}});
 
@@ -16,7 +16,7 @@ Meteor.methods({
             if(sign.poster_id === user._id){
                 return;
             }
-            console.log(user);
+
             var signUrl = Meteor.settings.public.baseUrl+'/' + sign.username + '/sign/' + sign._id;
             Meteor.call('sendEmail', {
                 to: user.emails[0].address,
