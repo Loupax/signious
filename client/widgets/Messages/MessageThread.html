@@ -82,6 +82,12 @@
                         }}</button>
                     {{/if}}
                 {{/if}}
+                {{#unless isLoggedIn}}
+                    <button class="messages-messages-actions-fave">{{!
+                        }}<i class="fa fa-star-o"></i>{{!
+                        }}{{#if this.favorites}}<span class="sup">{{this.favorites}}</span>{{/if}}{{!
+                    }}</button>
+                {{/unless}}
                 {{#if this.is_deleted}}
                     <a class="link-to-sign" title="share" href=""><i class="fa fa-link"></i></a>
                 {{/if}}
