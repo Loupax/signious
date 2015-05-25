@@ -1,4 +1,41 @@
 Meteor.methods({
+    'Sign:unfave': function(sign_id){
+        if(Meteor.user().profile.favorites.indexOf(sign_id) > -1) {
+            Meteor.users.update({_id: Meteor.userId()}, {$pull: {'profile.favorites': sign_id}});
+            SignsCollection.update({_id: sign_id}, {$inc: {'favorites': -1}});
+        }
+    },
+    'Sign:fave': function(sign_id){
+        if(Meteor.user().profile.favorites.indexOf(sign_id) === -1) {
+            Meteor.users.update({_id: Meteor.userId()}, {$addToSet: {'profile.favorites': sign_id}});
+            SignsCollection.update({_id: sign_id}, {$inc: {favorites: 1}});
+
+            this.unblock();
+            var sign = SignsCollection.find({_id: sign_id}, {limit: 1}).fetch().pop();
+            var user = Meteor.users.find({_id: sign.poster_id}, {limit: 1}).fetch().pop();
+            if(sign.poster_id === user._id){
+                return;
+            }
+            console.log(user);
+            var signUrl = Meteor.settings.public.baseUrl+'/' + sign.username + '/sign/' + sign._id;
+            Meteor.call('sendEmail', {
+                to: user.emails[0].address,
+                from: 'notifications@signious.com',
+                subject: 'Your message been been favorited on Signious!',
+                text: [
+                    sign.username + ' favorited your Sign',
+                    'You can see the discussion by following this link',
+                    signUrl
+                ].join('\r\n'),
+                html: [
+                    '<style type="text/css">*{text-align: center; margin: auto;}</style>',
+                    '<h1>' + sign.username + ' favorited your Sign' + '</h1>',
+                    '<p>You can see the discussion by following this link</p>',
+                    '<a href="' + signUrl + '">' + signUrl + '</a>'
+                ].join('')
+            });
+        }
+    },
     'Sign:DeleteHangingMessages': function () {
         SignsCollection.find({is_deleted: true, poster_id: Meteor.userId()}, {
             fields: {

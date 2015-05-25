@@ -2,6 +2,12 @@
  * Created by loupax on 3/8/15.
  */
 Template.Message.events({
+    'click .js-fave-message': function(event, template){
+        Meteor.call('Sign:fave', this._id);
+    },
+    'click .js-unfave-message': function(event, template){
+        Meteor.call('Sign:unfave', this._id);
+    },
     'click .js-delete-message': function signDeletionClickHandler(event, template){
         Meteor.call('Sign:delete', this._id);
     },
@@ -37,6 +43,10 @@ Template.Message.events({
 
 
 Template.Message.helpers({
+    'isFaved': function messageIsFaved(msg){
+        var favorites = Meteor.user().profile.favorites || [];
+        return  favorites.indexOf(msg._id) > -1;
+    },
     'isPrivateMessage': function isPrivateMessage(message){
         return message.is_private?'private-message':'';
     },

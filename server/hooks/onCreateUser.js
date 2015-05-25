@@ -12,6 +12,7 @@ Accounts.onCreateUser(function (options, user) {
         user.username = [user.username, count + 1].join('_');
     }
     user.profile = user.profile || {avatar: ''};
+    user.profile.favorites = [];
     return user;
 });
 
