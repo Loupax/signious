@@ -1,4 +1,4 @@
-var options = {sort: {when: -1}, fields: {location:0}};
+var options = {sort: {when: -1}/*, fields: {location:0}*/};
 Meteor.publish('NearbyMessages', function(point){
     point = new Location(point);
     if(!point.isValid())
