@@ -13,7 +13,7 @@ Meteor.methods({
             this.unblock();
             var sign = SignsCollection.find({_id: sign_id}, {limit: 1}).fetch().pop();
             var user = Meteor.users.find({_id: sign.poster_id}, {limit: 1}).fetch().pop();
-            if(sign.poster_id === user._id){
+            if(sign.poster_id === Meteor.userId){
                 return;
             }
 
