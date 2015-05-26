@@ -21,7 +21,6 @@ Router.route('/:username', {
 Router.route('/profile/show', {
     controller: 'ProfileController',
     waitOn: function () {
-        console.log('Show');
         return Meteor.subscribe('SpecificProfilePublication', Meteor.userId());
     },
     action: 'index'
@@ -38,6 +37,20 @@ Router.route('/:username/sign/:sign_id', {
     },
     action: 'index'
 });
+/*FlowRouter.route('/:username/sign/:sign_id',{
+    middlewares: [],
+    subscriptions: function(params) {
+        console.log(params);
+        this.register('sign', Meteor.subscribe('SpecificPublicSign', params.sign_id));
+    },
+    action: function(params) {
+        //console.log('Ready?',FlowRouter.subsReady("myPost"));
+        FlowRouter.subsReady("sign", function() {
+            // do something
+            console.log('Sign',SignsCollection.find({_id: params.sign_id}).fetch());
+        });
+    }
+});*/
 
 Router.route('/profile/edit', {
     controller: 'ProfileController',

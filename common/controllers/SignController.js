@@ -46,7 +46,7 @@ SignController = ApplicationController.extend({
         //metaData['ICBM']         = metaData['geo.position'];
         metaData['title'] = sign.text;
         var title = metaData['title'].length ? 'Signious - ' + metaData['title'] : 'Signious';
-        console.log(metaData);
+
         SEO.set({
             title: title,
             meta: metaData,
