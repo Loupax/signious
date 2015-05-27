@@ -1,5 +1,5 @@
 Session.setDefault('saving_message', 0);
-var newMessageSave = function (template) {
+var newMessageSave = function newMessageSave(template) {
     var text = template.find('textarea').value,
         response_to_sign_id = template.find('[name="respond_to_sign_id"]').value,
         response_to_user_id = template.find('[name="respond_to_user_id"]').value,
@@ -10,7 +10,6 @@ var newMessageSave = function (template) {
         is_private = /^d\s/i.test(text);
 
     parent = SignsCollection.find({_id: root_sign_id}, {limit: 1}).fetch()[0];
-    console.log(parent, is_private);
     if (parent && parent.discussion_root_sign_id) {
         root_sign_id = parent.discussion_root_sign_id;
     }
@@ -20,10 +19,7 @@ var newMessageSave = function (template) {
         is_private = parent.is_private;
     }
 
-    if (!text.trim()) {
-
-    }
-    else {
+    if (text.trim()) {
         var sign = new Sign({
             text: text,
             location: Signious.geolocation.lastKnownLocation,

@@ -19,7 +19,9 @@ Meteor.publish('NearbyMessages', function(point){
 
 Meteor.publish('OwnMessages', function(){
     var userId = this.userId || '';
-    var query = {};
+    var query = {
+        is_deleted: false
+    };
 
     if(!this.userId){
         query._id = -1;
@@ -27,8 +29,7 @@ Meteor.publish('OwnMessages', function(){
         query.$or = [];
         query.$or.push(
             { 'poster_id': userId },
-            { 'mentions._id': userId, is_deleted: false},
-            { 'response_to_user_id': userId, is_deleted: false}
+            { 'mentions._id': userId}
         );
     }
     var cursor = SignsCollection.find(query, options);

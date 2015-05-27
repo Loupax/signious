@@ -9,10 +9,8 @@ Template.Message.events({
         Meteor.call('Sign:unfave', this._id);
     },
     'click .js-delete-message': function signDeletionClickHandler(event, template){
-        Meteor.call('Sign:delete', this._id);
-    },
-    'click .js-undelete-message': function signUndeletionClickHandler(event, template){
-        Meteor.call('Sign:undelete', this._id);
+        Session.set('MessageBeingDeleted', this);
+        Modal.show('DeleteMessageModal');
     },
     'click .js-show-response-form': function clickToggleResponseFormHandler(event, template) {
         // MessageThread can be used as a reccursive template. Stopping propagation to avoid
@@ -49,6 +47,9 @@ Template.Message.helpers({
     },
     'isPrivateMessage': function isPrivateMessage(message){
         return message.is_private?'private-message':'';
+    },
+    'messageClass': function isPrivateMessage(message){
+        return 'message-id-'+message._id;
     },
     'belongsToCurrentUser': function(sign){
         return Meteor.userId() && sign.poster_id && (Meteor.userId() === sign.poster_id);

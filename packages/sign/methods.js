@@ -121,12 +121,6 @@ Meteor.methods({
             _id: sign_id
         }, {$set: {'is_deleted': true}}, {multi: false});
     },
-    'Sign:undelete': function (sign_id) {
-        return SignsCollection.update({
-            poster_id: Meteor.userId(),
-            _id: sign_id
-        }, {$set: {'is_deleted': false}}, {multi: false});
-    },
     'Sign:save': function (sign) {
         var mentions = Sign.getMentions(sign);
         var _id = SignsCollection.insert({
@@ -136,7 +130,8 @@ Meteor.methods({
             when: sign.when,
             is_deleted: false,
             location: Location.prototype.toMongo.call(sign.location),
-            is_private: sign.is_private,
+            // Anonymous messages cannot be set private
+            is_private: sign.poster_id ? sign.is_private : false,
             response_to_user_id: sign.response_to_user_id,
             response_to_sign_id: sign.response_to_sign_id,
             discussion_root_sign_id: sign.discussion_root_sign_id,
@@ -149,29 +144,32 @@ Meteor.methods({
             SignsCollection.update({_id: _id}, {$set: {discussion_root_sign_id: sign.discussion_root_sign_id}});
         }
 
+
         // Just make an asynchronous call to the route that will scrape the urls inside
         // the sign and add additional info to the record
-        HTTP.call('GET', Meteor.absoluteUrl('/scrape/html/' + _id), function () {
-        });
-        if (mentions.length) {
-            var users = Meteor.users.find({
-                _id: {
-                    $in: mentions.map(function (a) {
-                        return a._id;
-                    })
-                }
-            }, {fields: {emails: 1, 'profile.realname': 1, username: 1}}).fetch();
-            users.forEach(function (user) {
-                HTTP.call('POST', Meteor.absoluteUrl('/mail_notifier/mention'), {
-                    data: {
-                        user: user,
-                        sign: _.extend(sign, {_id: _id})
+        HTTP.call('GET', Meteor.absoluteUrl('/scrape/html/' + _id), function () {});
+
+        // Don't send emails from anonymous users
+        if(sign.poster_id){
+            if (mentions.length) {
+                var users = Meteor.users.find({
+                    _id: {
+                        $in: mentions.map(function (a) {
+                            return a._id;
+                        })
                     }
-                }, function () {
+                }, {fields: {emails: 1, 'profile.realname': 1, username: 1}}).fetch();
+                users.forEach(function (user) {
+                    HTTP.call('POST', Meteor.absoluteUrl('/mail_notifier/mention'), {
+                        data: {
+                            user: user,
+                            sign: _.extend(sign, {_id: _id})
+                        }
+                    }, function () {
+                    });
                 });
-            });
+            }
         }
         return _id;
     }
-
 });
