@@ -53,48 +53,54 @@
                 {{attachedContent this}}
             {{/unless}}
         </div>
-        <footer>
-            <div class="messages-message-actions">
-                <button class="js-show-response-form messages-messages-actions-reply"><i
-                        class="fa fa-reply"></i> Reply</button>
-                {{#if belongsToCurrentUser this}}
-                    {{#unless this.is_deleted}}
-                        <button class="js-delete-message messages-messages-actions-delete"><i class="fa fa-trash-o"></i></button>
-                    {{/unless}}
-                    {{#if this.is_deleted}}
-                        <button class="js-undelete-message messages-messages-actions-undelete"><i class="fa fa-undo"></i></button>
+        <footer class="messages-message-footer">
+            <div class="messages-messages-badges-row">
+                <div class="messages-message-status">
+                    {{messageBadge this}}
+                </div>
+                <div class="messages-message-actions">
+                    <button class="js-show-response-form messages-messages-actions-reply"><i
+                            class="fa fa-reply"></i> Reply</button>
+                    {{#if belongsToCurrentUser this}}
+                        {{#unless this.is_deleted}}
+                            <button title="Delete" class="js-delete-message messages-messages-actions-delete"><i class="fa fa-trash-o"></i></button>
+                        {{/unless}}
+                        {{#if this.is_deleted}}
+                            <button title="Cancel deletion" class="js-undelete-message messages-messages-actions-undelete"><i class="fa fa-undo"></i></button>
+                        {{/if}}
                     {{/if}}
-                {{/if}}
-                {{#unless this.is_deleted}}
-                     <a class="link-to-sign" title="share" href="/{{username}}/sign/{{_id}}"><i class="fa fa-link"></i></a>
-                {{/unless}}
-                {{#if isLoggedIn}}
-                    {{#unless isFaved this}}
-                        <button class="js-fave-message messages-messages-actions-fave">{{!
+                    {{#unless this.is_deleted}}
+                         <a class="link-to-sign" title="Direct link" href="/{{username}}/sign/{{_id}}"><i class="fa fa-link"></i></a>
+                    {{/unless}}
+                    {{#if isLoggedIn}}
+                        {{#unless isFaved this}}
+                            <button class="js-fave-message messages-messages-actions-fave">{{!
+                                }}<i class="fa fa-star-o"></i>{{!
+                                }}{{#if this.favorites}}<span class="sup">{{this.favorites}}</span>{{/if}}{{!
+                            }}</button>
+                        {{/unless}}
+                        {{#if isFaved this}}
+                            <button class="js-unfave-message messages-messages-actions-unfave">{{!
+                                }}<i class="fa fa-star"></i>{{!
+                                }}{{#if this.favorites}}<span class="sup">{{this.favorites}}</span>{{/if}}{{!
+                            }}</button>
+                        {{/if}}
+                    {{/if}}
+                    {{#unless isLoggedIn}}
+                        <button class="messages-messages-actions-fave">{{!
                             }}<i class="fa fa-star-o"></i>{{!
                             }}{{#if this.favorites}}<span class="sup">{{this.favorites}}</span>{{/if}}{{!
                         }}</button>
                     {{/unless}}
-                    {{#if isFaved this}}
-                        <button class="js-unfave-message messages-messages-actions-unfave">{{!
-                            }}<i class="fa fa-star"></i>{{!
-                            }}{{#if this.favorites}}<span class="sup">{{this.favorites}}</span>{{/if}}{{!
-                        }}</button>
+                    {{#if this.is_deleted}}
+                        <a class="link-to-sign" title="share" href=""><i class="fa fa-link"></i></a>
                     {{/if}}
-                {{/if}}
-                {{#unless isLoggedIn}}
-                    <button class="messages-messages-actions-fave">{{!
-                        }}<i class="fa fa-star-o"></i>{{!
-                        }}{{#if this.favorites}}<span class="sup">{{this.favorites}}</span>{{/if}}{{!
-                    }}</button>
-                {{/unless}}
-                {{#if this.is_deleted}}
-                    <a class="link-to-sign" title="share" href=""><i class="fa fa-link"></i></a>
-                {{/if}}
+                </div>
             </div>
-            {{#if isRespondingTo this}}
+            <div class="new-reply-form hidden">
+                <hr class="one em margin">
                 {{> NewMessageForm this}}
-            {{/if}}
+            </div>
         </footer>
     </article>
 </template>

@@ -14,6 +14,16 @@
   display: @display;
 }
 
+// Axis Alignment
+// - applies to: flex containers
+// flex-start | flex-end | center | space-between | space-around
+.justify-content(@justify: flex-start) {
+  -webkit-justify-content: @justify;
+  -moz-justify-content: @justify;
+  -ms-justify-content: @justify;
+  justify-content: @justify;
+}
+
 // Flex Flow Direction
 // - applies to: flex containers
 // row | row-reverse | column | column-reverse

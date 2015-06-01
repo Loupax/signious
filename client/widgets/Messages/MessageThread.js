@@ -18,32 +18,38 @@ Template.Message.events({
         if (this._id != template.data._id) {
             return;
         }
-
-        var responses = Session.get('NewMessageFormOpenResponseForms'),
-            index = responses.indexOf(this._id);
-
-        if (index > -1) {
-            responses.splice(index, 1);
-        } else {
-            responses.push(this._id);
-        }
-
-        Tracker.afterFlush(function(){
-             var input = template.find('.new-message-form-input');
-            if(input && !input.value.trim()){
-                input.value = '@'+template.data.username + ' ';
-                input.focus();
-            }
-        });
-        Session.set('NewMessageFormOpenResponseForms', responses.slice());
+        $(template.firstNode).find('.new-reply-form').toggleClass('hidden');
     }
 });
 
 
 Template.Message.helpers({
+    'messageBadge': function messageBadge(msg){
+        var userId = Meteor.userId();
+        if (Meteor.userId() && (Meteor.userId() === msg.poster_id) || (Meteor.user().profile.favorites.indexOf(msg._id) > -1) ){
+            return new Handlebars.SafeString('<i title="You can see this message because you own it" class="fa fa-user"></i>');
+        }
+
+        if (Meteor.userId() && (msg.mentions.map(function(mention){return mention._id;}).indexOf(Meteor.userId()) > -1) ){
+            return new Handlebars.SafeString('<i title="You can see this message because you are mentioned in it" class="fa fa-user-plus"></i>');
+        }
+
+        var nearby = SignsCollection.find({
+            '_id': msg._id,
+            'location': {
+            $near: {
+                $geometry: Signious.geolocation.lastKnownLocation.toMongo(),
+                $maxDistance: 1000
+            }
+        }}).count();
+        if(nearby) {
+            return new Handlebars.SafeString('<i title="You can see this message because you are within it\'s range" class="fa fa-crosshairs"></i>');
+        }
+
+        return new Handlebars.SafeString('<i title="You can see this message because you have access to it\'s URI" class="fa fa-bolt"></i>');
+    },
     'isFaved': function messageIsFaved(msg){
-        var favorites = Meteor.user().profile.favorites || [];
-        return  favorites.indexOf(msg._id) > -1;
+        return Meteor.users.find({_id: Meteor.userId(), 'profile.favorites': msg._id}, {limit:1}).count();
     },
     'isPrivateMessage': function isPrivateMessage(message){
         return message.is_private?'private-message':'';
@@ -70,10 +76,6 @@ Template.Message.helpers({
             text = text.replace(n, '<a href="/'+mention.username+'">' + n + '</a>');
         });
         return new Handlebars.SafeString(text);
-    },
-    'isRespondingTo': function isRespondingTo(sign) {
-        var responses = Session.get('NewMessageFormOpenResponseForms');
-        return responses.indexOf(sign._id) > -1;
     },
     'attachedContent': function attachedContent(sign) {
         if (!sign.linkedWebpage || !sign.linkedWebpage.meta) {
