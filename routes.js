@@ -114,8 +114,6 @@ if (Meteor.isServer) {
         var user = req.body.user;
         var sign = req.body.sign;
 
-        if(Meteor.userId() !== sign.poster_id){return;}
-
         var signUrl = Meteor.settings.public.baseUrl+'/' + sign.username + '/sign/' + sign._id;
         Meteor.call('sendEmail', {
             to: user.emails[0].address,
