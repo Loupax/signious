@@ -82,3 +82,5 @@ Location.prototype.addMetersToLongitude = function addMetersToLongitude(meters){
 	var dLong = meters/(Location.EARTH_RADIUS*Math.cos(Math.PI*this.latitude/180));
 	this.longitude = this.longitude+ dLong * 180/Math.PI;
 };
+
+this.Location = Location;

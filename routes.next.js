@@ -58,7 +58,7 @@ Router.route('/profile/edit', {
 });
 
 
-UploadedFilesCollection = new Meteor.Collection('uploaded_files');
+this.UploadedFilesCollection = new Meteor.Collection('uploaded_files');
 if (Meteor.isServer) {
     Picker.route('/deploy/git', function (params, req, res) {
         var exec = Npm.require('child_process').exec;

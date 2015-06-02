@@ -6,7 +6,7 @@
 var INITIAL_LOCATION = new Location();
 Session.set('lastKnownLocation', INITIAL_LOCATION);
 
-Signious = {
+var Signious = {
     updateLocationFromIP: function updateLocationFromIP() {
         Meteor.call('myGeoIPLocation', function (err, location) {
             if (!err) {
@@ -53,7 +53,8 @@ Signious = {
         LOCATION_WATCH_ID: undefined
     }
 };
-Utilities = {};
+
+var Utilities = {};
 // We keep the fallback in a variable, to allow switching on the fly later
 // in the case the user denies us geolocation. Not as accurate but still better
 // than having an unusable app
@@ -117,3 +118,6 @@ if (!navigator.geolocation) {
     Utilities.geolocation = navigator.geolocation;
 }
 Signious.geolocation.LOCATION_WATCH_ID = Utilities.geolocation.watchPosition(Signious.geolocation.onChange, Signious.geolocation.onError, Signious.geolocation.options);
+
+this.Signious = Signious;
+this.Utilities = Utilities;
