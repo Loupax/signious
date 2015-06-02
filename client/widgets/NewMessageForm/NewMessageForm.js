@@ -47,16 +47,6 @@ var newMessageSave = function newMessageSave(template) {
     }
 };
 
-Session.setDefault('NewMessageFormOpenResponseForms', []);
-if (window.typedInTexts === undefined) {
-    typedInTexts = new ReactiveVar({});
-}
-
-
-Handlebars.registerHelper('unsavedMessageText', function (sign_id) {
-    var texts = typedInTexts.get();
-    return texts[sign_id || ''] || '';
-});
 
 Handlebars.registerHelper('readonly', function (sign_id) {
     return Session.get('saving_message') ? 'disabled' : '';
@@ -70,22 +60,12 @@ Template.NewMessageForm.events({
     'keyup [name="message"]': function keyupNewMessageFormHandler(event, template) {
         if (event.which === 13 && !event.shiftKey) {
             newMessageSave(template).then(function (response_id) {
-                var texts = typedInTexts.get();
-                delete texts[response_id];
-                typedInTexts.set(_.extend(texts));
+                $(template.firstNode).closest('.messages-message').find('.new-reply-form').addClass('hidden');
             }).catch(function () {
                 //var texts = typedInTexts.get();
                 //delete texts[response_id];
                 //typedInTexts.set(_.extend(texts));
             });
-        }
-    },
-    'blur [name="message"]': function blurNewMessageFormHandler(event, template) {
-        var texts = typedInTexts.get(),
-            response_id = template.find('[name="respond_to_sign_id"]').value;
-        if (template.find('textarea').value.trim()) {
-            texts[response_id] = template.find('textarea').value;
-            typedInTexts.set(_.extend(texts));
         }
     }
 });

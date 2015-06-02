@@ -1,6 +1,6 @@
 <template name="NewMessageForm">
     <form>
-        <textarea class="new-message-form-input" {{readonly}} name="message">{{unsavedMessageText this._id}}</textarea>
+        <textarea class="new-message-form-input" {{readonly}} name="message"></textarea>
         <input type="hidden" name="respond_to_sign_id" value="{{this._id}}">
         <input type="hidden" name="respond_to_user_id" value="{{this.poster_id}}">
         <div class="btn-group btn-group-justified" role="group">

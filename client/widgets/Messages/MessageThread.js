@@ -18,7 +18,12 @@ Template.Message.events({
         if (this._id != template.data._id) {
             return;
         }
-        $(template.firstNode).find('.new-reply-form').toggleClass('hidden');
+        var form = $(template.firstNode).find('.new-reply-form');
+        form.toggleClass('hidden');
+        if(!form.is('.hidden')){
+            form.find('.new-message-form-input').focus();
+        }
+
     }
 });
 
