@@ -31,11 +31,12 @@ Meteor.publish('OwnMessages', function(){
         query.$or = [];
         query.$or.push(
             { 'poster_id': userId },
-            { 'mentions._id': userId},
-            {'_id': { $in : user.profile.favorites}}
+            { 'mentions._id': userId}
         );
+        if(user && user.profile && user.profile.favorites){
+            query.$or.push({'_id': { $in : (user.profile)?user.profile.favorites:[]}});
+        }
     }
     var cursor = SignsCollection.find(query, options);
-console.log('User changed!', user.profile.favorites);
     return [cursor, userCursor];
 });
