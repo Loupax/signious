@@ -38,7 +38,7 @@ Template.Message.helpers({
         if (Meteor.userId() && (msg.mentions.map(function(mention){return mention._id;}).indexOf(Meteor.userId()) > -1) ){
             return new Handlebars.SafeString('<i title="You can see this message because you are mentioned in it" class="fa fa-user-plus"></i>');
         }
-        
+
         var nearby = SignsCollection.find({
             '_id': msg._id,
             'location': {
