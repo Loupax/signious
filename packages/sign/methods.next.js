@@ -100,15 +100,14 @@ Meteor.methods({
                         prunePrefixes: ['twitter', 'og']
                     })
                 };
-
-                Scraper.downloadMetadataImages({
-                    meta: linkedWebpage.meta,
-                    imageCollection:UploadedFilesCollection,
-                    imageLocation:process.env.PWD + "/server/user-content/",
-                    imageUrl: '/static/resource'
-                });
             }
         }
+        Scraper.downloadMetadataImages({
+            meta: linkedWebpage.meta,
+            imageCollection:UploadedFilesCollection,
+            imageLocation:process.env.PWD + "/server/user-content/",
+            imageUrl: '/static/resource'
+        });
         SignsCollection.update(sign_id, {
             $set: {
                 linkedWebpage: linkedWebpage
