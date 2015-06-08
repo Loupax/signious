@@ -9,6 +9,6 @@ Package.on_use(function (api, where) {
       'publications/nearby_signs_publications.next.js',
       'publications/public_sign_publication.next.js'
   ], ['server']);
-  api.use(['location', 'session', 'deps','mquandalle:harmony@1.3.79']);
+  api.use(['location', 'session', 'deps'/*,'mquandalle:harmony@1.3.79'*/]);
   api.export(['Sign','SignsCollection', 'SignsCollection']);
 });

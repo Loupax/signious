@@ -22,7 +22,7 @@ Router.route('/:username', {
 Router.route('/profile/show', {
     controller: 'ProfileController',
     waitOn: function () {
-        return Meteor.subscribe('SpecificProfilePublication', Meteor.user().username);
+        return Meteor.subscribe('SpecificProfilePublication', Meteor.user()?Meteor.user().username:null);
     },
     action: 'index'
 });

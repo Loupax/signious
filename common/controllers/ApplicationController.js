@@ -12,12 +12,6 @@ ApplicationController = RouteController.extend({
         // or anything less, and any other properties (like paging or whatever) should be handled in the Deps.autorun
         //handler.stop();
     },
-    waitOn: function(){
-        if(Meteor.isClient) {
-            var loc = new Location(Session.get('lastKnownLocation'));
-            return [Meteor.subscribe('OwnMessages'), Meteor.subscribe('NearbyMessages', loc)];
-        }
-    },
     action: function () {
         console.log('this should be overridden!');
     }

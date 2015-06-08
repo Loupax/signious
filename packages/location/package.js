@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-  api.use('mquandalle:harmony@1.3.79');
+  //api.use('mquandalle:harmony@1.3.79');
   api.add_files('location.next.js', ['client', 'server']);
   api.export('Location');
 });
