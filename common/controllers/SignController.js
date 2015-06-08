@@ -43,7 +43,7 @@ SignController = ApplicationController.extend({
         });
 
         metaData['site_name'] = 'Signious';
-        metaData['url'] = encodeURI(Router.current().url).replace('http://localhost:3000', Meteor.settings.public.baseUrl);
+        //metaData['url'] = encodeURI(Router.current().url).replace('http://localhost:3000', Meteor.settings.public.baseUrl);
         metaData['description'] = 'You can see any responses to this post if they are nearby';
         // Not sure if geolocation should be given away...
         //metaData['geo.position'] = sign.location.coordinates.join(';');
