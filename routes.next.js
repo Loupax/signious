@@ -37,20 +37,7 @@ Router.route('/:username/sign/:sign_id', {
     },
     action: 'index'
 });
-/*FlowRouter.route('/:username/sign/:sign_id',{
-    middlewares: [],
-    subscriptions: function(params) {
-        console.log(params);
-        this.register('sign', Meteor.subscribe('SpecificPublicSign', params.sign_id));
-    },
-    action: function(params) {
-        //console.log('Ready?',FlowRouter.subsReady("myPost"));
-        FlowRouter.subsReady("sign", function() {
-            // do something
-            console.log('Sign',SignsCollection.find({_id: params.sign_id}).fetch());
-        });
-    }
-});*/
+
 
 Router.route('/profile/edit', {
     controller: 'ProfileController',
@@ -74,9 +61,16 @@ if (Meteor.isServer) {
         var previousIp = params.previousIp;
         var clientAddress = Meteor.npmRequire('request-ip').getClientIp(req);
         if (previousIp === clientAddress) {
-            res.end(304, 'Not modified');
+            res.writeHead(304);
+            res.end('Not modified');
         } else {
-            res.end(200,JSON.parse(HTTP.call('GET', 'https://freegeoip.net/json/' + clientAddress).content));
+            try {
+                var response = HTTP.call('GET', 'https://freegeoip.net/json/' + clientAddress);
+                res.writeHead(200);
+            }catch(e){
+                throw e;
+            }
+            res.end(response.content);
         }
     });
 

@@ -86,11 +86,14 @@ var geolocationFallback = function () {
             Meteor.clearInterval(watchId);
         },
         getCurrentPosition: function getCurrentPosition(success, error) {
-            HTTP.get('/myGeoIPLocation?previousIp='+lastIp, function(err, location){
-                if (err && err.error == 304) {
+            HTTP.get('/myGeoIPLocation?previousIp='+lastIp, function(err, res){
+                console.log(res);
+                var location = JSON.parse(res.content);
+                if(err){
+                    return error(err);
+                }
+                if (res.statusCode == 304) {
                     var _loc = _.extend(lastKnownLocation);
-                } else if (err && err.error !== 304) {
-                    error(err);
                 } else {
                     lastIp = location.ip;
                     var _loc = {

@@ -83,16 +83,17 @@ Meteor.methods({
     'Sign:addURLData': function (sign_id) {
         var sign = SignsCollection.find({_id: sign_id}).fetch()[0];
         var urls = Meteor.call('Sign:scrapeURLs', sign);
+        var linkedWebpage = {title: '', meta:[]};
         if (urls.length) {
             if (URLUtils.isImage(urls[0])) {
-                var linkedWebpage = {
+                linkedWebpage = {
                     title: undefined,
                     meta: [{property: 'image', content: urls[0]}]
                 };
             } else {
                 var webpage = Scraper.create(urls[0]);
 
-                var linkedWebpage = {
+                linkedWebpage = {
                     title: webpage.title(),
                     meta: webpage.getMeta({
                         fixRelativePaths: true,
