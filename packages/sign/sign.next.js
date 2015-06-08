@@ -6,7 +6,7 @@ SignsCollection.deny({
 });
 
 if(Meteor.isClient){
-	Session.setDefault('loadingNearbySigns', true);
+	/*Session.setDefault('loadingNearbySigns', true);
 	var handler = Deps.autorun(function () {
 		var loc = new Location(Session.get('lastKnownLocation'));
 		var subscriptions = [
@@ -19,7 +19,7 @@ if(Meteor.isClient){
 		if(i === subscriptions.length)
 			Session.set('loadingNearbySigns', false);
 
-	});
+	});*/
 }
 
 

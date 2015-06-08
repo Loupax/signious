@@ -1,5 +1,6 @@
 Router.configure({
     // the default layout
+    loadingTemplate: 'Loading',
     layoutTemplate: 'root',
     notFoundTemplate: "routeNotFound"
 });
@@ -21,7 +22,7 @@ Router.route('/:username', {
 Router.route('/profile/show', {
     controller: 'ProfileController',
     waitOn: function () {
-        return Meteor.subscribe('SpecificProfilePublication', Meteor.userId());
+        return Meteor.subscribe('SpecificProfilePublication', Meteor.user().username);
     },
     action: 'index'
 });
@@ -33,7 +34,6 @@ Router.route('/:username/sign/:sign_id', {
         this.next();
     },
     waitOn: function () {
-        console.log('waitOn...', this.params.sign_id);
         return Meteor.subscribe('SpecificPublicSign', this.params.sign_id);
     },
     action: 'index'
