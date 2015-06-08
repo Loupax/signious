@@ -68,6 +68,7 @@ nemo64:bootstrap-data@3.3.4_1
 npm-bcrypt@0.7.8_2
 npm-container@1.0.0
 observe-sequence@1.0.6
+ongoworks:spiderable@1.0.7
 ordered-dict@1.0.3
 peppelg:bootstrap-3-modal@1.0.3
 prasad19sara:client-debugger@0.2.1
@@ -83,7 +84,6 @@ sha@1.0.3
 sign@0.0.0
 spacebars@1.0.6
 spacebars-compiler@1.0.6
-spiderable@1.0.7
 srp@1.0.3
 templating@1.1.1
 tracker@1.0.7

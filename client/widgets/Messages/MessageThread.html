@@ -6,20 +6,25 @@
 </template>
 
 <template name="SingleMessageThread">
-    <div class="message-thread-header">
-        <div class="google-maps-background">{{> googleMap type="Map" name="BackgroundMap" options=mapOptions}}</div>
-        {{> Message this}}
-    </div>
-    {{#if topAvailableDiscussionId this}}
-        <div class="message-thread-link-to-discussion-head">
-            <a href="/discussion/sign/{{topAvailableDiscussionId this}}">
-                See whole discussion
-            </a>
+    {{#if this}}
+        <div class="message-thread-header">
+            <div class="google-maps-background">{{> googleMap type="Map" name="BackgroundMap" options=mapOptions}}</div>
+            {{> Message this}}
         </div>
+        {{#if topAvailableDiscussionId this}}
+            <div class="message-thread-link-to-discussion-head">
+                <a href="/discussion/sign/{{topAvailableDiscussionId this}}">
+                    See whole discussion
+                </a>
+            </div>
+        {{/if}}
+        {{#each responsesOfSign this}}
+            {{> Message this}}
+        {{/each}}
     {{/if}}
-    {{#each responsesOfSign this}}
-        {{> Message this}}
-    {{/each}}
+    {{#unless this}}
+    {{> recordNotFound}}
+    {{/unless}}
 </template>
 
 <template name="Message">

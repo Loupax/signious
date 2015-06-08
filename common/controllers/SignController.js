@@ -1,8 +1,10 @@
+var currentSignId = new ReactiveVar(undefined);
 var currentSign = new ReactiveVar(undefined);
 SignController = ApplicationController.extend({
     data: {
         sign: function () {
-            return currentSign.get();
+            var current = SignsCollection.find({_id: currentSignId.get()}).fetch().pop()
+            return current;
         }
     },
     onAfterAction: function () {
@@ -16,7 +18,9 @@ SignController = ApplicationController.extend({
             return false;
         }
 
-        var metaData = {};
+        var metaData = {
+            image: []
+        };
         metaData['content'] = [];
         if (sign.avatar) {
             metaData['image'] = [sign.avatar];
@@ -45,6 +49,7 @@ SignController = ApplicationController.extend({
         //metaData['geo.position'] = sign.location.coordinates.join(';');
         //metaData['ICBM']         = metaData['geo.position'];
         metaData['title'] = sign.text;
+        console.log(metaData, sign);
         var title = metaData['title'].length ? 'Signious - ' + metaData['title'] : 'Signious';
 
         SEO.set({
@@ -53,19 +58,12 @@ SignController = ApplicationController.extend({
             og: metaData,
             twitter: metaData
         });
-
-        //Meteor.setTimeout(function(){showGoogleMaps(sign);}, 1000);
     },
     index: function () {
-        var id = Router.current().params.sign_id;
-        var sign = SignsCollection.find({_id: id}).fetch().pop();
-        if (!sign) {
-            this.render('signNotFound');
-        } else {
-            currentSign.set(sign);
-            this.render('SignPage');
-            GAnalytics.pageview();
-        }
+        currentSignId.set(Router.current().params.sign_id);
+        currentSign.set(SignsCollection.find({_id: Router.current().params.sign_id}).fetch().pop());
+        this.render('SignPage');
+        GAnalytics.pageview();
     }
 });
 

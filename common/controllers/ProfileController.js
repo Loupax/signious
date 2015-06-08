@@ -3,7 +3,8 @@ var currentUser = new ReactiveVar(undefined);
 ProfileController = ApplicationController.extend({
     data: {
         user: function () {
-            return currentUser.get();
+            console.log(Meteor.users.find({_id: currentUser.get()}).fetch().pop());
+            return Meteor.users.find({_id: currentUser.get()}).fetch().pop();
         },
         ownedProfile: function () {
             return currentUser.get() && Meteor.user() && (currentUser.get().username === Meteor.user().username);
@@ -11,7 +12,7 @@ ProfileController = ApplicationController.extend({
         messages: function () {
             return SignsCollection.find({
                 response_to_sign_id: '',
-                poster_id: currentUser.get() ? currentUser.get()._id : -1
+                poster_id: currentUser.get() || -1
             }, {
                 sort: {
                     when: -1
@@ -25,13 +26,8 @@ ProfileController = ApplicationController.extend({
         } else {
             var user = Meteor.users.find({username: decodeURIComponent(path.url).split('/').pop()}).fetch().pop();
         }
-        if (!user) {
-            currentUser.set(undefined);
-            this.render('userNotFound');
-        } else {
-            currentUser.set(user);
-            this.render('profile');
-        }
+        currentUser.set(user?user._id:-1);
+        this.render('profile');
     },
     edit: function () {
         var user = Meteor.users.find({_id: Meteor.userId()}).fetch().pop();

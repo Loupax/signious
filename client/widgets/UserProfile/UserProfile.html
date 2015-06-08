@@ -1,12 +1,12 @@
 <template name="profile">
-  {{> UserInfo}}
-  {{> Messages}}
+    {{> UserInfo}}
+    {{> Messages}}
 </template>
 
 
 <template name="UserInfo">
+    {{#if user}}
     <section class="user-info">
-        {{#if user}}
         <div class="user-info-avatar">
             {{#if user.profile.avatar}}
             <img class="user-info-avatar-pic" src="/static/resource/{{user.profile.avatar}}">
@@ -21,10 +21,7 @@
         <h1 class="user-info-avatar-motto">
           {{user.profile.bio}}
         </h1>
-        {{/if}}
-        {{#unless user}}
-            {{> Loading}}
-        {{/unless}}
+
 
 
         <footer>
@@ -36,4 +33,8 @@
             {{/if}}
         </footer>
     </section>
+    {{/if}}
+    {{#unless user}}
+        {{> recordNotFound}}
+    {{/unless}}
 </template>
