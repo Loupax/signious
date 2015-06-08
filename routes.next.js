@@ -70,6 +70,16 @@ if (Meteor.isServer) {
         exec("git pull", puts);
     });
 
+    Picker.route('/myGeoIPLocation', function (params, req, res) {
+        var previousIp = params.previousIp;
+        var clientAddress = Meteor.npmRequire('request-ip').getClientIp(req);
+        if (previousIp === clientAddress) {
+            res.end(304, 'Not modified');
+        } else {
+            res.end(200,JSON.parse(HTTP.call('GET', 'https://freegeoip.net/json/' + clientAddress).content));
+        }
+    });
+
     Picker.route('/scrape/html/:sign_id', function (params, req, res) {
         Meteor.call('Sign:addURLData', params.sign_id);
         res.end();
