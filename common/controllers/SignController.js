@@ -43,13 +43,14 @@ SignController = ApplicationController.extend({
         });
 
         metaData['site_name'] = 'Signious';
-        //metaData['url'] = encodeURI(Router.current().url).replace('http://localhost:3000', Meteor.settings.public.baseUrl);
+        metaData['url'] = encodeURI(Router.current().url).replace('http://localhost:3000', Meteor.settings.public.baseUrl);
+        console.log('MetaData URL',metaData.url);
         metaData['description'] = 'You can see any responses to this post if they are nearby';
         // Not sure if geolocation should be given away...
         //metaData['geo.position'] = sign.location.coordinates.join(';');
         //metaData['ICBM']         = metaData['geo.position'];
         metaData['title'] = sign.text;
-        console.log(metaData, sign);
+        //console.log(metaData, sign);
         var title = metaData['title'].length ? 'Signious - ' + metaData['title'] : 'Signious';
 
         SEO.set({

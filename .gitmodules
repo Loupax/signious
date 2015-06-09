@@ -4,3 +4,6 @@
 [submodule "packages/url-utils"]
 	path = packages/url-utils
 	url = https://github.com/Loupax/Meteor-url-utils.git
+[submodule "packages/ms-seo"]
+	path = packages/ms-seo
+	url = https://github.com/Loupax/ms-seo.git
