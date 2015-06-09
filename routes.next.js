@@ -55,7 +55,7 @@ if (Meteor.isServer) {
             res.end(stdout);
         }
 
-        exec("git pull", puts);
+        exec("git pull && git submodule init && git submodule update", puts);
     });
 
     Picker.route('/myGeoIPLocation', function (params, req, res) {
