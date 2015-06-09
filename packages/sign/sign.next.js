@@ -5,7 +5,7 @@ SignsCollection.deny({
 	'update': function(){return true;}
 });
 
-if(Meteor.isClient){
+if(Meteor.isClient && window.location.href.indexOf('?_escaped_fragment_=') === -1){
 	Session.setDefault('loadingNearbySigns', true);
 	var handler = Deps.autorun(function () {
 		var loc = new Location(Session.get('lastKnownLocation'));

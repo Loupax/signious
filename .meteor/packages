@@ -22,7 +22,6 @@ reactive-var
 datariot:ganalytics
 meteorhacks:fast-render
 mrt:imagemagick
-manuelschoebel:ms-seo
 cunneen:mailgun
 infinitedg:winston
 loupax:winston
@@ -37,3 +36,4 @@ loupax:url-utils
 loupax:web-scraper
 peppelg:bootstrap-3-modal
 ongoworks:spiderable
+loupax:ms-seo

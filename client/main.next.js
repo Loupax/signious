@@ -120,6 +120,7 @@ if (!navigator.geolocation) {
 } else {
     Utilities.geolocation = navigator.geolocation;
 }
+
 Signious.geolocation.LOCATION_WATCH_ID = Utilities.geolocation.watchPosition(Signious.geolocation.onChange, Signious.geolocation.onError, Signious.geolocation.options);
 
 this.Signious = Signious;
