@@ -27,6 +27,36 @@ Template.Message.events({
     }
 });
 
+var incrementLimit = function(inc) {
+    inc = inc || 20;
+    var newLimit = Session.get('limit') + inc;
+    Session.set('limit', newLimit);
+}
+
+function loadMore(opts) {
+    var force = opts.force || false;
+    var threshold, target = $('body');
+    if (!target.length) return;
+
+    threshold = $(window).scrollTop() + $(window).height() - target.height();
+    console.log(threshold, target.offset().top);
+    // HACK: see http://www.meteorpedia.com/read/Infinite_Scrolling
+    if (force || threshold > 0/*target.offset().top < threshold+2 && threshold <2*/) {
+        console.log('Incrementing');
+        incrementLimit();
+    }
+}
+
+Template.Messages.events({'click .load_more': function(){
+    loadMore({force: true});
+}});
+
+// init
+Meteor.startup(function (argument) {
+    Session.setDefault('query', {filterTitle:undefined, page:1})
+    $(window).scroll(loadMore);
+})
+
 Template.Message.helpers({
     'messageBadge': function messageBadge(msg){
         var userId = Meteor.userId();

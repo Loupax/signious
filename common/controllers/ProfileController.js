@@ -16,7 +16,8 @@ ProfileController = ApplicationController.extend({
             }, {
                 sort: {
                     when: -1
-                }
+                },
+                limit: Meteor.isClient?Session.get('limit'):100
             });
         }
     },

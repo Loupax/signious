@@ -1,3 +1,5 @@
+if(Meteor.isClient)
+    Session.setDefault('limit', 20);
 HomeController = ApplicationController.extend({
     data: {
         messages: function () {
@@ -6,7 +8,8 @@ HomeController = ApplicationController.extend({
             }, {
                 sort: {
                     when: -1
-                }
+                },
+                limit: Meteor.isClient?Session.get('limit'):100
             });
         }
     },

@@ -10,8 +10,8 @@ if(Meteor.isClient && window.location.href.indexOf('?_escaped_fragment_=') === -
 	var handler = Deps.autorun(function () {
 		var loc = new Location(Session.get('lastKnownLocation'));
 		var subscriptions = [
-			Meteor.subscribe('OwnMessages'),
-			Meteor.subscribe('NearbyMessages', loc)
+			Meteor.subscribe('OwnMessages', Session.get('limit')),
+			Meteor.subscribe('NearbyMessages', loc, Session.get('limit'))
 		];
 
 		var i = 0;

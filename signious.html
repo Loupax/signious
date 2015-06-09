@@ -60,6 +60,7 @@
 	<div class="messages">
 		<ol class="messages-list">
 			{{#each messages}}<li>{{> MessageThread this}}</li>{{/each}}
+            {{#if messages}}<li><button class="load_more">Load more</button></li>{{/if}}
 		</ol>
 	</div>
     {{! {{/unless}}

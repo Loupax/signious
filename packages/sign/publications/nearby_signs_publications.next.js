@@ -1,9 +1,10 @@
 var options = {sort: {when: -1}/*, fields: {location:0}*/};
-Meteor.publish('NearbyMessages', function(point){
+Meteor.publish('NearbyMessages', function(point, limit){
     point = new Location(point);
     if(!point.isValid())
         return false;
-
+    var o  = _.extend(options);
+    o.limit = limit;
     var cursor = SignsCollection.find({
         is_private: false,
         is_deleted: false,
@@ -13,11 +14,11 @@ Meteor.publish('NearbyMessages', function(point){
                 $maxDistance: 1000
             }
         }
-    }, options);
+    }, o);
     return cursor;
 });
 
-Meteor.publish('OwnMessages', function(){
+Meteor.publish('OwnMessages', function(limit){
     var userId = this.userId || '';
     var userCursor = Meteor.users.find({_id: userId}, {limit:1, fields:{'profile.favorites': 1}});
     var user = userCursor.fetch().pop();
@@ -37,6 +38,8 @@ Meteor.publish('OwnMessages', function(){
             query.$or.push({'_id': { $in : (user.profile)?user.profile.favorites:[]}});
         }
     }
-    var cursor = SignsCollection.find(query, options);
+    var o  = _.extend(options);
+        o.limit = limit;
+    var cursor = SignsCollection.find(query, o);
     return [cursor, userCursor];
 });
