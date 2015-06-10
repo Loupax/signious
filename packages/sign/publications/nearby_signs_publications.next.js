@@ -1,10 +1,10 @@
-var options = {sort: {when: -1}/*, fields: {location:0}*/};
+var options = {sort: {when: -1}, reactive: false/*, fields: {location:0}*/};
 Meteor.publish('NearbyMessages', function(point, limit){
     point = new Location(point);
     if(!point.isValid())
         return false;
     var o  = _.extend(options);
-    o.limit = limit;
+    //o.limit = limit;
     var cursor = SignsCollection.find({
         is_private: false,
         is_deleted: false,
@@ -39,7 +39,7 @@ Meteor.publish('OwnMessages', function(limit){
         }
     }
     var o  = _.extend(options);
-        o.limit = limit;
+        //o.limit = limit;
     var cursor = SignsCollection.find(query, o);
     return [cursor, userCursor];
 });
