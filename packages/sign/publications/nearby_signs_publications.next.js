@@ -20,26 +20,31 @@ Meteor.publish('NearbyMessages', function(point, limit){
 
 Meteor.publish('OwnMessages', function(limit){
     var userId = this.userId || '';
-    var userCursor = Meteor.users.find({_id: userId}, {limit:1, fields:{'profile.favorites': 1}});
-    var user = userCursor.fetch().pop();
-    var query = {
-        is_deleted: false
-    };
-
-    if(!this.userId){
-        query._id = -1;
+    
+    if(!userId){
+        this.ready();
     }else{
-        query.$or = [];
-        query.$or.push(
-            { 'poster_id': userId },
-            { 'mentions._id': userId}
-        );
-        if(user && user.profile && user.profile.favorites){
-            query.$or.push({'_id': { $in : (user.profile)?user.profile.favorites:[]}});
+        var userCursor = Meteor.users.find({_id: userId}, {limit:1, fields:{'profile.favorites': 1}});
+        var user = userCursor.fetch().pop();
+        var query = {
+            is_deleted: false
+        };
+    
+        if(!this.userId){
+            query._id = -1;
+        }else{
+            query.$or = [];
+            query.$or.push(
+                { 'poster_id': userId },
+                { 'mentions._id': userId}
+            );
+            if(user && user.profile && user.profile.favorites){
+                query.$or.push({'_id': { $in : (user.profile)?user.profile.favorites:[]}});
+            }
         }
+        var o  = _.extend(options);
+            o.limit = limit;
+        var cursor = SignsCollection.find(query, o);
+        return [cursor, userCursor];
     }
-    var o  = _.extend(options);
-        o.limit = limit;
-    var cursor = SignsCollection.find(query, o);
-    return [cursor, userCursor];
 });
