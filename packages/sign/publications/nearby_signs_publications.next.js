@@ -6,6 +6,7 @@ Meteor.publish('NearbyMessages', function(point, limit){
     var o  = _.extend(options);
     //o.limit = limit;
     var cursor = SignsCollection.find({
+        $where: 'this._id === this.discussion_root_sign_id',
         is_private: false,
         is_deleted: false,
         'location': {
@@ -33,6 +34,7 @@ Meteor.publish('OwnMessages', function(limit){
         if(!this.userId){
             query._id = -1;
         }else{
+            query.$where = 'this._id === this.discussion_root_sign_id';
             query.$or = [];
             query.$or.push(
                 { 'poster_id': userId },

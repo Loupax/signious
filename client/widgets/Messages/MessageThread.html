@@ -75,7 +75,7 @@
                         {{/if}}
                     {{/if}}
                     {{#unless this.is_deleted}}
-                         <a class="link-to-sign" title="Direct link" href="/{{username}}/sign/{{_id}}"><i class="fa fa-link"></i></a>
+                         <a class="link-to-sign" title="Direct link" href="/{{username}}/sign/{{_id}}"><i class="fa fa-link"></i><span class="sup">{{children this}}</span></a>
                     {{/unless}}
                     {{#if isLoggedIn}}
                         {{#unless isFaved this}}

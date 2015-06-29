@@ -3,4 +3,5 @@ Meteor.startup(function(){
     Meteor.users.find({'profile.favorites': {$exists: false}}).forEach(function(user){
        Meteor.users.update({_id: user._id}, {$set: {'profile.favorites': []}});
     });
+    SignsCollection.find({})
 });

@@ -16,8 +16,11 @@ if(Meteor.isClient && window.location.href.indexOf('?_escaped_fragment_=') === -
 
 		var i = 0;
 		subscriptions.forEach(function(sub){if(sub.ready()){i++;}});
-		if(i === subscriptions.length)
+		if(i === subscriptions.length) {
+			var sign_ids = SignsCollection.find({}, {fields: {_id:1}}).map(function(a){return a._id;});
+			Meteor.subscribe('MessageCounters', sign_ids);
 			Session.set('loadingNearbySigns', false);
+		}
 
 	});
 }

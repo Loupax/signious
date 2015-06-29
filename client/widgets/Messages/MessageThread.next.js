@@ -39,10 +39,8 @@ function loadMore(opts) {
     if (!target.length) return;
 
     threshold = $(window).scrollTop() + $(window).height() - target.height();
-    console.log(threshold, target.offset().top);
     // HACK: see http://www.meteorpedia.com/read/Infinite_Scrolling
     if (force || threshold > 0/*target.offset().top < threshold+2 && threshold <2*/) {
-        console.log('Incrementing');
         incrementLimit();
     }
 }
@@ -50,14 +48,26 @@ function loadMore(opts) {
 Template.Messages.events({'click .load_more': function(){
     loadMore({force: true});
 }});
-
 // init
 Meteor.startup(function (argument) {
-    Session.setDefault('query', {filterTitle:undefined, page:1})
+    Session.setDefault('query', {filterTitle:undefined, page:1});
     $(window).scroll(loadMore);
-})
+});
 
+var counters = {};
 Template.Message.helpers({
+    children: function(msg){
+        var counter = MessageCounters.find({_id: msg._id}, {limit: 1}).fetch().pop();
+        counter = counter || {children: 0};
+        if(counters[msg._id] === undefined){
+            counters[msg._id] = new ReactiveVar(counter ? counter.children : 0);
+        }else{
+            if(counters[msg._id].get() < counter.children)
+                counters[msg._id].set(counter.children);
+        }
+
+        return counters[msg._id].get()||'';
+    },
     'messageBadge': function messageBadge(msg){
         var userId = Meteor.userId();
         var user = Meteor.user();
